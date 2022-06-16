@@ -24,16 +24,19 @@ import TicketsHome from "./pages/customer-support/TicketsHome";
 import InventoryHome from "./pages/inventory-management/InventoryHome";
 import Offers from "./pages/offers-management/offers";
 import VehicleDetails from "./pages/reviews-management/vehicleDetails";
+import FabMenu from './pages/inventory-management/fab-menu/fab-menu';
+import { Box } from '@mui/material';
 
 function App() {
   const [id, setId] = useState([]);
-  // const getFabMenuPositionStyles = () => {
-  //   return {
-  //     position: 'absolute',
-  //     bottom: '20px',
-  //     right: '20px'
-  //   };
-  // };
+  const getFabMenuPositionStyles = () => {
+    return {
+      position: 'absolute',
+      bottom: '20px',
+      right: '20px'
+    };
+  };
+
 
   return (
     <div className="App">
@@ -54,7 +57,11 @@ function App() {
           {/* Route for User Reviews Management */}
           <Route path="/vehicles/details" element={<VehicleDetails />} />
         </Routes>
-      </Router>
+      </Router >
+      {(window.location.pathname !== '/registration' && window.location.pathname !== '/') && 
+        <Box sx={getFabMenuPositionStyles()}>
+        <FabMenu></FabMenu>
+      </Box>}
     </div>
   );
 }

@@ -11,10 +11,13 @@ import EmployeeActionModal from '../employee-action-modal/employee-action-modal'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import CarRepairIcon from '@mui/icons-material/CarRepair';
+import { Search } from '@mui/icons-material';
+import AdvancedSearchModal from '../../advanced-search-modal/advanced-search-modal';
 
 const fabActions = [
     { icon: <CarRepairIcon />, name: 'Add car', actionId: 'addCar' },
     { icon: <EmojiTransportationIcon />, name: 'Add station', actionId: 'addStation' },
+    { icon: <Search />, name: 'Search', actionId: 'searchCarAction' },
 ];
 
 const FabMenu = () => {
@@ -183,6 +186,12 @@ const FabMenu = () => {
         }, 2000);
     }
 
+    const [isSearchModalOpen, setIsSearchModalOpen] = React.useState(false);
+    const handleSearchDialogClose = () => {
+        setIsSearchModalOpen(false);
+    }
+
+
     return (
         <>
             <Box sx={{ height: 320, transform: 'translateZ(0px)', flexGrow: 1 }}>
@@ -209,12 +218,17 @@ const FabMenu = () => {
                             tooltipTitle={fabAction.name}
                             tooltipOpen
                             onClick={() => {
+                                if (fabAction.actionId === "searchCarAction") {
+                                    setIsSearchModalOpen(true);
+                                    setOpen(false);
+                                } else {
                                 setOpen(true);
                                 setTitle(fabAction.name);
                                 setActionType(fabAction.actionId);
-                            }}
-                        />
-                    ))}
+                                }
+                                }
+                            }/>
+                        ))}
                 </SpeedDial>
                 <EmployeeActionModal open={open}
                     handleClose={handleClose}
@@ -223,6 +237,7 @@ const FabMenu = () => {
                     fields={getFieldsBasedOnAction()}
                     setToastMessage={setToastMessage}>
                 </EmployeeActionModal>
+                <AdvancedSearchModal isOpen={isSearchModalOpen} handleDialogClose={handleSearchDialogClose}></AdvancedSearchModal>
             </Box>
 
             <Box sx={{ position: 'fixed', top: '49%', right: '49%', height: 40 }}>

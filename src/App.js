@@ -15,17 +15,20 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, Flip } from "react-toastify";
 
 // Component imports
+
 import Success from "./pages/user-management/Success";
 import Registration from "./pages/user-management/Registration";
 import Login from "./pages/user-management/Login";
 import UserList from "./pages/user-management/UserList";
 import UserProfile from "./pages/user-management/UserProfile";
 import TicketsHome from "./pages/customer-support/TicketsHome";
+import Checkout from "./pages/payment-management/Checkout";
 import InventoryHome from "./pages/inventory-management/InventoryHome";
 import Offers from "./pages/offers-management/offers";
 import VehicleDetails from "./pages/reviews-management/vehicleDetails";
 import FabMenu from './pages/inventory-management/fab-menu/fab-menu';
 import { Box } from '@mui/material';
+
 
 function App() {
   const [id, setId] = useState([]);
@@ -56,6 +59,8 @@ function App() {
           <Route path="/offers" element={<Offers />} />
           {/* Route for User Reviews Management */}
           <Route path="/vehicles/details" element={<VehicleDetails />} />
+          {/* Route for Payment Management */}
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </Router >
       {(window.location.pathname !== '/registration' && window.location.pathname !== '/') && 

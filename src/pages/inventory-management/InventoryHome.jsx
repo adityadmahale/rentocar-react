@@ -4,8 +4,10 @@ import "./../../App.css";
 import Box from "@mui/material/Box";
 
 // Component imports
-import NavBar from './../../components/common/nav-bar';
-import FabMenu from './../../pages/inventory-management/fab-menu/fab-menu';
+
+import NavBar from "./../../components/common/nav-bar";
+import FabMenu from "./fab-menu/fab-menu";
+
 
 function InventoryHome() {
   const getFabMenuPositionStyles = () => {

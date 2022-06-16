@@ -34,7 +34,7 @@ function TicketsHome() {
   });
 
   return (
-    <div>
+    <div className="tickets-home-container">
       <Header />
       <div>
         <div className="first">

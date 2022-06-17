@@ -46,6 +46,11 @@ import AvailableCars from "./pages/reservation-management/availableCars";
 import ViewReservations from "./pages/reservation-management/viewReservations";
 import CancelReservation from "./pages/reservation-management/cancelReservation";
 import ModifyReservation from "./pages/reservation-management/modifyReservation";
+import ViewPostings from "./pages/career-management/viewPostings";
+import ViewApplications from "./pages/career-management/viewApplications";
+import CreatePosting from "./pages/career-management/createPosting";
+import ApplyPosting from "./pages/career-management/applyPosting";
+import ViewUserPostings from "./pages/career-management/viewUserPostings";
 
 >>>>>>> dae62fe (Reservation Management Frontend implemented)
 
@@ -99,6 +104,12 @@ function App() {
           <Route path="/viewreservations" element={<ViewReservations />} />
           <Route path="/cancelreservation" element={<CancelReservation />} />
           <Route path="/modifyreservation" element={<ModifyReservation />} />
+          {/* Route for Career Management */}
+          <Route path="/viewpostings" element={<ViewPostings />} />
+          <Route path="/viewuserpostings" element={<ViewUserPostings />} />
+          <Route path="/viewapplications" element={<ViewApplications />} />
+          <Route path="/createposting" element={<CreatePosting />} />
+          <Route path="/applyposting" element={<ApplyPosting />} />
         </Routes>
       </Router>
     </div>

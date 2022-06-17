@@ -7,7 +7,7 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
+import LinkMUI from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AddressForm from "./AddressForm";
@@ -15,14 +15,15 @@ import PaymentForm from "./PaymentForm";
 import Review from "./Review";
 import NavBar from "../../components/common/nav-bar";
 import { styled } from "@mui/material";
+import { Link } from "react-router-dom";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="#">
+      <LinkMUI color="inherit" href="#">
         RentoCar
-      </Link>{" "}
+      </LinkMUI>{" "}
       {new Date().getFullYear()}
       {"."}
     </Typography>
@@ -100,6 +101,12 @@ export default function Checkout() {
                   your booking confirmation. Please bring this number to station
                   to pick up the car
                 </Typography>
+                <Link
+                  style={{ textDecoration: "none", color: "#00d2d3" }}
+                  to="/viewreservations"
+                >
+                  View Reservations
+                </Link>
               </React.Fragment>
             ) : (
               <React.Fragment>

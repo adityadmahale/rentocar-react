@@ -3,6 +3,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import LuggageIcon from "@mui/icons-material/Luggage";
 import React from "react";
 import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
 
 const StyledButton = styled(Button)({
   marginTop: "40px",
@@ -20,6 +21,7 @@ const StyledButton = styled(Button)({
 });
 
 const Detail = () => {
+  const navigate = useNavigate();
   return (
     <Container
       sx={{
@@ -102,7 +104,12 @@ const Detail = () => {
               <Grid item xs={12} md={2} container></Grid>
             </Grid>
           </Typography>
-          <StyledButton variant="outlined">BOOK NOW</StyledButton>
+          <StyledButton
+            variant="outlined"
+            onClick={() => navigate("/checkout")}
+          >
+            BOOK NOW
+          </StyledButton>
         </Grid>
       </Grid>
     </Container>

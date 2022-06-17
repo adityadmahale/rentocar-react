@@ -1,19 +1,20 @@
-import './../../App.css';
+import "./../../App.css";
 
 // MUI imports
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box";
 
 // Component imports
-import NavBar from './../../components/common/nav-bar';
-import FabMenu from './../../components/inventory-management/fab-menu/fab-menu';
+
+import NavBar from "./../../components/common/nav-bar";
+import FabMenu from "./fab-menu/fab-menu";
+
 
 function InventoryHome() {
-
   const getFabMenuPositionStyles = () => {
     return {
-      position: 'absolute',
-      bottom: '20px',
-      right: '20px'
+      position: "absolute",
+      bottom: "20px",
+      right: "20px",
     };
   };
 

@@ -210,13 +210,13 @@ const EmployeeActionModal = ({ open, handleClose, setOpen, title, fields, addEnt
                                     {/* [Code Attribution 4 for MUI Select] */}
                                     {/* [URL: https://mui.com/material-ui/react-select/#basic-select] */}
                                     <Select
-                                    labelId={field.id}
-                                    id={field.id}
-                                    value={field.value}
-                                    label={field.name}
-                                    onChange={(event) => {
-                                        selectFieldChanged(event, field);
-                                    }}
+                                        labelId={field.id}
+                                        id={field.id}
+                                        value={field.value}
+                                        label={field.name}
+                                        onChange={(event) => {
+                                            selectFieldChanged(event, field);
+                                        }}
                                     >
                                         {getSelectOptions(field)}
                                     </Select>

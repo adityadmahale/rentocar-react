@@ -1,4 +1,4 @@
-import './App.css';
+import "./App.css";
 
 // MUI imports
 
@@ -9,30 +9,43 @@ import "primeicons/primeicons.css";
 
 // React imports
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import React, { useState } from 'react';
+import React, { useState } from "react";
+
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, Flip } from "react-toastify";
 
 // Component imports
-import Success from './components/user-management/Success';
-import Registration from "./components/user-management/Registration";
-import Login from "./components/user-management/Login";
-import UserList from './components/user-management/UserList';
-import UserProfile from './components/user-management/UserProfile';
-import TicketsHome from './components/customer-support/TicketsHome';
-import InventoryHome from './components/inventory-management/InventoryHome';
+
+import Success from "./pages/user-management/Success";
+import Registration from "./pages/user-management/Registration";
+import Login from "./pages/user-management/Login";
+import UserList from "./pages/user-management/UserList";
+import UserProfile from "./pages/user-management/UserProfile";
+import TicketsHome from "./pages/customer-support/TicketsHome";
+import Checkout from "./pages/payment-management/Checkout";
+import InventoryHome from "./pages/inventory-management/InventoryHome";
+import Offers from "./pages/offers-management/offers";
+import VehicleDetails from "./pages/reviews-management/vehicleDetails";
+import FabMenu from './pages/inventory-management/fab-menu/fab-menu';
+import { Box } from '@mui/material';
+import Comparision from "./pages/car-comparision/comparision";
+
 
 function App() {
   const [id, setId] = useState([]);
-  // const getFabMenuPositionStyles = () => {
-  //   return {
-  //     position: 'absolute',
-  //     bottom: '20px',
-  //     right: '20px'
-  //   };
-  // };
+  const getFabMenuPositionStyles = () => {
+    return {
+      position: 'absolute',
+      bottom: '20px',
+      right: '20px'
+    };
+  };
+
 
   return (
     <div className="App">
-      < Router >
+      <ToastContainer icon={false} transition={Flip} />
+      <Router>
         <Routes>
           {/* Routes for User Management and Support Features */}
           <Route path="/registration" element={<Registration />} />
@@ -43,8 +56,19 @@ function App() {
           <Route path="/ticketshome" element={<TicketsHome />} />
           {/* Routes for Inventory Management */}
           <Route path="/inventoryhome" element={<InventoryHome />} />
+          {/* Route for Offers Management */}
+          <Route path="/offers" element={<Offers />} />
+          {/* Route for User Reviews Management */}
+          <Route path="/vehicles/details" element={<VehicleDetails />} />
+          {/* Route for Payment Management */}
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/comparison" element={<Comparision/>} />
         </Routes>
       </Router >
+      {(window.location.pathname !== '/registration' && window.location.pathname !== '/') && 
+        <Box sx={getFabMenuPositionStyles()}>
+        <FabMenu></FabMenu>
+      </Box>}
     </div>
   );
 }

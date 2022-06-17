@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from './../common/Header';
+import Header from "../../components/common/Header";
+
 
 function UserList(props) {
   const [users, setUsers] = useState([]);
@@ -46,17 +47,34 @@ function UserList(props) {
       <div className="clearfix">
         <div className="text-center" style={{ margin: "1em" }}>
           <label htmlFor="searchValue">Enter User Name </label>
-          <input type="text" id="searchValue" style={{ marginLeft: "1em" }} onChange={updateSearch}/>
+          <input
+            type="text"
+            id="searchValue"
+            style={{ marginLeft: "1em" }}
+            onChange={updateSearch}
+          />
         </div>
         <div className="row">
-          {users.filter((item) => {
+          {users
+            .filter((item) => {
               console.log("item.name");
-              if (item.firstName.toLowerCase().includes(searchValue.toLowerCase()) || item.lastName.toLowerCase().includes(searchValue.toLowerCase())) {
+              if (
+                item.firstName
+                  .toLowerCase()
+                  .includes(searchValue.toLowerCase()) ||
+                item.lastName.toLowerCase().includes(searchValue.toLowerCase())
+              ) {
                 return item;
               }
             })
             .map((data) => (
-              <div className="col-md-4 animated fadeIn" key={data.id} onClick={() => {showUserProfile(data.id);}}>
+              <div
+                className="col-md-4 animated fadeIn"
+                key={data.id}
+                onClick={() => {
+                  showUserProfile(data.id);
+                }}
+              >
                 <div className="card">
                   <div className="card-body">
                     <div className="avatar">

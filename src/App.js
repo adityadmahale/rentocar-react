@@ -29,6 +29,7 @@ import VehicleDetails from "./pages/reviews-management/vehicleDetails";
 import FabMenu from './pages/inventory-management/fab-menu/fab-menu';
 import { Box } from '@mui/material';
 import Comparision from "./pages/car-comparision/comparision";
+import ReservationsSummary from "./pages/reservations-summary/reservationsSummary";
 
 
 function App() {
@@ -63,6 +64,7 @@ function App() {
           {/* Route for Payment Management */}
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/comparison" element={<Comparision/>} />
+          <Route path="/reservationsSummary" element={<ReservationsSummary/>} />
         </Routes>
       </Router >
       {(window.location.pathname !== '/registration' && window.location.pathname !== '/') && 

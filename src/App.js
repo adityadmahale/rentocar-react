@@ -28,6 +28,7 @@ import Offers from "./pages/offers-management/offers";
 import VehicleDetails from "./pages/reviews-management/vehicleDetails";
 import FabMenu from './pages/inventory-management/fab-menu/fab-menu';
 import { Box } from '@mui/material';
+import Comparision from "./pages/car-comparision/comparision";
 
 
 function App() {
@@ -61,6 +62,7 @@ function App() {
           <Route path="/vehicles/details" element={<VehicleDetails />} />
           {/* Route for Payment Management */}
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/comparison" element={<Comparision/>} />
         </Routes>
       </Router >
       {(window.location.pathname !== '/registration' && window.location.pathname !== '/') && 

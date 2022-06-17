@@ -26,22 +26,16 @@ import Checkout from "./pages/payment-management/Checkout";
 import InventoryHome from "./pages/inventory-management/InventoryHome";
 import Offers from "./pages/offers-management/offers";
 import VehicleDetails from "./pages/reviews-management/vehicleDetails";
-import FabMenu from './pages/inventory-management/fab-menu/fab-menu';
-import { Box } from '@mui/material';
 import Comparision from "./pages/car-comparision/comparision";
 import ReservationsSummary from "./pages/reservations-summary/reservationsSummary";
-
+import AvailableCars from "./pages/reservation-management/availableCars";
+import MakeReservation from "./pages/reservation-management/makeReservation";
+import ViewReservations from "./pages/reservation-management/viewReservations";
+import CancelReservation from "./pages/reservation-management/cancelReservation";
+import ModifyReservation from "./pages/reservation-management/modifyReservation";
 
 function App() {
   const [id, setId] = useState([]);
-  const getFabMenuPositionStyles = () => {
-    return {
-      position: 'absolute',
-      bottom: '20px',
-      right: '20px'
-    };
-  };
-
 
   return (
     <div className="App">
@@ -63,14 +57,19 @@ function App() {
           <Route path="/vehicles/details" element={<VehicleDetails />} />
           {/* Route for Payment Management */}
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/comparison" element={<Comparision/>} />
-          <Route path="/reservationsSummary" element={<ReservationsSummary/>} />
+          <Route path="/comparison" element={<Comparision />} />
+          <Route
+            path="/reservationsSummary"
+            element={<ReservationsSummary />}
+          />
+          {/* Route for Reservation Management */}
+          <Route path="/makereservation" element={<MakeReservation />} />
+          <Route path="/availablecars" element={<AvailableCars />} />
+          <Route path="/viewreservations" element={<ViewReservations />} />
+          <Route path="/cancelreservation" element={<CancelReservation />} />
+          <Route path="/modifyreservation" element={<ModifyReservation />} />
         </Routes>
-      </Router >
-      {(window.location.pathname !== '/registration' && window.location.pathname !== '/') && 
-        <Box sx={getFabMenuPositionStyles()}>
-        <FabMenu></FabMenu>
-      </Box>}
+      </Router>
     </div>
   );
 }

@@ -1,161 +1,157 @@
-import React, { useState } from 'react';
-import { Form, Field } from 'react-final-form';
-import { InputText } from 'primereact/inputtext';
-import { Button } from 'primereact/button';
-// import { Dialog } from 'primereact/dialog';
-import { classNames } from 'primereact/utils';
-import { Password } from 'primereact/password';
-import { Divider } from 'primereact/divider';
-import { Menubar } from 'primereact/menubar';
-import { useNavigate } from 'react-router-dom';
-// import { Success } from './Success.js';
-import './Registration.css';
+import { Button, Grid, Stack, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import React, { useState } from "react";
+import Input from "../../components/common/input";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import NavBar from "../../components/common/nav-bar";
 
-function Registration() {
-    const [showMessage, setShowMessage] = useState(false);
-    const [formData, setFormData] = useState({});
-    const navigate = useNavigate();
-    const passwordText = <h6>Enter a password</h6>;
-    const passwordFooter = (
-        <React.Fragment>
-            <Divider />
-            <p className="mt-2">Suggestions</p>
-            <ul className="pl-2 ml-2 mt-0" style={{ lineHeight: '1.5' }}>
-                <li>Minimum 8 characters</li>
-            </ul>
-        </React.Fragment>
-    );
-    const items = [
-        {
-            label: 'RentoCar',
-            icon: 'pi pi-fw pi-car',
-        }
-    ];
+const Register = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [errors, setErrors] = useState({});
 
-    const validate = (data) => {
-        let errors = {};
-        console.log("data", data)
-        if (!data.firstName) {
-            errors.firstName = 'First Name is required.';
-        }
-        else if (!/^[a-zA-Z\s]+$/i.test(data.firstName)) {
-            errors.firstName = 'First Name should only be letters';
-        }
-        if (!data.lastName) {
-            errors.lastName = 'Last Name is required.';
-        }
-        else if (!/^[a-zA-Z\s]+$/i.test(data.lastName)) {
-            errors.lastName = 'Last Name should only be letters';
-        }
-        if (!data.password) {
-            errors.password = 'Password is required.';
-        }
-        else if (Object.keys(data.password).length < 8) {
-            errors.password = 'Minimum password length is 8.';
-        }
-        if (!data.confirmpassword) {
-            errors.confirmpassword = 'Confirm Password is required.';
-        }
-        else if (data.confirmpassword !== data.password) {
-            errors.confirmpassword = 'The password confirmation must match the password.';
-        }
-        if (!data.email) {
-            errors.email = 'Email is required.';
-        }
-        else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(data.email)) {
-            errors.email = 'Invalid email address.';
-        }
+  const handleChange = ({ currentTarget: input }) => {
+    const account = { ...user };
+    account[input.name] = input.value;
+    setUser(account);
+  };
 
-        return errors;
-    };
+  const validate = () => {
+    const allErrors = {};
 
-    // const dialogFooter = <div className="flex justify-content-center"><Button label="OK" className="p-button-text" autoFocus onClick={() => setShowMessage(false)} /></div>;
+    // Validate First Name
+    if (user.firstName === "") {
+      allErrors.firstName = "First Name cannot be empty";
+    } else if (!user.firstName.match(/^[a-zA-Z]*$/)) {
+      allErrors.firstName = "First Name can only contain letters";
+    }
 
-    const onSubmit = (data, form) => {
-        setFormData(data);
-        // setShowMessage(true);
-        navigate('/success');
-        form.restart();
-    };
+    // Validate Last Name
+    if (user.lastName === "") {
+      allErrors.lastName = "Last Name cannot be empty";
+    } else if (!user.lastName.match(/^[a-zA-Z]*$/)) {
+      allErrors.lastName = "Last Name can only contain letters";
+    }
 
+    // TODO: Validate Email
+    if (user.email === "") {
+      allErrors.email = "Email cannot be empty";
+    } else if (!user.email.match(/^[^@]+@[^@]+\.[^@]+$/)) {
+      allErrors.email = "Email format is not valid";
+    }
 
-    const isFormFieldValid = (meta) => !!(meta.touched && meta.error);
-    const getFormErrorMessage = (meta) => {
-        return isFormFieldValid(meta) && <small className="p-error">{meta.error}</small>;
-    };
-    // const { getValues } = useForm();
-    return (
+    // TODO: Validate Password
+    if (user.password.length < 8) {
+      allErrors.password =
+        "Password should contain minimum of eight characters";
+    } else if (!user.password.match(/^[a-zA-Z0-9!@#$&()\\-`.+,/"]*$/)) {
+      allErrors.password =
+        "Password can only contain alpha-numeric and special characters";
+    }
 
-        <div className="form-demo">
-            {/* <Dialog visible={showMessage} onHide={() => setShowMessage(false)} position="top" footer={dialogFooter} showHeader={false} breakpoints={{ '960px': '80vw' }} style={{ width: '30vw' }}>
-                <div className="flex align-items-center flex-column pt-6 px-3">
-                    <i className="pi pi-check-circle" style={{ fontSize: '5rem', color: 'var(--green-500)' }}></i>
-                    <h5>Registration Successful!</h5>
-                    <p style={{ lineHeight: 1.5, textIndent: '1rem' }}>
-                        Your account is registered under name <b>{formData.firstName}</b> ; it'll be valid next 30 days without activation. Please check <b>{formData.email}</b> for activation instructions.
-                    </p>
-                </div>
-            </Dialog> */}
-            <Menubar model={items} style={{ 'backgroundColor': '#3F51B5' }} />
-            <div className="flex justify-content-center">
-                <div className="card">
-                    <h5 className="text-center">Register a new User</h5>
-                    <Form onSubmit={onSubmit} initialValues={{ firstName: '', lastName: '', email: '', password: '', confirmpassword: '' }} validate={validate} render={({ handleSubmit }) => (
-                        <form onSubmit={handleSubmit} className="p-fluid">
-                            <Field name="firstName" render={({ input, meta }) => (
-                                <div className="field">
-                                    <span className="p-float-label">
-                                        <InputText id="firstName" {...input} autoFocus className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
-                                        <label htmlFor="firstName" className={classNames({ 'p-error': isFormFieldValid(meta) })}>First Name*</label>
-                                    </span>
-                                    {getFormErrorMessage(meta)}
-                                </div>
-                            )} />
-                            <Field name="lastName" render={({ input, meta }) => (
-                                <div className="field">
-                                    <span className="p-float-label">
-                                        <InputText id="lastName" {...input} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
-                                        <label htmlFor="lastName" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Last Name*</label>
-                                    </span>
-                                    {getFormErrorMessage(meta)}
-                                </div>
-                            )} />
-                            <Field name="email" render={({ input, meta }) => (
-                                <div className="field">
-                                    <span className="p-float-label p-input-icon-right">
-                                        <i className="pi pi-envelope" />
-                                        <InputText id="email" {...input} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
-                                        <label htmlFor="email" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Email*</label>
-                                    </span>
-                                    {getFormErrorMessage(meta)}
-                                </div>
-                            )} />
-                            <Field name="password" render={({ input, meta }) => (
-                                <div className="field">
-                                    <span className="p-float-label">
-                                        <Password id="password" {...input} toggleMask className={classNames({ 'p-invalid': isFormFieldValid(meta) })} header={passwordText} footer={passwordFooter} />
-                                        <label htmlFor="password" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Password*</label>
-                                    </span>
-                                    {getFormErrorMessage(meta)}
-                                </div>
-                            )} />
-                            <Field name="confirmpassword" render={({ input, meta }) => (
-                                <div className="field">
-                                    <span className="p-float-label">
-                                        <Password id="confirmpassword" {...input} toggleMask className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
-                                        <label htmlFor="confirmpassword" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Confirm Password*</label>
-                                    </span>
-                                    {getFormErrorMessage(meta)}
-                                </div>
-                            )} />
+    // TODO: Validate Confirm Password
+    if (user.confirmPassword.length < 8) {
+      allErrors.confirmPassword =
+        "Confirm Password should contain minimum of eight characters";
+    } else if (!user.confirmPassword.match(/^[a-zA-Z0-9!@#$&()\\-`.+,/"]*$/)) {
+      allErrors.confirmPassword =
+        "Confirm Password can only contain alpha-numeric and special characters";
+    } else if (user.confirmPassword !== user.password) {
+      allErrors.confirmPassword = "Passwords do not match";
+    }
 
-                            <Button type="submit" label="Submit" className="mt-2" />
-                        </form>
-                    )} />
-                </div>
-            </div>
-        </div>
-    );
-}
+    return allErrors;
+  };
 
-export default Registration;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const allErrors = validate();
+    setErrors(allErrors);
+    if (Object.keys(allErrors).length !== 0) {
+      return;
+    }
+
+    toast.success("Registered successfuly");
+
+    navigate("/");
+  };
+
+  return (
+    <React.Fragment>
+      <NavBar />
+      <Grid container spacing={0} direction="column" alignItems="center">
+        <Grid item xs={3} width={{ xs: "80%", md: "60%", lg: "35%" }}>
+          <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
+            <Stack spacing={1.5} alignItems="center">
+              <Input
+                label="First Name"
+                name="firstName"
+                type="text"
+                value={user.firstName}
+                onChange={handleChange}
+                errors={errors}
+              />
+              <Input
+                label="Last Name"
+                name="lastName"
+                type="text"
+                value={user.lastName}
+                onChange={handleChange}
+                errors={errors}
+              />
+              <Input
+                label="Email"
+                name="email"
+                type="email"
+                value={user.email}
+                onChange={handleChange}
+                errors={errors}
+              />
+              <Input
+                label="Password"
+                name="password"
+                type="password"
+                value={user.password}
+                onChange={handleChange}
+                errors={errors}
+              />
+              <Input
+                label="Confirm Password"
+                name="confirmPassword"
+                type="password"
+                value={user.confirmPassword}
+                onChange={handleChange}
+                errors={errors}
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                style={{ minHeight: "40px", backgroundColor: "#00d2d3" }}
+              >
+                Register
+              </Button>
+              <Typography variant="span" component="span" style={{}}>
+                <Link
+                  to="/"
+                  style={{ textDecoration: "none", color: "#00d2d3" }}
+                >
+                  Already have an account?
+                </Link>
+              </Typography>
+            </Stack>
+          </Box>
+        </Grid>
+      </Grid>
+    </React.Fragment>
+  );
+};
+
+export default Register;

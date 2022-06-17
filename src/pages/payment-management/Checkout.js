@@ -21,8 +21,8 @@ function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="#">
+        RentoCar
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -30,7 +30,7 @@ function Copyright() {
   );
 }
 
-const steps = ['Shipping address', 'Payment details', 'Review your order'];
+const steps = ['Billing address', 'Payment details', 'Review your order'];
 
 function getStepContent(step) {
   switch (step) {
@@ -62,21 +62,7 @@ export default function Checkout() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Header/>
-      {/* <AppBar
-        position="absolute"
-        color="default"
-        elevation={0}
-        sx={{
-          position: 'relative',
-          borderBottom: (t) => `1px solid ${t.palette.divider}`,
-        }}
-      >
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Company name
-          </Typography>
-        </Toolbar>
-      </AppBar> */}
+ 
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h4" align="center">
@@ -96,9 +82,8 @@ export default function Checkout() {
                   Thank you for your order.
                 </Typography>
                 <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order
-                  confirmation, and will send you an update when your order has
-                  shipped.
+                  Your booking confirmation number is #199182. We have emailed your booking
+                  confirmation. Please bring this number to station to pick up the car
                 </Typography>
               </React.Fragment>
             ) : (

@@ -9,7 +9,7 @@ export default function AddressForm() {
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Shipping address
+        Billing address
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
@@ -100,7 +100,7 @@ export default function AddressForm() {
         <Grid item xs={12}>
           <FormControlLabel
             control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
-            label="Use this address for payment details"
+            label="Add Insurance"
           />
         </Grid>
       </Grid>

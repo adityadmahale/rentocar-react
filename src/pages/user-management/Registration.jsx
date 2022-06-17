@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Input from "../../components/common/input";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import NavBar from "../../components/common/nav-bar";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -84,73 +83,74 @@ const Register = () => {
   };
 
   return (
-    <React.Fragment>
-      <NavBar />
-      <Grid container spacing={0} direction="column" alignItems="center">
-        <Grid item xs={3} width={{ xs: "80%", md: "60%", lg: "35%" }}>
-          <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
-            <Stack spacing={1.5} alignItems="center">
-              <Input
-                label="First Name"
-                name="firstName"
-                type="text"
-                value={user.firstName}
-                onChange={handleChange}
-                errors={errors}
-              />
-              <Input
-                label="Last Name"
-                name="lastName"
-                type="text"
-                value={user.lastName}
-                onChange={handleChange}
-                errors={errors}
-              />
-              <Input
-                label="Email"
-                name="email"
-                type="email"
-                value={user.email}
-                onChange={handleChange}
-                errors={errors}
-              />
-              <Input
-                label="Password"
-                name="password"
-                type="password"
-                value={user.password}
-                onChange={handleChange}
-                errors={errors}
-              />
-              <Input
-                label="Confirm Password"
-                name="confirmPassword"
-                type="password"
-                value={user.confirmPassword}
-                onChange={handleChange}
-                errors={errors}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                style={{ minHeight: "40px", backgroundColor: "#00d2d3" }}
-              >
-                Register
-              </Button>
-              <Typography variant="span" component="span" style={{}}>
-                <Link
-                  to="/"
-                  style={{ textDecoration: "none", color: "#00d2d3" }}
-                >
-                  Already have an account?
-                </Link>
-              </Typography>
-            </Stack>
-          </Box>
-        </Grid>
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ marginTop: "40px" }}
+    >
+      <Grid item xs={3} width={{ xs: "80%", md: "60%", lg: "35%" }}>
+        <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
+          <Stack spacing={1.5} alignItems="center">
+            <Input
+              label="First Name"
+              name="firstName"
+              type="text"
+              value={user.firstName}
+              onChange={handleChange}
+              errors={errors}
+            />
+            <Input
+              label="Last Name"
+              name="lastName"
+              type="text"
+              value={user.lastName}
+              onChange={handleChange}
+              errors={errors}
+            />
+            <Input
+              label="Email"
+              name="email"
+              type="email"
+              value={user.email}
+              onChange={handleChange}
+              errors={errors}
+            />
+            <Input
+              label="Password"
+              name="password"
+              type="password"
+              value={user.password}
+              onChange={handleChange}
+              errors={errors}
+            />
+            <Input
+              label="Confirm Password"
+              name="confirmPassword"
+              type="password"
+              value={user.confirmPassword}
+              onChange={handleChange}
+              errors={errors}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              style={{ minHeight: "40px", backgroundColor: "#00d2d3" }}
+            >
+              Register
+            </Button>
+            <Typography variant="span" component="span" style={{}}>
+              <Link to="/" style={{ textDecoration: "none", color: "#00d2d3" }}>
+                Already have an account?
+              </Link>
+            </Typography>
+          </Stack>
+        </Box>
       </Grid>
-    </React.Fragment>
+    </Grid>
   );
 };
 

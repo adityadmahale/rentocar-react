@@ -38,14 +38,14 @@ const OfferCard = ({ offer, selectedOffer, onSelect, onApply, applied }) => {
         marginLeft: "15px",
         cursor: "pointer",
         backgroundColor:
-          selectedOffer && offer.id === selectedOffer.id ? "#bbb" : "#fff",
+          selectedOffer && offer._id === selectedOffer._id ? "#bbb" : "#fff",
       }}
       onClick={() => onSelect(offer)}
     >
       <CardMedia
         component="img"
         height="300"
-        image={offer.image}
+        image="/offer.jpg"
         alt={offer.title}
       />
       <CardContent>

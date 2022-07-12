@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Card from "./card";
-import { getOffers } from "./service/offersService";
+import { getOffers, addOffer, deleteOffer } from "../../services/offers";
 import {
   Grid,
   Container,
@@ -71,36 +71,51 @@ const Offers = () => {
     setOfferFields(newOfferFields);
   };
 
-  const handleOfferPost = (e) => {
-    e.preventDefault();
-    const allErrors = validate();
-    setErrors(allErrors || {});
-    if (allErrors) {
-      return;
+  const handleOfferPost = async (e) => {
+    const originalOffers = offers;
+    try {
+      e.preventDefault();
+      const allErrors = validate();
+      setErrors(allErrors || {});
+      if (allErrors) {
+        return;
+      }
+      const { data: newOffer } = await addOffer(offerFields);
+      const newOffers = [{ ...newOffer }, ...offers];
+      setOffers(newOffers);
+      handleClose();
+      toast.success("Offer Added Successfully");
+      setOfferFields({
+        title: "",
+        description: "",
+      });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        toast.error("Something went wrong");
+        setOffers(originalOffers);
+      }
     }
-    const updatedOffer = {
-      ...offerFields,
-      id: offers.length + 1,
-      image: "/offer.jpg",
-    };
-    const newOffers = [updatedOffer, ...offers];
-    setOffers(newOffers);
-    handleClose();
-    toast.success("Offer Added Successfully");
-    setOfferFields({
-      title: "",
-      description: "",
-    });
   };
 
   const handleSelect = (selected) => {
     setSelectedOffer({ ...selected });
   };
 
-  const handleDelete = () => {
-    const newOffers = offers.filter((offer) => offer.id !== selectedOffer.id);
-    setOffers(newOffers);
-    setSelectedOffer(null);
+  const handleDelete = async () => {
+    const originalOffers = offers;
+    try {
+      const newOffers = offers.filter(
+        (offer) => offer._id !== selectedOffer._id
+      );
+      setOffers(newOffers);
+      await deleteOffer(selectedOffer._id);
+      setSelectedOffer(null);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        toast.error("Something went wrong");
+        setOffers(originalOffers);
+      }
+    }
   };
 
   const handleApply = () => {
@@ -109,7 +124,12 @@ const Offers = () => {
   };
 
   useEffect(() => {
-    setOffers(getOffers());
+    const getData = async () => {
+      const { data: offers } = await getOffers();
+      setOffers(offers);
+    };
+
+    getData();
   }, []);
 
   return (
@@ -165,7 +185,7 @@ const Offers = () => {
               xs={12}
               md={4}
               style={{ cursor: "pointer" }}
-              key={offer.id}
+              key={offer._id}
             >
               <Card
                 key={offer.id}

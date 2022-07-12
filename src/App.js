@@ -9,7 +9,7 @@ import "primeicons/primeicons.css";
 
 // React imports
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, Flip } from "react-toastify";
@@ -33,9 +33,16 @@ import MakeReservation from "./pages/reservation-management/makeReservation";
 import ViewReservations from "./pages/reservation-management/viewReservations";
 import CancelReservation from "./pages/reservation-management/cancelReservation";
 import ModifyReservation from "./pages/reservation-management/modifyReservation";
+import auth from "./services/authService";
 
 function App() {
+  const [user, setUser] = useState(null);
   const [id, setId] = useState([]);
+
+  useEffect(() => {
+    const user = auth.getCurrentUser();
+    setUser(user);
+  }, []);
 
   return (
     <div className="App">

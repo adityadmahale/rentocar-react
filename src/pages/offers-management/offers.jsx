@@ -32,7 +32,7 @@ const StyledButton = styled(Button)({
   },
 });
 
-const Offers = () => {
+const Offers = ({ user }) => {
   const [offers, setOffers] = useState([]);
   const [applied, setApplied] = useState(false);
   const [open, setOpen] = useState(false);
@@ -98,6 +98,7 @@ const Offers = () => {
   };
 
   const handleSelect = (selected) => {
+    if (user && !user.isAdmin) return;
     setSelectedOffer({ ...selected });
   };
 
@@ -165,18 +166,20 @@ const Offers = () => {
             Offers
           </Typography>
 
-          <Stack direction={{ xs: "column", md: "row" }} spacing={4}>
-            <StyledButton
-              onClick={handleDelete}
-              disabled={selectedOffer === null}
-              variant="outlined"
-            >
-              DELETE OFFER
-            </StyledButton>
-            <StyledButton onClick={handleOpen} variant="outlined">
-              ADD OFFER
-            </StyledButton>
-          </Stack>
+          {user && user.isAdmin && (
+            <Stack direction={{ xs: "column", md: "row" }} spacing={4}>
+              <StyledButton
+                onClick={handleDelete}
+                disabled={selectedOffer === null}
+                variant="outlined"
+              >
+                DELETE OFFER
+              </StyledButton>
+              <StyledButton onClick={handleOpen} variant="outlined">
+                ADD OFFER
+              </StyledButton>
+            </Stack>
+          )}
         </Stack>
         <Grid container spacing={3}>
           {offers.map((offer) => (
@@ -194,6 +197,7 @@ const Offers = () => {
                 onSelect={handleSelect}
                 onApply={handleApply}
                 applied={applied}
+                user={user}
               />
             </Grid>
           ))}

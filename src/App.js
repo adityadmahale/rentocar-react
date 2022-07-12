@@ -8,7 +8,12 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 
 // React imports
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
 import React, { useState, useEffect } from "react";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -59,7 +64,10 @@ function App() {
           {/* Routes for Inventory Management */}
           <Route path="/inventoryhome" element={<InventoryHome />} />
           {/* Route for Offers Management */}
-          <Route path="/offers" element={<Offers />} />
+          <Route
+            path="/offers"
+            element={!user ? <Navigate to="/" /> : <Offers user={user} />}
+          />
           {/* Route for User Reviews Management */}
           <Route path="/vehicles/details" element={<VehicleDetails />} />
           {/* Route for Payment Management */}

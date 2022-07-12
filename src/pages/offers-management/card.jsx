@@ -28,7 +28,14 @@ const StyledButton = styled(Button)({
   },
 });
 
-const OfferCard = ({ offer, selectedOffer, onSelect, onApply, applied }) => {
+const OfferCard = ({
+  offer,
+  selectedOffer,
+  onSelect,
+  onApply,
+  applied,
+  user,
+}) => {
   return (
     <Card
       variant="outlined"
@@ -56,14 +63,16 @@ const OfferCard = ({ offer, selectedOffer, onSelect, onApply, applied }) => {
           {offer.description}
         </Typography>
       </CardContent>
-      <StyledButton
-        size="small"
-        variant="outlined"
-        onClick={onApply}
-        disabled={applied}
-      >
-        Apply
-      </StyledButton>
+      {user && !user.isAdmin && (
+        <StyledButton
+          size="small"
+          variant="outlined"
+          onClick={onApply}
+          disabled={applied}
+        >
+          Apply
+        </StyledButton>
+      )}
     </Card>
   );
 };

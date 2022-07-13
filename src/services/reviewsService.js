@@ -18,7 +18,7 @@ export const addReview = (review, user_id, vehicle_id) => {
 
 export const updateReview = (id, liked) => {
   return http.put(`${reviewsAPIEndpoint}${id}`, {
-    liked,
+    liked: liked,
   });
 };
 

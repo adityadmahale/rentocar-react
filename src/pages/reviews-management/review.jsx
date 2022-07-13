@@ -29,7 +29,7 @@ const Review = ({ review, user }) => {
                 ", " +
                 date.getFullYear()}
             </p>
-            <Vote yes={review.yes} no={review.no} user={user} />
+            <Vote review={review} user={user} />
           </Stack>
         </Grid>
         <Grid item xs={12} md={9} textAlign="left">

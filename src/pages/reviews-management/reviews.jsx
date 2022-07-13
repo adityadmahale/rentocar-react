@@ -89,6 +89,11 @@ const Reviews = ({ user }) => {
       handleClose();
       toast.success("Review Submitted Successfully");
       setPosted(updatedReview);
+      setReviewFields({
+        rating: "0",
+        title: "",
+        description: "",
+      });
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         toast.error("Something went wrong");

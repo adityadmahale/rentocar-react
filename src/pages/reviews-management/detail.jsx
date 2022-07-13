@@ -32,8 +32,6 @@ const Detail = () => {
       navigate("/availablecars");
     }
     setVehicle(location.state);
-    const getData = async () => {};
-    getData();
   }, [location, navigate]);
 
   return (
@@ -157,7 +155,7 @@ const renderIcon = (status, text) => {
     return (
       <>
         <CheckIcon sx={{ display: { md: "flex" }, mr: 1 }} color="success" />
-        <Typography variant="body1" gutterBottom>
+        <Typography variant="div" gutterBottom>
           {text}
         </Typography>
       </>
@@ -166,7 +164,7 @@ const renderIcon = (status, text) => {
     return (
       <>
         <CloseIcon sx={{ display: { md: "flex", color: "red" }, mr: 1 }} />
-        <Typography variant="body1" gutterBottom>
+        <Typography variant="div" gutterBottom>
           {text}
         </Typography>
       </>

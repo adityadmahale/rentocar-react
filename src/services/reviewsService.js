@@ -2,8 +2,8 @@ import http from "./httpService";
 
 const reviewsAPIEndpoint = "/reviews/";
 
-export const getReviews = () => {
-  return http.get(reviewsAPIEndpoint);
+export const getReviews = (id) => {
+  return http.get(`${reviewsAPIEndpoint}${id}`);
 };
 
 export const addReview = (review) => {

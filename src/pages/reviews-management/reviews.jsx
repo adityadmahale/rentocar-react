@@ -1,6 +1,6 @@
 import { Button, Stack, styled, Typography, Container } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { getReviews } from "./reviewsService";
+import { getReviews } from "../../services/reviewsService";
 import { getSortedReviews } from "./sortReviews";
 import Modal from "./modal";
 import Review from "./review";
@@ -8,6 +8,7 @@ import ReviewForm from "./reviewForm";
 import SortSelect from "./sortSelect";
 import Joi from "joi";
 import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const StyledButton = styled(Button)({
   color: "#fff",
@@ -22,6 +23,10 @@ const StyledButton = styled(Button)({
 });
 
 const Reviews = ({ user }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [vehicle, setVehicle] = useState({});
+
   const [posted, setPosted] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [sortOption, setSortOption] = useState("d");
@@ -96,8 +101,16 @@ const Reviews = ({ user }) => {
   };
 
   useEffect(() => {
-    setReviews(getReviews());
-  }, []);
+    if (!location.state) {
+      navigate("/availablecars");
+    }
+    setVehicle(location.state);
+    const getData = async () => {
+      const { data: vehicleReviews } = await getReviews(location.state._id);
+      setReviews(vehicleReviews);
+    };
+    getData();
+  }, [location, navigate]);
 
   const sortedReviews = getSortedReviews(reviews, sortOption);
 
@@ -150,7 +163,7 @@ const Reviews = ({ user }) => {
 
       <Stack spacing={2} paddingBottom="30px">
         {sortedReviews.map((review) => (
-          <Review key={review.id} review={review} user={user} />
+          <Review key={review._id} review={review} user={user} />
         ))}
       </Stack>
     </Container>

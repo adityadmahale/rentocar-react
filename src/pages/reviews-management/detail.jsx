@@ -156,10 +156,7 @@ const renderIcon = (status, text) => {
   if (status)
     return (
       <>
-        <CheckIcon
-          sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-          color="success"
-        />
+        <CheckIcon sx={{ display: { md: "flex" }, mr: 1 }} color="success" />
         <Typography variant="body1" gutterBottom>
           {text}
         </Typography>
@@ -168,9 +165,7 @@ const renderIcon = (status, text) => {
   else
     return (
       <>
-        <CloseIcon
-          sx={{ display: { xs: "none", md: "flex", color: "red" }, mr: 1 }}
-        />
+        <CloseIcon sx={{ display: { md: "flex", color: "red" }, mr: 1 }} />
         <Typography variant="body1" gutterBottom>
           {text}
         </Typography>

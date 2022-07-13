@@ -128,34 +128,16 @@ const Detail = () => {
               }}
             >
               {/* Reference: https://mui.com/material-ui/material-icons */}
-              {renderIcon(vehicle.door)}
-              <Typography variant="body1" gutterBottom>
-                4 Door
-              </Typography>
-              {renderIcon(vehicle.childCarSeat)}
-              <Typography variant="body1" gutterBottom>
-                Child Car Seat
-              </Typography>
-              {renderIcon(vehicle.automatic)}
-              <Typography variant="body1" gutterBottom>
-                Automatic
-              </Typography>
+              {renderIcon(vehicle.door, "4 Door")}
+              {renderIcon(vehicle.childCarSeat, "Child Car Seat")}
+              {renderIcon(vehicle.automatic, "Automatic")}
             </Typography>
             <Typography
               style={{ display: "flex", justifyContent: "space-around" }}
             >
-              {renderIcon(vehicle.ac)}
-              <Typography variant="body1" gutterBottom>
-                A/C
-              </Typography>
-              {renderIcon(vehicle.sportsMode)}
-              <Typography variant="body1" gutterBottom>
-                Sports Mode
-              </Typography>
-              {renderIcon(vehicle.cruiseControl)}
-              <Typography variant="body1" gutterBottom>
-                Cruise Control
-              </Typography>
+              {renderIcon(vehicle.ac, "A/C")}
+              {renderIcon(vehicle.sportsMode, "Sports Mode")}
+              {renderIcon(vehicle.cruiseControl, "Cruise Control")}
             </Typography>
           </Typography>
           <StyledButton
@@ -170,19 +152,29 @@ const Detail = () => {
   );
 };
 
-const renderIcon = (status) => {
+const renderIcon = (status, text) => {
   if (status)
     return (
-      <CheckIcon
-        sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-        color="success"
-      />
+      <>
+        <CheckIcon
+          sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+          color="success"
+        />
+        <Typography variant="body1" gutterBottom>
+          {text}
+        </Typography>
+      </>
     );
   else
     return (
-      <CloseIcon
-        sx={{ display: { xs: "none", md: "flex", color: "red" }, mr: 1 }}
-      />
+      <>
+        <CloseIcon
+          sx={{ display: { xs: "none", md: "flex", color: "red" }, mr: 1 }}
+        />
+        <Typography variant="body1" gutterBottom>
+          {text}
+        </Typography>
+      </>
     );
 };
 

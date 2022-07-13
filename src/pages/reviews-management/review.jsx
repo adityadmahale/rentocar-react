@@ -3,6 +3,7 @@ import React from "react";
 import Vote from "./vote";
 
 const Review = ({ review, user }) => {
+  const date = new Date(review.date);
   return (
     <Card style={{ border: "none", boxShadow: "none" }}>
       <Grid
@@ -20,15 +21,15 @@ const Review = ({ review, user }) => {
               readOnly
               size="large"
             />
-            <p>{review.user}</p>
+            <p>{review.user.username}</p>
             <p>
-              {review.date.toLocaleString("default", { month: "short" }) +
+              {date.toLocaleString("default", { month: "short" }) +
                 " " +
-                review.date.getDate() +
+                date.getDate() +
                 ", " +
-                review.date.getFullYear()}
+                date.getFullYear()}
             </p>
-            <Vote yes={review.useful.yes} no={review.useful.no} user={user} />
+            <Vote review={review} user={user} />
           </Stack>
         </Grid>
         <Grid item xs={12} md={9} textAlign="left">

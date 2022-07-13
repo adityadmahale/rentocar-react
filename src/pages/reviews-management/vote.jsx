@@ -1,19 +1,22 @@
 import { Typography } from "@mui/material";
 import React, { useState } from "react";
+import { updateReview } from "../../services/reviewsService";
 
-const Vote = ({ yes, no, user }) => {
-  const [agree, setAgree] = useState(yes);
-  const [disagree, setDisagree] = useState(no);
+const Vote = ({ review, user }) => {
+  const [agree, setAgree] = useState(review.yes);
+  const [disagree, setDisagree] = useState(review.no);
   const [disabled, setDisabled] = useState(false);
 
-  const handleYesClick = () => {
+  const handleYesClick = async () => {
     if (disabled || !user) return;
+    await updateReview(review._id, true);
     setAgree(agree + 1);
     setDisabled(true);
   };
 
-  const handleNoClick = () => {
+  const handleNoClick = async () => {
     if (disabled || !user) return;
+    await updateReview(review._id, false);
     setDisagree(disagree + 1);
     setDisabled(true);
   };

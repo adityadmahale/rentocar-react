@@ -11,11 +11,13 @@ export function getSortedReviews(reviews, sortCriteria) {
       b.rating > a.rating ? 1 : a.rating > b.rating ? -1 : 0
     );
 
-  return sortedReviews.sort((a, b) =>
-    b.date.getTime() > a.date.getTime()
+  return sortedReviews.sort((a, b) => {
+    const bDate = new Date(b.date);
+    const aDate = new Date(a.date);
+    return bDate.getTime() > aDate.getTime()
       ? 1
-      : a.date.getTime() > b.date.getTime()
+      : aDate.getTime() > bDate.getTime()
       ? -1
-      : 0
-  );
+      : 0;
+  });
 }

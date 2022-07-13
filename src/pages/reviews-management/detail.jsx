@@ -1,9 +1,11 @@
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import LuggageIcon from "@mui/icons-material/Luggage";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 
 const StyledButton = styled(Button)({
   marginTop: "40px",
@@ -22,6 +24,16 @@ const StyledButton = styled(Button)({
 
 const Detail = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [vehicle, setVehicle] = useState({});
+
+  useEffect(() => {
+    if (!location.state) {
+      navigate("/availablecars");
+    }
+    setVehicle(location.state);
+  }, [location, navigate]);
+
   return (
     <Container
       sx={{
@@ -42,14 +54,14 @@ const Detail = () => {
               width: "100%",
               borderRadius: "10px",
             }}
-            alt="The house from the offer."
-            src="/tucson.png"
+            alt={vehicle.name}
+            src={vehicle.image}
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <h2>Intermediate SUV</h2>
-          <p>Hyundai Tucson or similar</p>
-          <b>CA 267.36 Total</b>
+          <h2>{vehicle.name}</h2>
+          <p>{vehicle.type}</p>
+          <b>CA ${vehicle.price} Total</b>
           <Typography
             gutterBottom
             variant="subtitle2"
@@ -73,8 +85,9 @@ const Detail = () => {
                 gap={1}
                 marginLeft={{ md: "20px" }}
               >
-                <PersonIcon fontSize="small" style={{ color: "#00d2d3" }} />5
-                Seats
+                <PersonIcon fontSize="small" style={{ color: "#00d2d3" }} />
+                {vehicle.seats}
+                {vehicle.seats === 1 ? " Seat" : " Seats"}
               </Stack>
 
               <Stack
@@ -85,8 +98,9 @@ const Detail = () => {
                 gap={1}
                 marginLeft={{ md: "20px" }}
               >
-                <LuggageIcon fontSize="small" style={{ color: "#00d2d3" }} />1
-                Large Bag
+                <LuggageIcon fontSize="small" style={{ color: "#00d2d3" }} />
+                {vehicle.largeBag}
+                {vehicle.largeBag === 1 ? " Large Bag" : " Large Bags"}
               </Stack>
 
               <Stack
@@ -97,12 +111,32 @@ const Detail = () => {
                 gap={1}
                 marginLeft={{ md: "20px" }}
               >
-                <LuggageIcon fontSize="small" style={{ color: "#00d2d3" }} />1
-                Small Bag
+                <LuggageIcon fontSize="small" style={{ color: "#00d2d3" }} />
+                {vehicle.smallBag}
+                {vehicle.smallBag === 1 ? " Small Bag" : " Small Bags"}
               </Stack>
 
               <Grid item xs={12} md={2} container></Grid>
             </Grid>
+            <Typography
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginTop: "15px",
+              }}
+            >
+              {/* Reference: https://mui.com/material-ui/material-icons */}
+              {renderIcon(vehicle.door, "4 Door")}
+              {renderIcon(vehicle.childCarSeat, "Child Car Seat")}
+              {renderIcon(vehicle.automatic, "Automatic")}
+            </Typography>
+            <Typography
+              style={{ display: "flex", justifyContent: "space-around" }}
+            >
+              {renderIcon(vehicle.ac, "A/C")}
+              {renderIcon(vehicle.sportsMode, "Sports Mode")}
+              {renderIcon(vehicle.cruiseControl, "Cruise Control")}
+            </Typography>
           </Typography>
           <StyledButton
             variant="outlined"
@@ -114,6 +148,27 @@ const Detail = () => {
       </Grid>
     </Container>
   );
+};
+
+const renderIcon = (status, text) => {
+  if (status)
+    return (
+      <>
+        <CheckIcon sx={{ display: { md: "flex" }, mr: 1 }} color="success" />
+        <Typography variant="div" gutterBottom>
+          {text}
+        </Typography>
+      </>
+    );
+  else
+    return (
+      <>
+        <CloseIcon sx={{ display: { md: "flex", color: "red" }, mr: 1 }} />
+        <Typography variant="div" gutterBottom>
+          {text}
+        </Typography>
+      </>
+    );
 };
 
 export default Detail;

@@ -4,6 +4,8 @@ import LuggageIcon from "@mui/icons-material/Luggage";
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useLocation, useNavigate } from "react-router-dom";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 
 const StyledButton = styled(Button)({
   marginTop: "40px",
@@ -86,7 +88,8 @@ const Detail = () => {
                 marginLeft={{ md: "20px" }}
               >
                 <PersonIcon fontSize="small" style={{ color: "#00d2d3" }} />
-                {vehicle.seats + " Seats"}
+                {vehicle.seats}
+                {vehicle.seats === 1 ? " Seat" : " Seats"}
               </Stack>
 
               <Stack
@@ -98,7 +101,8 @@ const Detail = () => {
                 marginLeft={{ md: "20px" }}
               >
                 <LuggageIcon fontSize="small" style={{ color: "#00d2d3" }} />
-                {vehicle.largeBag + " Large Bag"}
+                {vehicle.largeBag}
+                {vehicle.largeBag === 1 ? " Large Bag" : " Large Bags"}
               </Stack>
 
               <Stack
@@ -110,11 +114,49 @@ const Detail = () => {
                 marginLeft={{ md: "20px" }}
               >
                 <LuggageIcon fontSize="small" style={{ color: "#00d2d3" }} />
-                {vehicle.smallBag + " Small Bag"}
+                {vehicle.smallBag}
+                {vehicle.smallBag === 1 ? " Small Bag" : " Small Bags"}
               </Stack>
 
               <Grid item xs={12} md={2} container></Grid>
             </Grid>
+            <Typography
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginTop: "15px",
+              }}
+            >
+              {/* Reference: https://mui.com/material-ui/material-icons */}
+              {renderIcon(vehicle.door)}
+              <Typography variant="body1" gutterBottom>
+                4 Door
+              </Typography>
+              {renderIcon(vehicle.childCarSeat)}
+              <Typography variant="body1" gutterBottom>
+                Child Car Seat
+              </Typography>
+              {renderIcon(vehicle.automatic)}
+              <Typography variant="body1" gutterBottom>
+                Automatic
+              </Typography>
+            </Typography>
+            <Typography
+              style={{ display: "flex", justifyContent: "space-around" }}
+            >
+              {renderIcon(vehicle.ac)}
+              <Typography variant="body1" gutterBottom>
+                A/C
+              </Typography>
+              {renderIcon(vehicle.sportsMode)}
+              <Typography variant="body1" gutterBottom>
+                Sports Mode
+              </Typography>
+              {renderIcon(vehicle.cruiseControl)}
+              <Typography variant="body1" gutterBottom>
+                Cruise Control
+              </Typography>
+            </Typography>
           </Typography>
           <StyledButton
             variant="outlined"
@@ -126,6 +168,22 @@ const Detail = () => {
       </Grid>
     </Container>
   );
+};
+
+const renderIcon = (status) => {
+  if (status)
+    return (
+      <CheckIcon
+        sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+        color="success"
+      />
+    );
+  else
+    return (
+      <CloseIcon
+        sx={{ display: { xs: "none", md: "flex", color: "red" }, mr: 1 }}
+      />
+    );
 };
 
 export default Detail;

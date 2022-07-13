@@ -1,6 +1,10 @@
 import { Button, Stack, styled, Typography, Container } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { getReviews } from "../../services/reviewsService";
+import {
+  addReview,
+  deleteReview,
+  getReviews,
+} from "../../services/reviewsService";
 import { getSortedReviews } from "./sortReviews";
 import Modal from "./modal";
 import Review from "./review";
@@ -66,44 +70,55 @@ const Reviews = ({ user }) => {
     setReviewFields(newReviewFields);
   };
 
-  const handleReviewPost = (e) => {
-    e.preventDefault();
-    const allErrors = validate();
-    setErrors(allErrors || {});
-    if (allErrors) {
-      return;
+  const handleReviewPost = async (e) => {
+    const originalReviews = reviews;
+    try {
+      e.preventDefault();
+      const allErrors = validate();
+      setErrors(allErrors || {});
+      if (allErrors) {
+        return;
+      }
+      const { data: updatedReview } = await addReview(
+        reviewFields,
+        user._id,
+        vehicle._id
+      );
+      const newReviews = [updatedReview, ...reviews];
+      setReviews(newReviews);
+      handleClose();
+      toast.success("Review Submitted Successfully");
+      setPosted(updatedReview);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        toast.error("Something went wrong");
+        setReviews(originalReviews);
+      }
     }
-    const updatedReview = {
-      ...reviewFields,
-      date: new Date(),
-      id: reviews.length + 1,
-      user: "Aditya Mahale",
-      useful: {
-        yes: 0,
-        no: 0,
-      },
-    };
-    const newReviews = [updatedReview, ...reviews];
-    setReviews(newReviews);
-    handleClose();
-    toast.success("Review Submitted Successfully");
-    setPosted(updatedReview);
   };
 
   const handleSortSelect = (e) => {
     setSortOption(e.target.value);
   };
 
-  const handleDelete = () => {
-    const filteredReviews = reviews.filter((r) => r !== posted);
-    setReviews(filteredReviews);
-    setPosted(null);
+  const handleDelete = async (id) => {
+    try {
+      await deleteReview(id);
+      const filteredReviews = reviews.filter((r) => r._id !== posted._id);
+      setReviews(filteredReviews);
+      setPosted(null);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        toast.error("Something went wrong");
+      }
+    }
   };
 
   useEffect(() => {
     if (!location.state) {
       navigate("/availablecars");
     }
+
     setVehicle(location.state);
     const getData = async () => {
       const { data: vehicleReviews } = await getReviews(location.state._id);
@@ -150,7 +165,10 @@ const Reviews = ({ user }) => {
             </StyledButton>
           )}
           {user && !user.isAdmin && posted && (
-            <StyledButton onClick={handleDelete} variant="contained">
+            <StyledButton
+              onClick={() => handleDelete(posted._id)}
+              variant="contained"
+            >
               DELETE Review
             </StyledButton>
           )}

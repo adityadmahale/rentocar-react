@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -13,6 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import NavBar from "../../components/common/nav-bar";
 import { styled } from "@mui/material";
+import { getVehicles } from "../../services/vehicleService";
 
 const StyledButton = styled(Button)({
   color: "#fff",
@@ -27,7 +28,18 @@ const StyledButton = styled(Button)({
 });
 
 const AvailableCars = () => {
+  const [vehicles, setVehicles] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const getData = async () => {
+      const { data: newVehicles } = await getVehicles();
+      setVehicles(newVehicles);
+    };
+
+    getData();
+  }, []);
+
   return (
     <React.Fragment>
       <NavBar />
@@ -137,398 +149,161 @@ const AvailableCars = () => {
             </Grid>
           </Grid>
         </Box>
-        <Box>
-          <Grid container spacing={3}>
-            <Grid
-              item
-              xs={12}
-              sm={4}
-              md={4}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                margin: "auto",
-              }}
-            >
-              <img
-                alt="suv"
-                src={require("../../assets/images/suv.webp")}
-                style={{ height: "150px", width: "250px", alignSelf: "center" }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={4} md={4} margin="auto">
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <Typography
-                  variant="h5"
-                  component="div"
-                  gutterBottom
-                  textAlign={"center"}
-                  sx={{ fontFamily: "monospace" }}
-                >
-                  Hyundai Tucson
-                </Typography>
-                <Typography
-                  variant="h6"
-                  component="div"
-                  gutterBottom
-                  textAlign={"center"}
-                  sx={{ fontFamily: "monospace" }}
-                >
-                  SUV
-                </Typography>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                {/* Reference: https://mui.com/material-ui/material-icons */}
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  4 Door
-                </Typography>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  7 Seats
-                </Typography>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  Automatic
-                </Typography>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  A/C
-                </Typography>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  Sports Mode
-                </Typography>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  Cruise Control
-                </Typography>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  1 Large
-                </Typography>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  2 Small Bags
-                </Typography>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  Child Car Seat
-                </Typography>
-              </div>
-            </Grid>
-            <Grid item xs={12} sm={4} md={4} textAlign="center" margin={"auto"}>
-              <h2>C$ 200 Total</h2>
-              <StyledButton
-                variant="contained"
-                size="large"
-                color="success"
-                onClick={() => {
-                  navigate("/vehicles/details");
+        {vehicles.map((vehicle) => (
+          <Box key={vehicle._id}>
+            <Grid container spacing={3}>
+              <Grid
+                item
+                xs={12}
+                sm={4}
+                md={4}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  margin: "auto",
                 }}
               >
-                Reserve
-              </StyledButton>
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <Divider
-                orientation="horizontal"
-                variant="inset"
-                flexItem
-                style={{ marginLeft: "-1px" }}
-              />
-            </Grid>
-          </Grid>
-        </Box>
-        <Box>
-          <Grid container spacing={3}>
-            <Grid
-              item
-              xs={12}
-              sm={4}
-              md={4}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                margin: "auto",
-              }}
-            >
-              <img
-                alt="suv"
-                src={require("../../assets/images/sedan.webp")}
-                style={{ height: "150px", width: "250px", alignSelf: "center" }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={4} md={4} margin="auto">
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <Typography
-                  variant="h5"
-                  component="div"
-                  gutterBottom
-                  textAlign={"center"}
-                  sx={{ fontFamily: "monospace" }}
+                <img
+                  alt="suv"
+                  src={require("../../assets/images/suv.webp")}
+                  style={{
+                    height: "150px",
+                    width: "250px",
+                    alignSelf: "center",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={4} md={4} margin="auto">
+                <div
+                  style={{ display: "flex", justifyContent: "space-around" }}
                 >
-                  Hyundai Verna
-                </Typography>
-                <Typography
-                  variant="h6"
-                  component="div"
-                  gutterBottom
-                  textAlign={"center"}
-                  sx={{ fontFamily: "monospace" }}
+                  <Typography
+                    variant="h5"
+                    component="div"
+                    gutterBottom
+                    textAlign={"center"}
+                    sx={{ fontFamily: "monospace" }}
+                  >
+                    {vehicle.name}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    component="div"
+                    gutterBottom
+                    textAlign={"center"}
+                    sx={{ fontFamily: "monospace" }}
+                  >
+                    {vehicle.type}
+                  </Typography>
+                </div>
+                <div
+                  style={{ display: "flex", justifyContent: "space-around" }}
                 >
-                  Sedan
-                </Typography>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  4 Door
-                </Typography>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  4 Seats
-                </Typography>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  Automatic
-                </Typography>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  A/C
-                </Typography>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  Sports Mode
-                </Typography>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  Cruise Control
-                </Typography>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  1 Large
-                </Typography>
-                <CloseIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="error"
-                />
-                <Typography variant="body1" gutterBottom>
-                  2 Small Bags
-                </Typography>
-                <CloseIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="error"
-                />
-                <Typography variant="body1" gutterBottom>
-                  Child Car Seat
-                </Typography>
-              </div>
-            </Grid>
-            <Grid item xs={12} sm={4} md={4} textAlign="center" margin={"auto"}>
-              <h2>C$ 150 Total</h2>
-              <StyledButton
-                variant="contained"
-                size="large"
-                color="success"
-                onClick={() => {
-                  navigate("/vehicles/details");
-                }}
+                  {/* Reference: https://mui.com/material-ui/material-icons */}
+                  <CheckIcon
+                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+                    color="success"
+                  />
+                  <Typography variant="body1" gutterBottom>
+                    4 Door
+                  </Typography>
+                  <CheckIcon
+                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+                    color="success"
+                  />
+                  <Typography variant="body1" gutterBottom>
+                    {vehicle.seats} Seats
+                  </Typography>
+                  <CheckIcon
+                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+                    color="success"
+                  />
+                  <Typography variant="body1" gutterBottom>
+                    Automatic
+                  </Typography>
+                </div>
+                <div
+                  style={{ display: "flex", justifyContent: "space-around" }}
+                >
+                  <CheckIcon
+                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+                    color="success"
+                  />
+                  <Typography variant="body1" gutterBottom>
+                    A/C
+                  </Typography>
+                  <CheckIcon
+                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+                    color="success"
+                  />
+                  <Typography variant="body1" gutterBottom>
+                    Sports Mode
+                  </Typography>
+                  <CheckIcon
+                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+                    color="success"
+                  />
+                  <Typography variant="body1" gutterBottom>
+                    Cruise Control
+                  </Typography>
+                </div>
+                <div
+                  style={{ display: "flex", justifyContent: "space-around" }}
+                >
+                  <CheckIcon
+                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+                    color="success"
+                  />
+                  <Typography variant="body1" gutterBottom>
+                    {vehicle.largeBag} Large Bag
+                  </Typography>
+                  <CheckIcon
+                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+                    color="success"
+                  />
+                  <Typography variant="body1" gutterBottom>
+                    {vehicle.smallBag} Small Bag
+                  </Typography>
+                  <CheckIcon
+                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+                    color="success"
+                  />
+                  <Typography variant="body1" gutterBottom>
+                    Child Car Seat
+                  </Typography>
+                </div>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={4}
+                md={4}
+                textAlign="center"
+                margin={"auto"}
               >
-                Reserve
-              </StyledButton>
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <Divider
-                orientation="horizontal"
-                variant="inset"
-                flexItem
-                style={{ marginLeft: "-1px" }}
-              />
-            </Grid>
-          </Grid>
-        </Box>
-        <Box>
-          <Grid container spacing={3}>
-            <Grid
-              item
-              xs={12}
-              sm={4}
-              md={4}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                margin: "auto",
-              }}
-            >
-              <img
-                alt="suv"
-                src={require("../../assets/images/hatchback.webp")}
-                style={{ height: "150px", width: "250px", alignSelf: "center" }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={4} md={4} margin="auto">
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <Typography
-                  variant="h5"
-                  component="div"
-                  gutterBottom
-                  textAlign={"center"}
-                  sx={{ fontFamily: "monospace" }}
+                <h2>C$ {vehicle.price} Total</h2>
+                <StyledButton
+                  variant="contained"
+                  size="large"
+                  color="success"
+                  onClick={() => {
+                    navigate("/vehicles/details");
+                  }}
                 >
-                  Honda Breez
-                </Typography>
-                <Typography
-                  variant="h6"
-                  component="div"
-                  gutterBottom
-                  textAlign={"center"}
-                  sx={{ fontFamily: "monospace" }}
-                >
-                  Hatchback
-                </Typography>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
+                  Reserve
+                </StyledButton>
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                <Divider
+                  orientation="horizontal"
+                  variant="inset"
+                  flexItem
+                  style={{ marginLeft: "-1px" }}
                 />
-                <Typography variant="body1" gutterBottom>
-                  4 Door
-                </Typography>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  4 Seats
-                </Typography>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  Automatic
-                </Typography>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  A/C
-                </Typography>
-                <CheckIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="success"
-                />
-                <Typography variant="body1" gutterBottom>
-                  Sports Mode
-                </Typography>
-                <CloseIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="error"
-                />
-                <Typography variant="body1" gutterBottom>
-                  Cruise Control
-                </Typography>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <CloseIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="error"
-                />
-                <Typography variant="body1" gutterBottom>
-                  1 Large
-                </Typography>
-                <CloseIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="error"
-                />
-                <Typography variant="body1" gutterBottom>
-                  2 Small Bags
-                </Typography>
-                <CloseIcon
-                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                  color="error"
-                />
-                <Typography variant="body1" gutterBottom>
-                  Child Car Seat
-                </Typography>
-              </div>
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={4} md={4} textAlign="center" margin={"auto"}>
-              <h2>C$ 110 Total</h2>
-              <StyledButton
-                variant="contained"
-                size="large"
-                color="success"
-                onClick={() => {
-                  navigate("/vehicles/details");
-                }}
-              >
-                Reserve
-              </StyledButton>
-            </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        ))}
       </Box>
     </React.Fragment>
   );

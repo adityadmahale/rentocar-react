@@ -69,7 +69,10 @@ function App() {
             element={!user ? <Navigate to="/" /> : <Offers user={user} />}
           />
           {/* Route for User Reviews Management */}
-          <Route path="/vehicles/details" element={<VehicleDetails />} />
+          <Route
+            path="/vehicles/details"
+            element={<VehicleDetails user={user} />}
+          />
           {/* Route for Payment Management */}
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/comparison" element={<Comparision />} />

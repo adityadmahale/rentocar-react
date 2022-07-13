@@ -1,19 +1,19 @@
 import { Typography } from "@mui/material";
 import React, { useState } from "react";
 
-const Vote = ({ yes, no }) => {
+const Vote = ({ yes, no, user }) => {
   const [agree, setAgree] = useState(yes);
   const [disagree, setDisagree] = useState(no);
   const [disabled, setDisabled] = useState(false);
 
   const handleYesClick = () => {
-    if (disabled) return;
+    if (disabled || !user) return;
     setAgree(agree + 1);
     setDisabled(true);
   };
 
   const handleNoClick = () => {
-    if (disabled) return;
+    if (disabled || !user) return;
     setDisagree(disagree + 1);
     setDisabled(true);
   };
@@ -29,7 +29,7 @@ const Vote = ({ yes, no }) => {
           borderRadius: "5px",
           backgroundColor: "#00d2d3",
           fontWeight: 600,
-          cursor: "pointer",
+          cursor: disabled || !user ? "auto" : "pointer",
         }}
         onClick={handleYesClick}
       >
@@ -43,7 +43,7 @@ const Vote = ({ yes, no }) => {
           borderRadius: "5px",
           backgroundColor: "#00d2d3",
           fontWeight: 600,
-          cursor: "pointer",
+          cursor: disabled || !user ? "auto" : "pointer",
         }}
         onClick={handleNoClick}
       >

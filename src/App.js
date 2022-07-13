@@ -70,7 +70,7 @@ function App() {
           />
           {/* Route for User Reviews Management */}
           <Route
-            path="/vehicles/details"
+            path="/vehicles/:id"
             element={<VehicleDetails user={user} />}
           />
           {/* Route for Payment Management */}

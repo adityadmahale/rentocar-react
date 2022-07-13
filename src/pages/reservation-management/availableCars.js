@@ -165,7 +165,7 @@ const AvailableCars = () => {
               >
                 <img
                   alt="suv"
-                  src={require("../../assets/images/suv.webp")}
+                  src={vehicle.image}
                   style={{
                     height: "150px",
                     width: "250px",
@@ -287,7 +287,9 @@ const AvailableCars = () => {
                   size="large"
                   color="success"
                   onClick={() => {
-                    navigate("/vehicles/details");
+                    navigate(`/vehicles/${vehicle._id}`, {
+                      state: vehicle,
+                    });
                   }}
                 >
                   Reserve

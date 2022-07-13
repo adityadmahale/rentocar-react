@@ -1,9 +1,9 @@
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import LuggageIcon from "@mui/icons-material/Luggage";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const StyledButton = styled(Button)({
   marginTop: "40px",
@@ -22,6 +22,18 @@ const StyledButton = styled(Button)({
 
 const Detail = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [vehicle, setVehicle] = useState({});
+
+  useEffect(() => {
+    if (!location.state) {
+      navigate("/availablecars");
+    }
+    setVehicle(location.state);
+    const getData = async () => {};
+    getData();
+  }, [location, navigate]);
+
   return (
     <Container
       sx={{
@@ -42,14 +54,14 @@ const Detail = () => {
               width: "100%",
               borderRadius: "10px",
             }}
-            alt="The house from the offer."
-            src="/tucson.png"
+            alt={vehicle.name}
+            src={vehicle.image}
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <h2>Intermediate SUV</h2>
-          <p>Hyundai Tucson or similar</p>
-          <b>CA 267.36 Total</b>
+          <h2>{vehicle.name}</h2>
+          <p>{vehicle.type}</p>
+          <b>CA ${vehicle.price} Total</b>
           <Typography
             gutterBottom
             variant="subtitle2"
@@ -73,8 +85,8 @@ const Detail = () => {
                 gap={1}
                 marginLeft={{ md: "20px" }}
               >
-                <PersonIcon fontSize="small" style={{ color: "#00d2d3" }} />5
-                Seats
+                <PersonIcon fontSize="small" style={{ color: "#00d2d3" }} />
+                {vehicle.seats + " Seats"}
               </Stack>
 
               <Stack
@@ -85,8 +97,8 @@ const Detail = () => {
                 gap={1}
                 marginLeft={{ md: "20px" }}
               >
-                <LuggageIcon fontSize="small" style={{ color: "#00d2d3" }} />1
-                Large Bag
+                <LuggageIcon fontSize="small" style={{ color: "#00d2d3" }} />
+                {vehicle.largeBag + " Large Bag"}
               </Stack>
 
               <Stack
@@ -97,8 +109,8 @@ const Detail = () => {
                 gap={1}
                 marginLeft={{ md: "20px" }}
               >
-                <LuggageIcon fontSize="small" style={{ color: "#00d2d3" }} />1
-                Small Bag
+                <LuggageIcon fontSize="small" style={{ color: "#00d2d3" }} />
+                {vehicle.smallBag + " Small Bag"}
               </Stack>
 
               <Grid item xs={12} md={2} container></Grid>

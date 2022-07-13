@@ -21,7 +21,7 @@ const StyledButton = styled(Button)({
   },
 });
 
-const Reviews = () => {
+const Reviews = ({ user }) => {
   const [posted, setPosted] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [sortOption, setSortOption] = useState("d");
@@ -131,12 +131,12 @@ const Reviews = () => {
         </Typography>
 
         <Stack direction={{ xs: "column", md: "row" }} spacing={4}>
-          {!posted && (
+          {user && !user.isAdmin && !posted && (
             <StyledButton onClick={handleOpen} variant="contained">
               Post Review
             </StyledButton>
           )}
-          {posted && (
+          {user && !user.isAdmin && posted && (
             <StyledButton onClick={handleDelete} variant="contained">
               DELETE Review
             </StyledButton>
@@ -150,7 +150,7 @@ const Reviews = () => {
 
       <Stack spacing={2} paddingBottom="30px">
         {sortedReviews.map((review) => (
-          <Review key={review.id} review={review} />
+          <Review key={review.id} review={review} user={user} />
         ))}
       </Stack>
     </Container>

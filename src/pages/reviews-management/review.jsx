@@ -2,7 +2,7 @@ import { Card, Grid, Rating, Stack, Typography } from "@mui/material";
 import React from "react";
 import Vote from "./vote";
 
-const Review = ({ review }) => {
+const Review = ({ review, user }) => {
   return (
     <Card style={{ border: "none", boxShadow: "none" }}>
       <Grid
@@ -28,7 +28,7 @@ const Review = ({ review }) => {
                 ", " +
                 review.date.getFullYear()}
             </p>
-            <Vote yes={review.useful.yes} no={review.useful.no} />
+            <Vote yes={review.useful.yes} no={review.useful.no} user={user} />
           </Stack>
         </Grid>
         <Grid item xs={12} md={9} textAlign="left">

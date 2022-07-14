@@ -137,8 +137,8 @@ const CancelReservation = () => {
               onChange={handleChange}
               variant="outlined"
               fullWidth
-              error = {cancellationValues.reason.errorMessage == "" ? false : true}
-              helperText = {cancellationValues.reason.errorMessage}
+              error={cancellationValues.reason.errorMessage == "" ? false : true}
+              helperText={cancellationValues.reason.errorMessage}
             />
           </Grid>
           <Grid item xs={12} sm={12} md={12} margin="auto">

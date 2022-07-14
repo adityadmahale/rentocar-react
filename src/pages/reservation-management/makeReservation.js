@@ -218,7 +218,7 @@ const MakeReservation = () => {
   return (
     <React.Fragment>
       <NavBar />
-      <div style={{textAlign: "center"}}>
+      <div style={{ textAlign: "center" }}>
         {/* Reference: https://mui.com/material-ui/react-box */}
         <Box
           sx={{ flexGrow: 1 }}

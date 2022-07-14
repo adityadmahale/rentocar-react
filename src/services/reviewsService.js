@@ -6,6 +6,10 @@ export const getReviews = (id) => {
   return http.get(`${reviewsAPIEndpoint}${id}`);
 };
 
+export const getReview = (userId, vehicleId) => {
+  return http.get(`${reviewsAPIEndpoint}${userId}/${vehicleId}`);
+};
+
 export const addReview = (review, user_id, vehicle_id) => {
   return http.post(reviewsAPIEndpoint, {
     rating: parseInt(review.rating),

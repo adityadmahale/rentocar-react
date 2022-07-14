@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   addReview,
   deleteReview,
+  getReview,
   getReviews,
 } from "../../services/reviewsService";
 import { getSortedReviews } from "./sortReviews";
@@ -127,7 +128,9 @@ const Reviews = ({ user }) => {
     setVehicle(location.state);
     const getData = async () => {
       const { data: vehicleReviews } = await getReviews(location.state._id);
+      const { data: posted } = await getReview(user._id, location.state._id);
       setReviews(vehicleReviews);
+      setPosted(posted);
     };
     getData();
   }, [location, navigate]);

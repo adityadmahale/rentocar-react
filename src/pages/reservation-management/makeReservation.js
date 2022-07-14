@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
@@ -13,7 +13,6 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { FormHelperText } from "@mui/material";
 import NavBar from "../../components/common/nav-bar";
-import "./makeReservation.css";
 import { styled } from "@mui/material";
 
 const StyledButton = styled(Button)({
@@ -81,12 +80,12 @@ const MakeReservation = () => {
   const validate = (event) => {
     let isSubmittable = true;
     let errorMessage =
-      reservationValues.pickupPostal.value == ""
+      reservationValues.pickupPostal.value === ""
         ? "Pickup Postal is required."
         : /^[A-Za-z0-9]{6}$/.test(reservationValues.pickupPostal.value)
-        ? ""
-        : "Pickup Postal is invalid";
-    isSubmittable &= errorMessage == "";
+          ? ""
+          : "Pickup Postal is invalid";
+    isSubmittable &= errorMessage === "";
     setReservationValues((reservationValues) => ({
       ...reservationValues,
       pickupPostal: {
@@ -96,12 +95,12 @@ const MakeReservation = () => {
     }));
 
     let errorMessage2 =
-      reservationValues.dropPostal.value == ""
+      reservationValues.dropPostal.value === ""
         ? "Drop Postal is required."
         : /^[A-Za-z0-9]{6}$/.test(reservationValues.dropPostal.value)
-        ? ""
-        : "Drop Postal is invalid";
-    isSubmittable &= errorMessage2 == "";
+          ? ""
+          : "Drop Postal is invalid";
+    isSubmittable &= errorMessage2 === "";
     setReservationValues((reservationValues) => ({
       ...reservationValues,
       dropPostal: {
@@ -112,17 +111,17 @@ const MakeReservation = () => {
 
     let today = new Date();
     let errorMessage3 =
-      reservationValues.pickupDate.value == null
+      reservationValues.pickupDate.value === null
         ? "Pickup Date is Required"
         : reservationValues.pickupDate.value.getDate() < today.getDate()
-        ? "Pickup Date is before today."
-        : reservationValues.dropDate.value != null &&
-          reservationValues.pickupDate.value != null &&
-          reservationValues.dropDate.value.getDate() <
+          ? "Pickup Date is before today."
+          : reservationValues.dropDate.value != null &&
+            reservationValues.pickupDate.value != null &&
+            reservationValues.dropDate.value.getDate() <
             reservationValues.pickupDate.value.getDate()
-        ? "Pickup Date is after Drop Date"
-        : "";
-    isSubmittable &= errorMessage3 == "";
+            ? "Pickup Date is after Drop Date"
+            : "";
+    isSubmittable &= errorMessage3 === "";
     setReservationValues((reservationValues) => ({
       ...reservationValues,
       pickupDate: {
@@ -132,17 +131,17 @@ const MakeReservation = () => {
     }));
 
     let errorMessage4 =
-      reservationValues.dropDate.value == null
+      reservationValues.dropDate.value === null
         ? "Drop Date is Required"
         : reservationValues.dropDate.value.getDate() <
           reservationValues.pickupDate.value.getDate()
-        ? "Drop Date is before Pickup Date."
-        : reservationValues.dropDate.value.getDate() < today.getDate()
-        ? "Drop Date is before today"
-        : reservationValues.dropDate.value.getDate() > today.getDate() + 7
-        ? "Drop Date is after a week"
-        : "";
-    isSubmittable &= errorMessage4 == "";
+          ? "Drop Date is before Pickup Date."
+          : reservationValues.dropDate.value.getDate() < today.getDate()
+            ? "Drop Date is before today"
+            : reservationValues.dropDate.value.getDate() > today.getDate() + 7
+              ? "Drop Date is after a week"
+              : "";
+    isSubmittable &= errorMessage4 === "";
     setReservationValues((reservationValues) => ({
       ...reservationValues,
       dropDate: {
@@ -152,10 +151,10 @@ const MakeReservation = () => {
     }));
 
     let errorMessage5 =
-      reservationValues.pickupTime.value == ""
+      reservationValues.pickupTime.value === ""
         ? "Pickup Time is required."
         : "";
-    isSubmittable &= errorMessage5 == "";
+    isSubmittable &= errorMessage5 === "";
     setReservationValues((reservationValues) => ({
       ...reservationValues,
       pickupTime: {
@@ -165,8 +164,8 @@ const MakeReservation = () => {
     }));
 
     let errorMessage6 =
-      reservationValues.dropTime.value == "" ? "Drop Time is required." : "";
-    isSubmittable &= errorMessage6 == "";
+      reservationValues.dropTime.value === "" ? "Drop Time is required." : "";
+    isSubmittable &= errorMessage6 === "";
     setReservationValues((reservationValues) => ({
       ...reservationValues,
       dropTime: {
@@ -176,8 +175,8 @@ const MakeReservation = () => {
     }));
 
     let errorMessage7 =
-      reservationValues.age.value == "" ? "Age is required." : "";
-    isSubmittable &= errorMessage7 == "";
+      reservationValues.age.value === "" ? "Age is required." : "";
+    isSubmittable &= errorMessage7 === "";
     setReservationValues((reservationValues) => ({
       ...reservationValues,
       age: {
@@ -187,10 +186,10 @@ const MakeReservation = () => {
     }));
 
     let errorMessage8 =
-      reservationValues.nationality.value == ""
+      reservationValues.nationality.value === ""
         ? "Nationality is required."
         : "";
-    isSubmittable &= errorMessage8 == "";
+    isSubmittable &= errorMessage8 === "";
     setReservationValues((reservationValues) => ({
       ...reservationValues,
       nationality: {
@@ -200,8 +199,8 @@ const MakeReservation = () => {
     }));
 
     let errorMessage9 =
-      reservationValues.carType.value == "" ? "Car Type is required." : "";
-    isSubmittable &= errorMessage9 == "";
+      reservationValues.carType.value === "" ? "Car Type is required." : "";
+    isSubmittable &= errorMessage9 === "";
     setReservationValues((reservationValues) => ({
       ...reservationValues,
       carType: {
@@ -219,7 +218,7 @@ const MakeReservation = () => {
   return (
     <React.Fragment>
       <NavBar />
-      <div style={{ textAlign: "center" }}>
+      <div style={{textAlign: "center"}}>
         {/* Reference: https://mui.com/material-ui/react-box */}
         <Box
           sx={{ flexGrow: 1 }}
@@ -243,7 +242,7 @@ const MakeReservation = () => {
                 variant="outlined"
                 fullWidth
                 error={
-                  reservationValues.pickupPostal.errorMessage == ""
+                  reservationValues.pickupPostal.errorMessage === ""
                     ? false
                     : true
                 }
@@ -271,7 +270,7 @@ const MakeReservation = () => {
                       fullWidth
                       {...params}
                       error={
-                        reservationValues.pickupDate.errorMessage == ""
+                        reservationValues.pickupDate.errorMessage === ""
                           ? false
                           : true
                       }
@@ -287,7 +286,7 @@ const MakeReservation = () => {
               <FormControl
                 fullWidth
                 error={
-                  reservationValues.pickupTime.errorMessage == "" ? false : true
+                  reservationValues.pickupTime.errorMessage === "" ? false : true
                 }
               >
                 <InputLabel id="pickup-time-slot">Pickup Time *</InputLabel>
@@ -326,7 +325,7 @@ const MakeReservation = () => {
                 value={reservationValues.dropPostal.value}
                 onChange={handleChange}
                 error={
-                  reservationValues.dropPostal.errorMessage == "" ? false : true
+                  reservationValues.dropPostal.errorMessage === "" ? false : true
                 }
                 helperText={reservationValues.dropPostal.errorMessage}
                 fullWidth
@@ -352,7 +351,7 @@ const MakeReservation = () => {
                       fullWidth
                       {...params}
                       error={
-                        reservationValues.dropDate.errorMessage == ""
+                        reservationValues.dropDate.errorMessage === ""
                           ? false
                           : true
                       }
@@ -366,7 +365,7 @@ const MakeReservation = () => {
               <FormControl
                 fullWidth
                 error={
-                  reservationValues.dropTime.errorMessage == "" ? false : true
+                  reservationValues.dropTime.errorMessage === "" ? false : true
                 }
               >
                 <InputLabel id="drop-time-slot">Drop Time *</InputLabel>
@@ -397,7 +396,7 @@ const MakeReservation = () => {
             <Grid item xs={12} sm={4} md={4}>
               <FormControl
                 fullWidth
-                error={reservationValues.age.errorMessage == "" ? false : true}
+                error={reservationValues.age.errorMessage === "" ? false : true}
               >
                 <InputLabel id="age">Age *</InputLabel>
                 <Select
@@ -426,7 +425,7 @@ const MakeReservation = () => {
               <FormControl
                 fullWidth
                 error={
-                  reservationValues.nationality.errorMessage == ""
+                  reservationValues.nationality.errorMessage === ""
                     ? false
                     : true
                 }
@@ -452,7 +451,7 @@ const MakeReservation = () => {
               <FormControl
                 fullWidth
                 error={
-                  reservationValues.carType.errorMessage == "" ? false : true
+                  reservationValues.carType.errorMessage === "" ? false : true
                 }
               >
                 <InputLabel id="carType">Car Type *</InputLabel>

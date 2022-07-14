@@ -27,6 +27,28 @@ const StyledButton = styled(Button)({
   },
 });
 
+const renderIcon = (status, text) => {
+  if (status)
+    return (
+      <>
+        {/* Reference: https://mui.com/material-ui/material-icons */}
+        <CheckIcon sx={{ display: { md: "flex" }, mr: 1 }} color="success" />
+        <Typography variant="div" gutterBottom>
+          {text}
+        </Typography>
+      </>
+    );
+  else
+    return (
+      <>
+        <CloseIcon sx={{ display: { md: "flex", color: "red" }, mr: 1 }} />
+        <Typography variant="div" gutterBottom>
+          {text}
+        </Typography>
+      </>
+    );
+};
+
 const AvailableCars = () => {
   const [vehicles, setVehicles] = useState([]);
   const navigate = useNavigate();
@@ -199,78 +221,23 @@ const AvailableCars = () => {
                 <div
                   style={{ display: "flex", justifyContent: "space-around" }}
                 >
-                  {/* Reference: https://mui.com/material-ui/material-icons */}
-                  <CheckIcon
-                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                    color="success"
-                  />
-                  <Typography variant="body1" gutterBottom>
-                    4 Door
-                  </Typography>
-                  <CheckIcon
-                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                    color="success"
-                  />
-                  <Typography variant="body1" gutterBottom>
-                    {vehicle.seats} Seats
-                  </Typography>
-                  <CheckIcon
-                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                    color="success"
-                  />
-                  <Typography variant="body1" gutterBottom>
-                    Automatic
-                  </Typography>
+                  {renderIcon(vehicle.door, "4 Door")}
+                  {renderIcon(vehicle.seats, vehicle.seats + "Seats")}
+                  {renderIcon(vehicle.automatic, "Automatic")}
                 </div>
                 <div
                   style={{ display: "flex", justifyContent: "space-around" }}
                 >
-                  <CheckIcon
-                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                    color="success"
-                  />
-                  <Typography variant="body1" gutterBottom>
-                    A/C
-                  </Typography>
-                  <CheckIcon
-                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                    color="success"
-                  />
-                  <Typography variant="body1" gutterBottom>
-                    Sports Mode
-                  </Typography>
-                  <CheckIcon
-                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                    color="success"
-                  />
-                  <Typography variant="body1" gutterBottom>
-                    Cruise Control
-                  </Typography>
+                  {renderIcon(vehicle.ac, "A/C")}
+                  {renderIcon(vehicle.sportsMode, "Sports Mode")}
+                  {renderIcon(vehicle.cruiseControl, "Cruise Control")}
                 </div>
                 <div
                   style={{ display: "flex", justifyContent: "space-around" }}
                 >
-                  <CheckIcon
-                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                    color="success"
-                  />
-                  <Typography variant="body1" gutterBottom>
-                    {vehicle.largeBag} Large Bag
-                  </Typography>
-                  <CheckIcon
-                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                    color="success"
-                  />
-                  <Typography variant="body1" gutterBottom>
-                    {vehicle.smallBag} Small Bag
-                  </Typography>
-                  <CheckIcon
-                    sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                    color="success"
-                  />
-                  <Typography variant="body1" gutterBottom>
-                    Child Car Seat
-                  </Typography>
+                  {renderIcon(vehicle.largeBag > 0, vehicle.largeBag + "Large Bags")}
+                  {renderIcon(vehicle.smallBag > 0, vehicle.smallBag + "Small Bags")}
+                  {renderIcon(vehicle.childCarSeat, "Child Car Seat")}
                 </div>
               </Grid>
               <Grid

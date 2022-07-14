@@ -31,7 +31,6 @@ import Checkout from "./pages/payment-management/Checkout";
 import InventoryHome from "./pages/inventory-management/InventoryHome";
 import Offers from "./pages/offers-management/offers";
 import VehicleDetails from "./pages/reviews-management/vehicleDetails";
-<<<<<<< HEAD
 import Comparision from "./pages/car-comparision/comparision";
 import ReservationsSummary from "./pages/reservations-summary/reservationsSummary";
 import AvailableCars from "./pages/reservation-management/availableCars";
@@ -40,19 +39,11 @@ import ViewReservations from "./pages/reservation-management/viewReservations";
 import CancelReservation from "./pages/reservation-management/cancelReservation";
 import ModifyReservation from "./pages/reservation-management/modifyReservation";
 import auth from "./services/authService";
-=======
-import MakeReservation from "./pages/reservation-management/makeReservation";
-import AvailableCars from "./pages/reservation-management/availableCars";
-import ViewReservations from "./pages/reservation-management/viewReservations";
-import CancelReservation from "./pages/reservation-management/cancelReservation";
-import ModifyReservation from "./pages/reservation-management/modifyReservation";
 import ViewPostings from "./pages/career-management/viewPostings";
 import ViewApplications from "./pages/career-management/viewApplications";
 import CreatePosting from "./pages/career-management/createPosting";
 import ApplyPosting from "./pages/career-management/applyPosting";
 import ViewUserPostings from "./pages/career-management/viewUserPostings";
-
->>>>>>> dae62fe (Reservation Management Frontend implemented)
 
 function App() {
   const [user, setUser] = useState(null);
@@ -83,7 +74,6 @@ function App() {
             element={!user ? <Navigate to="/" /> : <Offers user={user} />}
           />
           {/* Route for User Reviews Management */}
-<<<<<<< HEAD
           <Route
             path="/vehicles/:id"
             element={<VehicleDetails user={user} />}
@@ -95,9 +85,6 @@ function App() {
             path="/reservationsSummary"
             element={<ReservationsSummary />}
           />
-=======
-          <Route path="/vehicles/details" element={<VehicleDetails />} />
->>>>>>> dae62fe (Reservation Management Frontend implemented)
           {/* Route for Reservation Management */}
           <Route path="/makereservation" element={<MakeReservation />} />
           <Route path="/availablecars" element={<AvailableCars />} />

@@ -10,6 +10,8 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import { IconButton, Typography } from '@mui/material';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 const EmployeeActionModal = ({ open, handleClose, setOpen, title, fields, addEntity }) => {
     const [scroll, setScroll] = React.useState('paper'); // eslint-disable-line no-unused-vars
@@ -111,7 +113,6 @@ const EmployeeActionModal = ({ open, handleClose, setOpen, title, fields, addEnt
     const numbersAndSpecialChars = /^[a-zA-Z]+$/;
 
     const selectFieldChanged = (event, field) => {
-        console.log("field: ", field);
         const fieldsDuplicate = JSON.parse(JSON.stringify(modalFields));
         fieldsDuplicate.map(fieldProp => {
             if (fieldProp.name === field.name) {
@@ -184,6 +185,29 @@ const EmployeeActionModal = ({ open, handleClose, setOpen, title, fields, addEnt
         return isDisabled;
     }
 
+    const changeListener = (event) => {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(event.target.files[0])
+        fileReader.onload = () => {
+            if (fileReader.result) {
+                const fieldsDuplicate = JSON.parse(JSON.stringify(modalFields));
+                fieldsDuplicate.map(fieldProp => {
+                    if (fieldProp.id === 'addCar-image') {
+                        fieldProp.value = fileReader.result;
+                        fieldProp.fileName = event.target.files[0].name;
+                    }
+                    return fieldProp;
+                });
+                setModalFields([...fieldsDuplicate]);
+            }
+        }
+        fileReader.onerror = (error) => {
+            // reject(error);
+            console.log("error: ", error);
+        }
+
+    }
+
     return (
         <div>
             {/* [Code Attribution 2 for MUI Dialog] */}
@@ -222,6 +246,17 @@ const EmployeeActionModal = ({ open, handleClose, setOpen, title, fields, addEnt
                                     </Select>
                                 </FormControl>
                                 :
+                                (field.type === 'image') ?
+                                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'end', color: '#a9a9a9' }}>
+                                        <Typography variant="div" gutterBottom color={field.fileName ? '#161616' : '#a9a9a9'}>
+                                            {field.fileName ? field.fileName : 'No image selected'}
+                                        </Typography>
+                                        <IconButton color="primary" component="label">
+                                            <input type="file" accept="image/*" onChange={changeListener} hidden />
+                                            <AddPhotoAlternateIcon fontSize="medium" />
+                                        </IconButton>
+                                    </Box>
+                                :
                                 <>
                                 {/* [Code Attribution 3 for MUI TextField] */}
                                 {/* [URL: https://mui.com/material-ui/react-text-field/#full-width] */}
@@ -247,7 +282,7 @@ const EmployeeActionModal = ({ open, handleClose, setOpen, title, fields, addEnt
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button
                         disabled={disabledAdd}
-                        onClick={() => { addEntity((title === 'Add a car' ? 'car' : 'station'), modalFields); }}>
+                        onClick={() => { addEntity((title === 'Add car' ? 'car' : 'station'), modalFields); }}>
                             Add
                     </Button>
                 </DialogActions>

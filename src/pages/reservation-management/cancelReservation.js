@@ -3,11 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { Card, CardActionArea } from "@mui/material";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import { TextField } from "@mui/material";
-import { CardActions, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import NavBar from "../../components/common/nav-bar";
 
 import { styled } from "@mui/material";
@@ -26,11 +23,38 @@ const StyledButton = styled(Button)({
 
 const CancelReservation = () => {
   const navigate = useNavigate();
-  const [reason, setReason] = React.useState();
+  const [cancellationValues, setCancellationValues] = React.useState({
+    reason: {
+      value: "",
+      errorMessage: ""
+    }
+  });
 
   const handleChange = (event) => {
-    setReason(event.target.value);
+    const { name, value } = event.target;
+    setCancellationValues({
+      ...cancellationValues,
+      [name]: { ...cancellationValues[name], value }
+    })
   };
+
+  const validate = (event) => {
+    let isSubmittable = true;
+    let errorMessage = cancellationValues.reason.value == "" ? "Cancellation Reason is required." : ""
+    isSubmittable &= errorMessage == "";
+    setCancellationValues((cancellationValues) => ({
+      ...cancellationValues,
+      reason: {
+        value: cancellationValues.reason.value,
+        errorMessage: errorMessage
+      }
+    }));
+
+    console.log(cancellationValues);
+    if (isSubmittable) {
+      navigate('/viewreservations')
+    }
+  }
 
   return (
     <React.Fragment>
@@ -109,10 +133,12 @@ const CancelReservation = () => {
               name="reason"
               label="Cancellation Reason"
               type="text"
-              value={reason}
+              value={cancellationValues.reason.value}
               onChange={handleChange}
               variant="outlined"
               fullWidth
+              error = {cancellationValues.reason.errorMessage == "" ? false : true}
+              helperText = {cancellationValues.reason.errorMessage}
             />
           </Grid>
           <Grid item xs={12} sm={12} md={12} margin="auto">
@@ -131,9 +157,7 @@ const CancelReservation = () => {
               variant="contained"
               size="large"
               color="success"
-              onClick={() => {
-                navigate("/viewreservations");
-              }}
+              onClick={validate}
             >
               Submit
             </StyledButton>

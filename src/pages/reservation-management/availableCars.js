@@ -98,7 +98,7 @@ const AvailableCars = () => {
         <Box>
           {/* Reference: https://mui.com/material-ui/react-grid/ */}
           <Grid container spacing={3} margin="auto">
-            <Grid item xs={12} sm={4} md={4}>
+            <Grid item xs={12} sm={6} md={6}>
               {/* Reference: https://mui.com/material-ui/react-typography */}
               <Typography variant="body1" gutterBottom>
                 Pickup
@@ -110,7 +110,7 @@ const AvailableCars = () => {
                 {reservationData.pickupDate}, {reservationData.pickupTime}
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={4} md={4} margin="auto">
+            <Grid item xs={12} sm={6} md={6} margin="auto">
               <Typography variant="body1" gutterBottom>
                 Drop
               </Typography>
@@ -121,8 +121,8 @@ const AvailableCars = () => {
                 {reservationData.dropDate}, {reservationData.dropTime}
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={4} md={4} margin="auto" textAlign={"center"}>
-              {/* Reference: https://mui.com/material-ui/react-button */}
+            {/* Reference: https://mui.com/material-ui/react-button */}
+            {/* <Grid item xs={12} sm={4} md={4} margin="auto" textAlign={"center"}>
               <StyledButton
                 variant="contained"
                 size="large"
@@ -133,7 +133,7 @@ const AvailableCars = () => {
               >
                 Modify Rental Details
               </StyledButton>
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={12}>
               {/* Reference: https://mui.com/material-ui/react-divider */}
               <Divider

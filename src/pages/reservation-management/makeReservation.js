@@ -212,9 +212,20 @@ const MakeReservation = () => {
       },
     }));
 
-    console.log(reservationValues);
+    console.log("makeReservation.js: ",reservationValues);
     if (isSubmittable) {
-      navigate("/availablecars", { reservationValues: reservationValues });
+      const reservationData = {
+        pickupPostal: reservationValues.pickupPostal.value,
+        dropPostal: reservationValues.dropPostal.value,
+        pickupDate: reservationValues.pickupDate.value,
+        dropDate: reservationValues.dropDate.value,
+        pickupTime: reservationValues.pickupTime.value,
+        dropTime: reservationValues.dropTime.value,
+        age: reservationValues.age.value,
+        nationality: reservationValues.nationality.value,
+        carType: reservationValues.carType.value
+      } 
+      navigate("/availablecars", { state: reservationData });
     }
   };
 

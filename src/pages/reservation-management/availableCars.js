@@ -56,18 +56,23 @@ const renderIcon = (status, text) => {
 };
 
 const AvailableCars = () => {
-  const {reservationValues} = useLocation();
-  const [vehicles, setVehicles] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [vehicles, setVehicles] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
-      const { data: newVehicles } = await getSpecificVehicles(reservationValues);
+      if (!location.state) {
+        navigate('/makereservation')
+      }
+      const reservationData = location.state 
+      console.log("availableCars.js: ",reservationData);
+      const { data: newVehicles } = await getSpecificVehicles(reservationData);
       setVehicles(newVehicles);
     };
 
     getData();
-  }, []);
+  }, [location, navigate, vehicles]);
 
   return (
     <React.Fragment>

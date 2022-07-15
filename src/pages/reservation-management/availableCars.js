@@ -54,6 +54,7 @@ const AvailableCars = () => {
       console.log("availableCars.js (newVehicles): ", newVehicles);
       setAllVehicles(newVehicles);
       setVehicles(newVehicles);
+      console.log("availableCars.js (allVehicles): ", allVehicles);
     };
     getVehicles()
   }, [location, navigate, reservationData]);

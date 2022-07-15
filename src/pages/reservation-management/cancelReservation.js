@@ -44,8 +44,8 @@ const CancelReservation = () => {
 
   const validate = (event) => {
     let isSubmittable = true;
-    let errorMessage = cancellationValues.reason.value == "" ? "Cancellation Reason is required." : ""
-    isSubmittable &= errorMessage == "";
+    let errorMessage = cancellationValues.reason.value   === "" ? "Cancellation Reason is required." : ""
+    isSubmittable &= errorMessage  === "";
     setCancellationValues((cancellationValues) => ({
       ...cancellationValues,
       reason: {
@@ -141,7 +141,7 @@ const CancelReservation = () => {
               onChange={handleChange}
               variant="outlined"
               fullWidth
-              error={cancellationValues.reason.errorMessage == "" ? false : true}
+              error={cancellationValues.reason.errorMessage  === "" ? false : true}
               helperText={cancellationValues.reason.errorMessage}
             />
           </Grid>

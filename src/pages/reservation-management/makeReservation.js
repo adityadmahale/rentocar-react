@@ -38,7 +38,6 @@ const MakeReservation = () => {
       value: "",
       errorMessage: "",
     },
-
     pickupDate: {
       value: new Date(),
       errorMessage: "",
@@ -70,7 +69,7 @@ const MakeReservation = () => {
     carType: {
       value: "",
       errorMessage: "",
-    },
+    }
   });
 
   const handleChange = (event) => {
@@ -215,7 +214,7 @@ const MakeReservation = () => {
 
     console.log(reservationValues);
     if (isSubmittable) {
-      navigate("/availablecars");
+      navigate("/availablecars", { reservationValues: reservationValues });
     }
   };
 

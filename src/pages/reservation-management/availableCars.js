@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Divider } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
@@ -19,7 +19,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import NavBar from "../../components/common/nav-bar";
 import { styled } from "@mui/material";
-import { getVehicles } from "../../services/vehicleService";
+import { getSpecificVehicles } from "../../services/vehicleService";
 
 const StyledButton = styled(Button)({
   color: "#fff",
@@ -56,12 +56,13 @@ const renderIcon = (status, text) => {
 };
 
 const AvailableCars = () => {
+  const {reservationValues} = useLocation();
   const [vehicles, setVehicles] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const getData = async () => {
-      const { data: newVehicles } = await getVehicles();
+      const { data: newVehicles } = await getSpecificVehicles(reservationValues);
       setVehicles(newVehicles);
     };
 

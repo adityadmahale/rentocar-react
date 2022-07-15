@@ -11,6 +11,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Button from "@mui/material/Button";
+import auth from "./../../services/authService";
 
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +22,7 @@ const pages = [
   "Comparison",
   "Offers",
 ];
-const settings = ["Logout"];
+const settings = ["View Profile", "Logout"];
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -57,7 +58,10 @@ const NavBar = () => {
 
   const navigateFromMenu = (setting) => {
     if (setting === "Logout") {
+      auth.logout();
       navigate("/");
+    }else if(setting === "View Profile"){
+      navigate("/userprofile");
     }
   };
 

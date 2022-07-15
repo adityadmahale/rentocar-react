@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from 'axios';
 import LoginNavBar from "../../components/common/nav-bar-login";
+import userService from "./../../services/authService";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -61,19 +62,23 @@ const Login = () => {
       "email": user.email,
       "password" : user.password
     }
+    
+    userService.login(user.email,user.password)
+
     axios.post('/auth/login', JSON.stringify(requestBody), {headers: headers}).then((response) => {
       if(response.data.message === "Login Success"){
+        
         const message = response.data.message;
         toast.success(message);
+        navigate("/userprofile");
       }else{
         const message = response.data.message;
         toast.warn(message);
       }
-  }, (err) => {
+    }, (err) => {
       const message = err.response.data.message;
       toast.error(message);     
-  });
-    navigate("/userprofile");
+    });
   };
 
   return (

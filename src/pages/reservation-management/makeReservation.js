@@ -2,7 +2,7 @@
 * @author: Maan Mandaliya (B00903171 | mn638205@dal.ca)
 * @description: This file takes requirements from customer to select a car and sends that information to /availablecars
 */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
@@ -14,7 +14,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FormHelperText } from "@mui/material";
 import NavBar from "../../components/common/nav-bar";
 import { styled } from "@mui/material";
@@ -33,6 +33,7 @@ const StyledButton = styled(Button)({
 
 const MakeReservation = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [reservationValues, setReservationValues] = useState({
     pickupPostal: {
       value: "",
@@ -214,18 +215,18 @@ const MakeReservation = () => {
 
     console.log("makeReservation.js: ",reservationValues);
     if (isSubmittable) {
-      const reservationData = {
-        pickupPostal: reservationValues.pickupPostal.value,
-        dropPostal: reservationValues.dropPostal.value,
-        pickupDate: reservationValues.pickupDate.value,
-        dropDate: reservationValues.dropDate.value,
-        pickupTime: reservationValues.pickupTime.value,
-        dropTime: reservationValues.dropTime.value,
-        age: reservationValues.age.value,
-        nationality: reservationValues.nationality.value,
-        carType: reservationValues.carType.value
-      } 
-      navigate("/availablecars", { state: reservationData });
+      const reservationDataTemp = {
+          pickupPostal: reservationValues.pickupPostal.value,
+          dropPostal: reservationValues.dropPostal.value,
+          pickupDate: reservationValues.pickupDate.value.toDateString(),
+          dropDate: reservationValues.dropDate.value.toDateString(),
+          pickupTime: reservationValues.pickupTime.value,
+          dropTime: reservationValues.dropTime.value,
+          age: reservationValues.age.value,
+          nationality: reservationValues.nationality.value,
+          carType: reservationValues.carType.value
+        }
+      navigate("/availablecars", { state: reservationDataTemp });
     }
   };
 
@@ -480,6 +481,7 @@ const MakeReservation = () => {
                   <MenuItem value={"SUV"}>SUV</MenuItem>
                   <MenuItem value={"Sedan"}>Sedan</MenuItem>
                   <MenuItem value={"Hatchback"}>Hatchback</MenuItem>
+                  <MenuItem value={"Any"}>Any</MenuItem>
                 </Select>
               </FormControl>
               <FormHelperText>

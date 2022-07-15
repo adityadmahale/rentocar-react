@@ -1,7 +1,7 @@
 /*
 * @author: Maan Mandaliya (B00903171 | mn638205@dal.ca)
 * @description: This file fetches available cars according to customer requirements taken from /makereservation
-*               and shows details on Frontend to resever the car
+*               and shows details on Frontend to reseve the car
 */
 
 import React, { useEffect, useState } from "react";
@@ -33,46 +33,57 @@ const StyledButton = styled(Button)({
   },
 });
 
-const renderIcon = (status, text) => {
-  if (status)
-    return (
-      <>
-        {/* Reference: https://mui.com/material-ui/material-icons */}
-        <CheckIcon sx={{ display: { md: "flex" }, mr: 1 }} color="success" />
-        <Typography variant="div" gutterBottom>
-          {text}
-        </Typography>
-      </>
-    );
-  else
-    return (
-      <>
-        <CloseIcon sx={{ display: { md: "flex", color: "red" }, mr: 1 }} />
-        <Typography variant="div" gutterBottom>
-          {text}
-        </Typography>
-      </>
-    );
-};
-
 const AvailableCars = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [vehicles, setVehicles] = useState([]);
+  const [allVehicles, setAllVehicles] = useState([]);
+  const [reservationData, setReservationData] = useState({});
+  const [filter, setFilter] = useState("Any");
+  const [sortBy, setSortBy] = useState("Price-L2H");
 
   useEffect(() => {
-    const getData = async () => {
-      if (!location.state) {
-        navigate('/makereservation')
-      }
-      const reservationData = location.state 
-      console.log("availableCars.js: ",reservationData);
+    if (!location.state) {
+      navigate('/makereservation');
+    }
+    console.log("state: ", location.state);
+    setReservationData(location.state);
+    console.log("availableCars.js (reservationData): ", reservationData);
+    const getVehicles = async () => {
       const { data: newVehicles } = await getSpecificVehicles(reservationData);
+      console.log("availableCars.js (newVehicles): ", newVehicles);
+      setAllVehicles(newVehicles);
       setVehicles(newVehicles);
     };
+    getVehicles()
+  }, [location, navigate, reservationData]);
 
-    getData();
-  }, [location, navigate, vehicles]);
+  const handleFilterChange = (event) => {
+    const { value } = event.target;
+    setFilter(value)
+    if (value != "Any") {
+      const filteredVehicles = allVehicles.filter(vehicle => {
+        return vehicle.type === value;
+      })
+      setVehicles(filteredVehicles);
+    }
+    else {
+      setVehicles(allVehicles);
+    }
+  };
+
+  const handleSortChange = (event) => {
+    const { value } = event.target;
+    setSortBy(value)
+    if (value === "Price-L2H") {
+      const l2hVehicles = [...vehicles].sort((a, b) => a.price - b.price)
+      setVehicles(l2hVehicles)
+    }
+    else {
+      const h2lvehicles = [...vehicles].sort((a, b) => b.price - a.price)
+      setVehicles(h2lvehicles)
+    }
+  };
 
   return (
     <React.Fragment>
@@ -93,10 +104,10 @@ const AvailableCars = () => {
                 Pickup
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Halifax - Bayers Rd, B3L4P3
+                {reservationData.pickupPostal}
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Monday, June 06 12:00 PM
+                {reservationData.pickupDate}, {reservationData.pickupTime}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={4} md={4} margin="auto">
@@ -104,10 +115,10 @@ const AvailableCars = () => {
                 Drop
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Halifax - Bayers Rd, B3L4P3
+                {reservationData.dropPostal}
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Tuesday, June 07 12:00 PM
+                {reservationData.dropDate}, {reservationData.dropTime}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={4} md={4} margin="auto" textAlign={"center"}>
@@ -117,7 +128,7 @@ const AvailableCars = () => {
                 size="large"
                 color="warning"
                 onClick={() => {
-                  navigate("/makereservation");
+                  navigate("/makereservation", { state: reservationData });
                 }}
               >
                 Modify Rental Details
@@ -136,7 +147,7 @@ const AvailableCars = () => {
         </Box>
         <Box>
           <Grid container spacing={3} margin="auto">
-            <Grid item xs={12} sm={4} md={4} margin="auto">
+            <Grid item xs={12} sm={6} md={6} margin="auto">
               {/* Reference: https://mui.com/material-ui/api/form-control */}
               {/* Reference: https://mui.com/material-ui/react-select/ */}
               <FormControl fullWidth>
@@ -145,33 +156,30 @@ const AvailableCars = () => {
                   labelId="filter-label"
                   id="filter"
                   label="filter"
-                  value={"All"}
+                  value={filter}
+                  onChange={handleFilterChange}
                 >
-                  <MenuItem value={"All"}>All</MenuItem>
+                  <MenuItem value={"Any"}>Any</MenuItem>
                   <MenuItem value={"SUV"}>SUV</MenuItem>
                   <MenuItem value={"Sedan"}>Sedan</MenuItem>
                   <MenuItem value={"Hatchback"}>Hatchback</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={4} md={4} margin="auto">
+            <Grid item xs={12} sm={6} md={6} margin="auto">
               <FormControl fullWidth>
                 <InputLabel id="sort">Sort By</InputLabel>
                 <Select
                   labelId="sort-label"
                   id="sort"
                   label="sort"
-                  value={"Price-L2H"}
+                  value={sortBy}
+                  onChange={handleSortChange}
                 >
                   <MenuItem value={"Price-L2H"}>Price (Low to High)</MenuItem>
                   <MenuItem value={"Price-H2L"}>Price (High to Low)</MenuItem>
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={4} md={4} textAlign="center" margin={"auto"}>
-              <StyledButton variant="contained" size="large" color="success">
-                Submit
-              </StyledButton>
             </Grid>
             <Grid item xs={12} sm={12}>
               <Divider
@@ -267,7 +275,7 @@ const AvailableCars = () => {
                   color="success"
                   onClick={() => {
                     navigate(`/vehicles/${vehicle._id}`, {
-                      state: vehicle,
+                      state: { ...vehicle, ...reservationData }
                     });
                   }}
                 >
@@ -288,6 +296,28 @@ const AvailableCars = () => {
       </Box>
     </React.Fragment>
   );
+};
+
+const renderIcon = (status, text) => {
+  if (status)
+    return (
+      <>
+        {/* Reference: https://mui.com/material-ui/material-icons */}
+        <CheckIcon sx={{ display: { md: "flex" }, mr: 1 }} color="success" />
+        <Typography variant="div" gutterBottom>
+          {text}
+        </Typography>
+      </>
+    );
+  else
+    return (
+      <>
+        <CloseIcon sx={{ display: { md: "flex", color: "red" }, mr: 1 }} />
+        <Typography variant="div" gutterBottom>
+          {text}
+        </Typography>
+      </>
+    );
 };
 
 export default AvailableCars;

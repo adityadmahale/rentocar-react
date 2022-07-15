@@ -8,5 +8,5 @@ export const getVehicles = () => {
 
 // /specificVehicles endpoint use to get vehicles acc to requirements taken from /makereservation
 export const getSpecificVehicles = (requirements) => {
-  return http.get(vehiclesAPIEndpoint + "/specificVehicles", { params: { requirements: requirements } })
+  return http.post(vehiclesAPIEndpoint + "search", requirements)
 };

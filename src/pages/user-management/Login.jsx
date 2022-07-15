@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import Input from "../../components/common/input";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import axios from 'axios';
+import LoginNavBar from "../../components/common/nav-bar-login";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -44,6 +46,10 @@ const Login = () => {
     return allErrors;
   };
 
+  const headers = {
+    'Content-Type': 'application/json',
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const allErrors = validate();
@@ -51,13 +57,28 @@ const Login = () => {
     if (Object.keys(allErrors).length !== 0) {
       return;
     }
-
-    toast.success("Login successfuly");
-
-    navigate("/userlist");
+    let requestBody = {
+      "email": user.email,
+      "password" : user.password
+    }
+    axios.post('/auth/login', JSON.stringify(requestBody), {headers: headers}).then((response) => {
+      if(response.data.message === "Login Success"){
+        const message = response.data.message;
+        toast.success(message);
+      }else{
+        const message = response.data.message;
+        toast.warn(message);
+      }
+  }, (err) => {
+      const message = err.response.data.message;
+      toast.error(message);     
+  });
+    navigate("/userprofile");
   };
 
   return (
+    <div>
+    <LoginNavBar />
     <Grid
       container
       spacing={0}
@@ -105,6 +126,7 @@ const Login = () => {
         </Box>
       </Grid>
     </Grid>
+    </div>
   );
 };
 

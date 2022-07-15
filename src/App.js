@@ -25,7 +25,7 @@ import Success from "./pages/user-management/Success";
 import Registration from "./pages/user-management/Registration";
 import Login from "./pages/user-management/Login";
 import UserList from "./pages/user-management/UserList";
-import UserProfile from "./pages/user-management/UserProfile";
+import UserProfile from "./pages/user-management/user-landing";
 import TicketsHome from "./pages/customer-support/TicketsHome";
 import Checkout from "./pages/payment-management/Checkout";
 import InventoryHome from "./pages/inventory-management/InventoryHome";

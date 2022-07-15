@@ -4,12 +4,15 @@ import React, { useState } from "react";
 import Input from "../../components/common/input";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import LoginNavBar from "../../components/common/nav-bar-login";
+import axios from 'axios';
 
 const Register = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
+    userName: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -26,6 +29,13 @@ const Register = () => {
     const allErrors = {};
 
     // Validate First Name
+    if (user.userName === "") {
+      allErrors.userName = " username cannot be empty";
+    } else if (!user.userName.match(/^[a-zA-Z]*$/)) {
+      allErrors.userName = "First Name can only contain letters";
+    }
+
+    // Validate Last Name
     if (user.firstName === "") {
       allErrors.firstName = "First Name cannot be empty";
     } else if (!user.firstName.match(/^[a-zA-Z]*$/)) {
@@ -69,6 +79,10 @@ const Register = () => {
     return allErrors;
   };
 
+  const headers = {
+    'Content-Type': 'application/json',
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const allErrors = validate();
@@ -77,12 +91,26 @@ const Register = () => {
       return;
     }
 
-    toast.success("Registered successfuly");
-
+    let requestBody = {
+      "firstname": user.firstName,
+      "lastname": user.lastName,
+      "username" : user.userName,
+      "email": user.email,
+      "password" : user.password
+    }
+    console.log(requestBody)
+    axios.post('/users/register', JSON.stringify(requestBody), {headers: headers}).then((response) => {
+            toast.success("Registered successfuly");
+    }, (err) => {
+      const message = err.response.data.message;
+      toast.error(message);     
+  });
     navigate("/");
   };
 
   return (
+    <div>
+    <LoginNavBar/>
     <Grid
       container
       spacing={0}
@@ -94,7 +122,7 @@ const Register = () => {
       <Grid item xs={3} width={{ xs: "80%", md: "60%", lg: "35%" }}>
         <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
           <Stack spacing={1.5} alignItems="center">
-            <Input
+             <Input
               label="First Name"
               name="firstName"
               type="text"
@@ -107,6 +135,14 @@ const Register = () => {
               name="lastName"
               type="text"
               value={user.lastName}
+              onChange={handleChange}
+              errors={errors}
+            />
+            <Input
+              label="Username"
+              name="userName"
+              type="text"
+              value={user.userName}
               onChange={handleChange}
               errors={errors}
             />
@@ -151,6 +187,7 @@ const Register = () => {
         </Box>
       </Grid>
     </Grid>
+    </div>
   );
 };
 

@@ -143,7 +143,11 @@ const Detail = () => {
           </Typography>
           <StyledButton
             variant="outlined"
-            onClick={() => navigate("/checkout")}
+            onClick={() =>
+              navigate("/checkout", {
+                state: vehicle,
+              })
+            }
           >
             BOOK NOW
           </StyledButton>

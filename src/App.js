@@ -21,11 +21,9 @@ import { ToastContainer, Flip } from "react-toastify";
 
 // Component imports
 
-import Success from "./pages/user-management/Success";
 import Registration from "./pages/user-management/Registration";
 import Login from "./pages/user-management/Login";
-import UserList from "./pages/user-management/UserList";
-import UserProfile from "./pages/user-management/UserProfile";
+import UserProfile from "./pages/user-management/user-profile";
 import TicketsHome from "./pages/customer-support/TicketsHome";
 import Checkout from "./pages/payment-management/Checkout";
 import InventoryHome from "./pages/inventory-management/InventoryHome";
@@ -42,7 +40,6 @@ import auth from "./services/authService";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [id, setId] = useState([]);
 
   useEffect(() => {
     const user = auth.getCurrentUser();
@@ -57,9 +54,8 @@ function App() {
           {/* Routes for User Management and Support Features */}
           <Route path="/registration" element={<Registration />} />
           <Route path="/" element={<Login />} />
-          <Route path="/userlist" element={<UserList setId={setId} />} />
-          <Route path="/success" element={<Success />} />
-          <Route path="/userprofile" element={<UserProfile id={id} />} />
+          {/* Landing Page */}
+          <Route path="/userprofile" element={!user ? <Navigate to="/" /> : <UserProfile user={user} />} />
           <Route path="/ticketshome" element={<TicketsHome />} />
           {/* Routes for Inventory Management */}
           <Route path="/inventoryhome" element={<InventoryHome />} />

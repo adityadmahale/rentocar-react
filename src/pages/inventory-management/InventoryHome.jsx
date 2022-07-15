@@ -118,7 +118,7 @@ function InventoryHome() {
           </Box>
         </TabPanel>
         <Box sx={getFabMenuPositionStyles()}>
-          <FabMenu getVehicles={getVehicles} getStations={getStations}></FabMenu>
+          <FabMenu getVehicles={getVehicles} setVehicles={setVehicles} getStations={getStations}></FabMenu>
         </Box>
       </Box>
     </div>

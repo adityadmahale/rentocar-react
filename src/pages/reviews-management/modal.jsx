@@ -1,7 +1,10 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
+
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
+// Custom style for the modal
 const style = {
   position: "absolute",
   top: "40%",

@@ -1,3 +1,5 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
+
 import { Button, Rating, Stack, TextField } from "@mui/material";
 import React from "react";
 

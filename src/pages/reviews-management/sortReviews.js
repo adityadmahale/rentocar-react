@@ -1,11 +1,15 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
+
 export function getSortedReviews(reviews, sortCriteria) {
   const sortedReviews = [...reviews];
 
+  // Sort low to high
   if (sortCriteria === "lh")
     return sortedReviews.sort((a, b) =>
       a.rating > b.rating ? 1 : b.rating > a.rating ? -1 : 0
     );
 
+  // Sort high to low
   if (sortCriteria === "hl")
     return sortedReviews.sort((a, b) =>
       b.rating > a.rating ? 1 : a.rating > b.rating ? -1 : 0

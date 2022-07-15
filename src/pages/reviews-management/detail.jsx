@@ -1,3 +1,5 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
+
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import LuggageIcon from "@mui/icons-material/Luggage";
@@ -7,6 +9,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 
+// Custom style for the button
 const StyledButton = styled(Button)({
   marginTop: "40px",
   padding: "15px",
@@ -150,6 +153,7 @@ const Detail = () => {
   );
 };
 
+// Render icon based on the status
 const renderIcon = (status, text) => {
   if (status)
     return (

@@ -1,3 +1,5 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
+
 import { Card, Grid, Rating, Stack, Typography } from "@mui/material";
 import React from "react";
 import Vote from "./vote";

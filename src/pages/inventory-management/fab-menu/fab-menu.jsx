@@ -1,5 +1,5 @@
+/* Author: @104 Shaik Asaduddin (sh465111@dal.ca) - Maintainer */
 import * as React from 'react';
-
 import Box from '@mui/material/Box';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
@@ -21,7 +21,7 @@ const fabActions = [
     { icon: <Search />, name: 'Search', actionId: 'searchCarAction' },
 ];
 
-const FabMenu = ({getVehicles, getStations}) => {
+const FabMenu = ({getVehicles, setVehicles, getStations}) => {
     const [open, setOpen] = React.useState(false);
     const handleClose = () => {
         setOpen(false);
@@ -39,6 +39,12 @@ const FabMenu = ({getVehicles, getStations}) => {
     const Alert = React.forwardRef(function Alert(props, ref) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
     });
+
+    const openToastSnackBar = (message, severity) => {
+        setToastMessage(message);
+        setSeverity(severity);
+        setSnackbarOpen(true);
+    }
 
     const getFieldsBasedOnAction = () => {
         if (actionType === "addCar") {
@@ -374,6 +380,22 @@ const FabMenu = ({getVehicles, getStations}) => {
         setIsSearchModalOpen(false);
     }
 
+    const searchForVehicles = (requestParams) => {
+        // axios.post('/vehicles/search', {)
+        console.log("requestParams: ", requestParams);
+        let requestBody = {
+            pickupStation: requestParams.fromLocation,
+            dropoffStation: requestParams.toLocation,
+        };
+        axios.post('/vehicles/search', {...requestBody}).then((response) => {
+            console.log("response: ", response);
+            // setIsSearchModalOpen(false);
+            setVehicles(response.data);
+        }, (err) => {
+            console.error("err: ", err);
+        });
+    }
+
 
     return (
         <>
@@ -418,9 +440,13 @@ const FabMenu = ({getVehicles, getStations}) => {
                     addEntity={addEntity}
                     title={title}
                     fields={getFieldsBasedOnAction()}
-                    setToastMessage={setToastMessage}>
+                    setToastMessage={setToastMessage}
+                    getVehicles={getVehicles}
+                    getStations={getStations}
+                    setOpen={setOpen}
+                    openToastSnackBar={openToastSnackBar}>
                 </EmployeeActionModal>
-                <AdvancedSearchModal isOpen={isSearchModalOpen} handleDialogClose={handleSearchDialogClose}></AdvancedSearchModal>
+                <AdvancedSearchModal isOpen={isSearchModalOpen} searchForVehicles={searchForVehicles} handleDialogClose={handleSearchDialogClose}></AdvancedSearchModal>
             </Box>
 
             <Box sx={{ position: 'fixed', top: '49%', right: '49%', height: 40 }}>

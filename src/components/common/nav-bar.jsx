@@ -1,3 +1,4 @@
+/* Author: @104 Shaik Asaduddin (sh465111@dal.ca) - Maintainer */
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";

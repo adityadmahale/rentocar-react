@@ -2,7 +2,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+axios.defaults.baseURL = "http://localhost:5001/api";
 
 axios.interceptors.response.use(null, (error) => {
   const expectedError =

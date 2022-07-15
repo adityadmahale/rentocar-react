@@ -1,3 +1,9 @@
+/*
+* @author: Maan Mandaliya (B00903171 | mn638205@dal.ca)
+* @description: This file fetches available cars according to customer requirements taken from /makereservation
+*               and shows details on Frontend to resever the car
+*/
+
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";

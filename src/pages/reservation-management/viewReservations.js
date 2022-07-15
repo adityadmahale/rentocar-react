@@ -1,3 +1,7 @@
+/*
+* @author: Maan Mandaliya (B00903171 | mn638205@dal.ca)
+* @description: This file fetches existing reservations from database and shows in card format with option to modify and cancel.
+*/
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";

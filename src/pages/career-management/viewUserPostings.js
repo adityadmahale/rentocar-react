@@ -1,3 +1,7 @@
+/*
+* @author: Maan Mandaliya (B00903171 | mn638205@dal.ca)
+* @description: This file fetches all available job postings in organization for user.
+*/
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";

@@ -1,3 +1,7 @@
+/*
+* @author: Maan Mandaliya (B00903171 | mn638205@dal.ca)
+* @description: This file helps user to apply for a job posting through form.
+*/
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";

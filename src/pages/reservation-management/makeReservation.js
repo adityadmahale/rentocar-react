@@ -1,3 +1,7 @@
+/*
+* @author: Maan Mandaliya (B00903171 | mn638205@dal.ca)
+* @description: This file takes requirements from customer to select a car and sends that information to /availablecars
+*/
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";

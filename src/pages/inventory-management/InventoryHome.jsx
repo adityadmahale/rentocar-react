@@ -35,12 +35,14 @@ function InventoryHome() {
   const [vehicles, setVehicles] = React.useState([]);
   const [stations, setStations] = React.useState([]);
   
+  // function to get all vehicles
   const getVehicles = () => {
     axios.get('/vehicles', {}).then((response) => {
       setVehicles([...response.data]);
     });
   }
 
+  // function to get all stations
   const getStations = () => {
     axios.get('/stations', {}).then((response) => {
       setStations([...response.data]);
@@ -56,6 +58,7 @@ function InventoryHome() {
     setValue(newValue);
   };
 
+  // tab content
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
   
@@ -125,6 +128,7 @@ function InventoryHome() {
   );
 }
 
+// vehicle card component
 const CarCard = ({vehicle, getVehicles}) => {
 
   const deleteVehicle = (vehicleId) => {
@@ -192,6 +196,7 @@ const CarCard = ({vehicle, getVehicles}) => {
   );
 }
 
+// station card component
 const StationCard = ({station, getStations}) => {
   const deleteStation = (stationId) => {
     axios.delete('/stations/' + stationId, {}).then((response) => {

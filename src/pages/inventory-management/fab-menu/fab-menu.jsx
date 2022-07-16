@@ -355,6 +355,7 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
                 requestBody[field.requestProp] = field.value;
             });
 
+            // Adding new station
             axios.post('/stations', { ...requestBody }).then((response) => {
                 setLoading(false);
                 setOpen(false);
@@ -387,6 +388,7 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
             pickupStation: requestParams.fromLocation,
             dropoffStation: requestParams.toLocation,
         };
+        // search for vehicles
         axios.post('/vehicles/search', {...requestBody}).then((response) => {
             console.log("response: ", response);
             // setIsSearchModalOpen(false);

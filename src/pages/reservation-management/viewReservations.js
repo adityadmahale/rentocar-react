@@ -147,7 +147,7 @@ const ViewReservations = () => {
                   <StyledButton
                     size="small"
                     onClick={() => {
-                      navigate("/cancelreservation");
+                      navigate("/cancelreservation", {state: reservation});
                     }}
                   >
                     Cancel

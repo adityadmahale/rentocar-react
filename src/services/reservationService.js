@@ -9,3 +9,7 @@ export const getReservations = () => {
 export const getSpecificReservations = (username) => {
   return http.post(reservationsAPIEndpoint + "search", username)
 };
+
+export const cancelReservation = (id) => {
+  return http.delete(reservationsAPIEndpoint + `${id}`)
+};

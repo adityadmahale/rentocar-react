@@ -3,15 +3,15 @@
 * @description: This file is used to cancel the reservation with mandatory reason.
 */
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { TextField } from "@mui/material";
 import { Button } from "@mui/material";
 import NavBar from "../../components/common/nav-bar";
-
 import { styled } from "@mui/material";
+import { cancelReservation } from "../../services/reservationService";
 
 const StyledButton = styled(Button)({
   color: "#fff",
@@ -27,12 +27,23 @@ const StyledButton = styled(Button)({
 
 const CancelReservation = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [reservationData, setReservationData] = useState([]);
   const [cancellationValues, setCancellationValues] = React.useState({
     reason: {
       value: "",
       errorMessage: ""
     }
   });
+
+  useEffect(() => {
+    if (!location.state) {
+      navigate('/viewreservations');
+    }
+    console.log("state: ", location.state);
+    setReservationData(location.state);
+    console.log("cancelReservation.js (reservationData): ", reservationData);
+  }, [location, navigate, reservationData]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -41,6 +52,16 @@ const CancelReservation = () => {
       [name]: { ...cancellationValues[name], value }
     })
   };
+
+  const handleCancelReservation = async (event) => {
+    const id = reservationData._id;
+    console.log("reservationData._id: ", id);
+    const { data: result } = await cancelReservation(id);
+    console.log("Result: ", result);
+    if (result.isCancelled) {
+      navigate("/viewreservations")
+    }
+  }
 
   const validate = (event) => {
     let isSubmittable = true;
@@ -56,7 +77,7 @@ const CancelReservation = () => {
 
     console.log(cancellationValues);
     if (isSubmittable) {
-      navigate('/viewreservations')
+      handleCancelReservation()
     }
   }
 
@@ -101,10 +122,10 @@ const CancelReservation = () => {
               Pickup
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Halifax - Bayers Rd, B3L4P3
+              {reservationData.pickupPostal}
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Monday, June 06 12:00 PM
+              {reservationData.pickupDate},{reservationData.pickupTime}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={3} md={3} margin="auto">
@@ -112,21 +133,21 @@ const CancelReservation = () => {
               Drop
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Halifax - Bayers Rd, B3L4P3
+              {reservationData.dropPostal}
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Tuesday, June 07 12:00 PM
+              {reservationData.dropDate},{reservationData.dropTime}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={3} md={3} margin="auto">
             <Typography variant="body1" gutterBottom>
-              Age: 18
+              Age: {reservationData.age}
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Nationality: Non-Canadian
+              Nationality: {reservationData.nationality}
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Car Type: SUV
+              Car Type: {reservationData.carType}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={12} md={12}>
@@ -151,9 +172,7 @@ const CancelReservation = () => {
               variant="contained"
               size="large"
               color="warning"
-              onClick={() => {
-                navigate("/viewreservations");
-              }}
+              onClick={()=> navigate('/viewreservations')}
             >
               Cancel
             </StyledButton>

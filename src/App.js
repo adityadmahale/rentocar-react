@@ -24,6 +24,7 @@ import { ToastContainer, Flip } from "react-toastify";
 import Registration from "./pages/user-management/Registration";
 import Login from "./pages/user-management/Login";
 import UserProfile from "./pages/user-management/user-profile";
+import UpdatePassword from "./pages/user-management/update-password";
 import TicketsHome from "./pages/customer-support/TicketsHome";
 import Checkout from "./pages/payment-management/Checkout";
 import InventoryHome from "./pages/inventory-management/InventoryHome";
@@ -36,6 +37,7 @@ import MakeReservation from "./pages/reservation-management/makeReservation";
 import ViewReservations from "./pages/reservation-management/viewReservations";
 import CancelReservation from "./pages/reservation-management/cancelReservation";
 import ModifyReservation from "./pages/reservation-management/modifyReservation";
+
 import auth from "./services/authService";
 
 function App() {
@@ -54,8 +56,12 @@ function App() {
           {/* Routes for User Management and Support Features */}
           <Route path="/registration" element={<Registration />} />
           <Route path="/" element={<Login />} />
-          {/* Landing Page */}
-          <Route path="/userprofile" element={!user ? <Navigate to="/" /> : <UserProfile user={user} />} />
+          {/*User Landing Page */}
+          {/* <Route path="/userprofile" element={!user ? <Navigate to="/" /> : <UserProfile user={user} />} /> */}
+          <Route path="/userprofile" element={<UserProfile user={user} />} />
+          {/*User Update Password page */}
+          {/* <Route path="/updatepassword" element={!user ? <Navigate to="/" /> : <UpdatePassword user={user} />} /> */}
+          <Route path="/updatepassword" element={<UpdatePassword user={user} />} />
           <Route path="/ticketshome" element={<TicketsHome />} />
           {/* Routes for Inventory Management */}
           <Route path="/inventoryhome" element={<InventoryHome />} />

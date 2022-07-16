@@ -60,7 +60,7 @@ const NavBar = () => {
   const navigateFromMenu = (setting) => {
     if (setting === "Logout") {
       auth.logout();
-      navigate("/");
+      window.location="/";
     }else if(setting === "View Profile"){
       navigate("/userprofile");
     }

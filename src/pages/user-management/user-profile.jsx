@@ -8,23 +8,20 @@ import axios from 'axios';
 import NavBar from "../../components/common/nav-bar";
 import userimage from '../../assets/images/userimage.jpg'
 import auth from "./../../services/authService";
+import { useNavigate } from "react-router-dom";
 
 function UserProfile({ user })  {
-
-    // const [user1, setUser1] = useState(null);
-    // const navigate = useNavigate();
     const [fetcheduser,setFetcheduser] = useState([]);
-    
+
+    const navigate = useNavigate();
+
     useEffect(() => {
-        // const user1 = auth.getCurrentUser();
-        console.log(user)
-        // setUser1(user1);
         loadUserProfile();
     }, [])
     
     const handleSubmit = (e) => {
         e.preventDefault();
-       console.log("changepassword");
+        navigate("/updatepassword");
       };
       
 
@@ -59,7 +56,7 @@ function UserProfile({ user })  {
                             </Stack>
                             <Typography variant="span" component="span" style={{}}>
                             <h2>User Profile</h2>
-                            Username : {user?.username}
+                            Username : {fetcheduser?.username}
                             <br></br>
                             First Name : {fetcheduser?.firstname}
                             <br></br>

@@ -70,7 +70,7 @@ const Login = () => {
         
         const message = response.data.message;
         toast.success(message);
-        navigate("/userprofile");
+        window.location="/userprofile";
       }else{
         const message = response.data.message;
         toast.warn(message);

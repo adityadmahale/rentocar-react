@@ -9,7 +9,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { useTheme } from '@mui/material/styles';
@@ -17,7 +16,6 @@ import { useTheme } from '@mui/material/styles';
 // Component imports
 import NavBar from "./../../components/common/nav-bar";
 import FabMenu from "./fab-menu/fab-menu";
-
 import axios from "axios";
 import { CardHeader } from "reactstrap";
 

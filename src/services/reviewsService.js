@@ -1,3 +1,5 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
+
 import http from "./httpService";
 
 const reviewsAPIEndpoint = "/reviews/";

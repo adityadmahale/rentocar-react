@@ -1,3 +1,5 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
+
 import { Typography } from "@mui/material";
 import React, { useState } from "react";
 import { updateReview } from "../../services/reviewsService";

@@ -9,7 +9,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { useTheme } from '@mui/material/styles';
@@ -17,7 +16,6 @@ import { useTheme } from '@mui/material/styles';
 // Component imports
 import NavBar from "./../../components/common/nav-bar";
 import FabMenu from "./fab-menu/fab-menu";
-
 import axios from "axios";
 import { CardHeader } from "reactstrap";
 
@@ -35,12 +33,14 @@ function InventoryHome() {
   const [vehicles, setVehicles] = React.useState([]);
   const [stations, setStations] = React.useState([]);
   
+  // function to get all vehicles
   const getVehicles = () => {
     axios.get('/vehicles', {}).then((response) => {
       setVehicles([...response.data]);
     });
   }
 
+  // function to get all stations
   const getStations = () => {
     axios.get('/stations', {}).then((response) => {
       setStations([...response.data]);
@@ -56,6 +56,7 @@ function InventoryHome() {
     setValue(newValue);
   };
 
+  // tab content
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
   
@@ -118,13 +119,14 @@ function InventoryHome() {
           </Box>
         </TabPanel>
         <Box sx={getFabMenuPositionStyles()}>
-          <FabMenu getVehicles={getVehicles} getStations={getStations}></FabMenu>
+          <FabMenu getVehicles={getVehicles} setVehicles={setVehicles} getStations={getStations}></FabMenu>
         </Box>
       </Box>
     </div>
   );
 }
 
+// vehicle card component
 const CarCard = ({vehicle, getVehicles}) => {
 
   const deleteVehicle = (vehicleId) => {
@@ -192,6 +194,7 @@ const CarCard = ({vehicle, getVehicles}) => {
   );
 }
 
+// station card component
 const StationCard = ({station, getStations}) => {
   const deleteStation = (stationId) => {
     axios.delete('/stations/' + stationId, {}).then((response) => {

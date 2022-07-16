@@ -1,4 +1,3 @@
-/* Author: @104 Shaik Asaduddin (sh465111@dal.ca) - Maintainer */
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -12,20 +11,15 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Button from "@mui/material/Button";
-import auth from "./../../services/authService";
 
 import { useNavigate } from "react-router-dom";
 
 const pages = [
-  "Reservation",
-  "Inventory Listing",
-  "Reservation Summary",
-  "Comparison",
-  "Offers",
+ 
 ];
-const settings = ["View Profile", "Logout"];
+const settings = [];
 
-const NavBar = () => {
+const LoginNavBar = () => {
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -48,8 +42,8 @@ const NavBar = () => {
       navigate("/comparison");
     } else if (page === "Offers") {
       navigate("/offers");
-    } else if (page === "Reservation") {
-      navigate("/makereservation");
+    } else if (page === "Vehicles") {
+      navigate("/availablecars");
     }
   };
 
@@ -59,10 +53,7 @@ const NavBar = () => {
 
   const navigateFromMenu = (setting) => {
     if (setting === "Logout") {
-      auth.logout();
-      window.location="/";
-    }else if(setting === "View Profile"){
-      navigate("/userprofile");
+      navigate("/");
     }
   };
 
@@ -203,4 +194,4 @@ const NavBar = () => {
     </AppBar>
   );
 };
-export default NavBar;
+export default LoginNavBar;

@@ -21,11 +21,10 @@ import { ToastContainer, Flip } from "react-toastify";
 
 // Component imports
 
-import Success from "./pages/user-management/Success";
 import Registration from "./pages/user-management/Registration";
 import Login from "./pages/user-management/Login";
-import UserList from "./pages/user-management/UserList";
-import UserProfile from "./pages/user-management/UserProfile";
+import UserProfile from "./pages/user-management/user-profile";
+import UpdatePassword from "./pages/user-management/update-password";
 import TicketsHome from "./pages/customer-support/TicketsHome";
 import Checkout from "./pages/payment-management/Checkout";
 import InventoryHome from "./pages/inventory-management/InventoryHome";
@@ -38,6 +37,7 @@ import MakeReservation from "./pages/reservation-management/makeReservation";
 import ViewReservations from "./pages/reservation-management/viewReservations";
 import CancelReservation from "./pages/reservation-management/cancelReservation";
 import ModifyReservation from "./pages/reservation-management/modifyReservation";
+
 import auth from "./services/authService";
 import ViewPostings from "./pages/career-management/viewPostings";
 import ViewApplications from "./pages/career-management/viewApplications";
@@ -47,7 +47,6 @@ import ViewUserPostings from "./pages/career-management/viewUserPostings";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [id, setId] = useState([]);
 
   useEffect(() => {
     const user = auth.getCurrentUser();
@@ -62,9 +61,12 @@ function App() {
           {/* Routes for User Management and Support Features */}
           <Route path="/registration" element={<Registration />} />
           <Route path="/" element={<Login />} />
-          <Route path="/userlist" element={<UserList setId={setId} />} />
-          <Route path="/success" element={<Success />} />
-          <Route path="/userprofile" element={<UserProfile id={id} />} />
+          {/*User Landing Page */}
+          {/* <Route path="/userprofile" element={!user ? <Navigate to="/" /> : <UserProfile user={user} />} /> */}
+          <Route path="/userprofile" element={<UserProfile user={user} />} />
+          {/*User Update Password page */}
+          {/* <Route path="/updatepassword" element={!user ? <Navigate to="/" /> : <UpdatePassword user={user} />} /> */}
+          <Route path="/updatepassword" element={<UpdatePassword user={user} />} />
           <Route path="/ticketshome" element={<TicketsHome />} />
           {/* Routes for Inventory Management */}
           <Route path="/inventoryhome" element={<InventoryHome />} />

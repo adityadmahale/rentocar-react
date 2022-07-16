@@ -1,9 +1,11 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
 //ref : https://github.com/adityadmahale/adopt/blob/master/src/services/httpService.js
 import axios from "axios";
 import { toast } from "react-toastify";
 
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+axios.defaults.baseURL = "http://localhost:5000/api";
 
+// Interceptor for handling errors
 axios.interceptors.response.use(null, (error) => {
   const expectedError =
     error.response &&
@@ -17,6 +19,7 @@ axios.interceptors.response.use(null, (error) => {
   return Promise.reject(error);
 });
 
+// Set JWT in the header
 function setJwt(jwt) {
   axios.defaults.headers.common["x-auth-token"] = jwt;
 }

@@ -1,3 +1,5 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
+
 import styled from "@emotion/styled";
 import {
   Button,

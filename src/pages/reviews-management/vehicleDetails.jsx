@@ -1,3 +1,5 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
+
 import Details from "./detail";
 import Reviews from "./reviews";
 import React from "react";

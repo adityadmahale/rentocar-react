@@ -1,3 +1,5 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
+
 import React, { useEffect, useState } from "react";
 import Card from "./card";
 import { getOffers, addOffer, deleteOffer } from "../../services/offers";

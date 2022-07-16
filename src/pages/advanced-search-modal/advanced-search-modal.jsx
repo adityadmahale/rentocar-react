@@ -1,3 +1,4 @@
+/* Author: @104 Shaik Asaduddin (sh465111@dal.ca) - Maintainer */
 import * as React from 'react';
 
 import { Box, Button, Select } from "@mui/material";
@@ -16,7 +17,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 
-const AdvancedSearchModal = ({ isOpen, handleDialogClose }) => {
+const AdvancedSearchModal = ({ isOpen, handleDialogClose, searchForVehicles }) => {
     const [scroll, setScroll] = React.useState('paper'); // eslint-disable-line no-unused-vars
 
     const title = "Search for a car";
@@ -210,6 +211,22 @@ const AdvancedSearchModal = ({ isOpen, handleDialogClose }) => {
         fromLocationError, toLocationError, startDateError, 
         endDateError, driverAgeError]);
 
+    const handleSearch = () => {
+        console.log("searching");
+        console.log("fromLocation: ", fromLocation);
+        console.log("toLocation: ", toLocation);
+        console.log("startDate: ", startDate);
+        console.log("endDate: ", endDate);
+        console.log("driverAge: ", driverAge);
+        searchForVehicles({
+            fromLocation: fromLocation,
+            toLocation: toLocation,
+            startDate: startDate,
+            endDate: endDate,
+            driverAge: driverAge
+        });
+    }
+
     return <Dialog
         open={isOpen}
         // onClose={handleClose}
@@ -318,7 +335,7 @@ const AdvancedSearchModal = ({ isOpen, handleDialogClose }) => {
         </DialogContent>
         <DialogActions>
             <Button onClick={handleDialogClose} color="primary">Cancel</Button>
-            <Button onClick={handleDialogClose} disabled={searchButtonDisabled} color="primary">Search</Button>
+            <Button onClick={() => {handleSearch()}} disabled={searchButtonDisabled} color="primary">Search</Button>
         </DialogActions>
     </Dialog>
 };

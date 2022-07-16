@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 function UserProfile({ user })  {
     const [fetcheduser,setFetcheduser] = useState([]);
+
     const navigate = useNavigate();
 
     useEffect(() => {

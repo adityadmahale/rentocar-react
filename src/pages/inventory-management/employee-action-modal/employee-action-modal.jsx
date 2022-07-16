@@ -57,6 +57,7 @@ const EmployeeActionModal = ({ open, handleClose, setOpen, title, fields, addEnt
         isAddDisabled();
     }, [modalFields]);
 
+    // add either a vehicle or station
     const addEntityInInventory = (entityType, modalFields) => {
         setLoading(true);
         let requestBody = {};
@@ -99,6 +100,7 @@ const EmployeeActionModal = ({ open, handleClose, setOpen, title, fields, addEnt
                 requestBody[field.requestProp] = field.value;
             });
 
+            // Adding new station
             axios.post('/stations', { ...requestBody }).then((response) => {
                 const message = `Station with ${stationNameField} name added successfully`;
                 openToastSnackBar(message, 'success');
@@ -256,6 +258,7 @@ const EmployeeActionModal = ({ open, handleClose, setOpen, title, fields, addEnt
         isAddDisabled();
     }
 
+    // check if all fields are valid
     const isAddDisabled = () => {
         let isDisabled = modalFields.some(field => field.error || !field.value);
         setDisabledAdd(isDisabled);

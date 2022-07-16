@@ -6,6 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
 import civic from '../../assets/images/civic.jpg'
 
+
 const products = [
   { 
     name: 'Honda Civic',
@@ -14,15 +15,28 @@ const products = [
   },
 ];
 
-const addresses = ['5415 Victoria Road', 'Halifax', 'Nova Scotia', 'B3h 2k5', 'Canada'];
-const payments = [
-  { name: 'Card type', detail: 'Visa' },
-  { name: 'Card holder', detail: 'Mr Sidharth Mahant' },
-  { name: 'Card number', detail: 'xxxx-xxxx-xxxx-5611' },
-  { name: 'Expiry date', detail: '09/2022' },
-];
 
 export default function Review() {
+
+var fname=localStorage.getItem("fname");
+var lname=localStorage.getItem("lname");
+var address1=localStorage.getItem("address");
+var city=localStorage.getItem("city");
+var state=localStorage.getItem("state");
+var zip=localStorage.getItem("zip");
+var country=localStorage.getItem("country");
+var cname=localStorage.getItem("cardName");
+var cnumber=localStorage.getItem("cardNumber");
+var exp=localStorage.getItem('expDate');
+
+
+const addresses = [address1, city, state, zip, country];
+const payments = [
+  { name: 'Card holder', detail: cname },
+  { name: 'Card number', detail: 'xxxx-xxxx-xxxx-'+cnumber.slice(- 4) },
+  { name: 'Expiry date', detail: exp },
+];
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -49,7 +63,7 @@ export default function Review() {
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
             Billing
           </Typography>
-          <Typography gutterBottom>Sidharth Mahant</Typography>
+          <Typography gutterBottom>{fname} {lname}</Typography>
           <Typography gutterBottom>{addresses.join(', ')}</Typography>
         </Grid>
         <Grid item container direction="column" xs={12} sm={6}>

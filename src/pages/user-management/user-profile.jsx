@@ -15,7 +15,7 @@ function UserProfile({ user })  {
     // const navigate = useNavigate();
     const [fetcheduser,setFetcheduser] = useState([]);
     
-    useEffect((user) => {
+    useEffect(() => {
         // const user1 = auth.getCurrentUser();
         console.log(user)
         // setUser1(user1);

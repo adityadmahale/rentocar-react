@@ -213,7 +213,9 @@ const MakeReservation = () => {
       },
     }));
 
-    if (reservationValues.pickupDate == reservationValues.dropDate) {
+    var pickupDateObject = new Date(reservationValues.pickupDate.value)
+    var dropDateObject = new Date(reservationValues.dropDate.value)
+    if (pickupDateObject.getTime() === dropDateObject.getTime()) {
       const dateArr = ["9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM"]
       let errorMessage10 = dateArr.indexOf(reservationValues.dropTime.value) <= dateArr.indexOf(reservationValues.pickupTime.value) ? "Pickup Time is after or same as Drop Time" : ""
       let errorMessage11 = errorMessage10 === "" ? "" : "Drop Time is before or same as Pickup Time"
@@ -235,7 +237,6 @@ const MakeReservation = () => {
       }));
     }
 
-    console.log("makeReservation.js: ", reservationValues);
     if (isSubmittable) {
       const reservationDataTemp = {
         pickupPostal: reservationValues.pickupPostal.value,

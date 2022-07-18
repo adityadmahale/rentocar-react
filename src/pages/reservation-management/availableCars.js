@@ -40,31 +40,34 @@ const AvailableCars = () => {
   const [reservationData, setReservationData] = useState({});
   const [filter, setFilter] = useState("Any");
   const [sortBy, setSortBy] = useState("Price-L2H");
-  const dateDiff = null;
+  const [dateDiff, setDateDiff] = useState(0);
 
   useEffect(() => {
     if (!location.state) {
       navigate('/makereservation');
     }
-    console.log("state: ", location.state);
     setReservationData(location.state);
-    console.log("availableCars.js (reservationData): ", reservationData);
-    const oneDay = 1000 * 60 * 60 * 24;
-    dateDiff = Math.round((new Date(reservationData.dropDate).getTime() - new Date(reservationData.pickupDate).getTime()) / oneDay)
     const getVehicles = async () => {
-      const { data: newVehicles } = await getSpecificVehicles(reservationData);
-      console.log("availableCars.js (newVehicles): ", newVehicles);
+      const { data: newVehicles } = await getSpecificVehicles(location.state);
       setAllVehicles(newVehicles);
       setVehicles(newVehicles);
-      console.log("availableCars.js (allVehicles): ", allVehicles);
     };
     getVehicles()
+    const setDateDifference = () => {
+      var pickupDateObject = new Date(location.state.pickupDate)
+      var dropDateObject = new Date(location.state.dropDate)
+      if (dropDateObject.getTime() !== pickupDateObject.getTime()) {
+        let difference = dropDateObject.getTime() - pickupDateObject.getTime()
+        setDateDiff(Math.ceil(difference / (1000 * 3600 * 24)))
+      }
+    }
+    setDateDifference()
   }, [location, navigate, reservationData]);
 
   const handleFilterChange = (event) => {
     const { value } = event.target;
     setFilter(value)
-    if (value != "Any") {
+    if (value !== "Any") {
       const filteredVehicles = allVehicles.filter(vehicle => {
         return vehicle.type === value;
       })
@@ -89,7 +92,7 @@ const AvailableCars = () => {
   };
 
   const handleReserve = (vehicle) => {
-    vehicle.price = vehicle.price * dateDiff
+    vehicle.price = dateDiff > 0 ? vehicle.price * dateDiff : vehicle.price
     navigate(`/vehicles/${vehicle._id}`, {
       state: { ...vehicle, ...reservationData }
     });
@@ -278,7 +281,7 @@ const AvailableCars = () => {
                 textAlign="center"
                 margin={"auto"}
               >
-                <h2>C$ {vehicle.price * dateDiff} Total</h2>
+                <h2>C$ {dateDiff > 0 ? vehicle.price * dateDiff : vehicle.price} Total </h2>
                 <StyledButton
                   variant="contained"
                   size="large"

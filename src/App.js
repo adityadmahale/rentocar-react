@@ -8,40 +8,45 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 
 // React imports
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import React, { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
+import React, { useState, useEffect } from "react";
 
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, Flip } from "react-toastify";
 
 // Component imports
 
-import Success from "./pages/user-management/Success";
 import Registration from "./pages/user-management/Registration";
 import Login from "./pages/user-management/Login";
-import UserList from "./pages/user-management/UserList";
-import UserProfile from "./pages/user-management/UserProfile";
+import UserProfile from "./pages/user-management/user-profile";
+import UpdatePassword from "./pages/user-management/update-password";
 import TicketsHome from "./pages/customer-support/TicketsHome";
 import Checkout from "./pages/payment-management/Checkout";
 import InventoryHome from "./pages/inventory-management/InventoryHome";
 import Offers from "./pages/offers-management/offers";
 import VehicleDetails from "./pages/reviews-management/vehicleDetails";
-import FabMenu from './pages/inventory-management/fab-menu/fab-menu';
-import { Box } from '@mui/material';
 import Comparision from "./pages/car-comparision/comparision";
 import ReservationsSummary from "./pages/reservations-summary/reservationsSummary";
+import AvailableCars from "./pages/reservation-management/availableCars";
+import MakeReservation from "./pages/reservation-management/makeReservation";
+import ViewReservations from "./pages/reservation-management/viewReservations";
+import CancelReservation from "./pages/reservation-management/cancelReservation";
+import ModifyReservation from "./pages/reservation-management/modifyReservation";
 
+import auth from "./services/authService";
 
 function App() {
-  const [id, setId] = useState([]);
-  const getFabMenuPositionStyles = () => {
-    return {
-      position: 'absolute',
-      bottom: '20px',
-      right: '20px'
-    };
-  };
+  const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    const user = auth.getCurrentUser();
+    setUser(user);
+  }, []);
 
   return (
     <div className="App">
@@ -51,26 +56,40 @@ function App() {
           {/* Routes for User Management and Support Features */}
           <Route path="/registration" element={<Registration />} />
           <Route path="/" element={<Login />} />
-          <Route path="/userlist" element={<UserList setId={setId} />} />
-          <Route path="/success" element={<Success />} />
-          <Route path="/userprofile" element={<UserProfile id={id} />} />
+          {/*User Landing Page */}
+          {/* <Route path="/userprofile" element={!user ? <Navigate to="/" /> : <UserProfile user={user} />} /> */}
+          <Route path="/userprofile" element={<UserProfile user={user} />} />
+          {/*User Update Password page */}
+          {/* <Route path="/updatepassword" element={!user ? <Navigate to="/" /> : <UpdatePassword user={user} />} /> */}
+          <Route path="/updatepassword" element={<UpdatePassword user={user} />} />
           <Route path="/ticketshome" element={<TicketsHome />} />
           {/* Routes for Inventory Management */}
           <Route path="/inventoryhome" element={<InventoryHome />} />
           {/* Route for Offers Management */}
-          <Route path="/offers" element={<Offers />} />
+          <Route
+            path="/offers"
+            element={!user ? <Navigate to="/" /> : <Offers user={user} />}
+          />
           {/* Route for User Reviews Management */}
-          <Route path="/vehicles/details" element={<VehicleDetails />} />
+          <Route
+            path="/vehicles/:id"
+            element={<VehicleDetails user={user} />}
+          />
           {/* Route for Payment Management */}
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/comparison" element={<Comparision/>} />
-          <Route path="/reservationsSummary" element={<ReservationsSummary/>} />
+          <Route path="/comparison" element={<Comparision />} />
+          <Route
+            path="/reservationsSummary"
+            element={<ReservationsSummary />}
+          />
+          {/* Route for Reservation Management */}
+          <Route path="/makereservation" element={<MakeReservation />} />
+          <Route path="/availablecars" element={<AvailableCars />} />
+          <Route path="/viewreservations" element={<ViewReservations />} />
+          <Route path="/cancelreservation" element={<CancelReservation />} />
+          <Route path="/modifyreservation" element={<ModifyReservation />} />
         </Routes>
-      </Router >
-      {(window.location.pathname !== '/registration' && window.location.pathname !== '/') && 
-        <Box sx={getFabMenuPositionStyles()}>
-        <FabMenu></FabMenu>
-      </Box>}
+      </Router>
     </div>
   );
 }

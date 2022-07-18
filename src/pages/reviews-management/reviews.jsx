@@ -1,6 +1,13 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
+
 import { Button, Stack, styled, Typography, Container } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { getReviews } from "./reviewsService";
+import {
+  addReview,
+  deleteReview,
+  getReview,
+  getReviews,
+} from "../../services/reviewsService";
 import { getSortedReviews } from "./sortReviews";
 import Modal from "./modal";
 import Review from "./review";
@@ -8,6 +15,7 @@ import ReviewForm from "./reviewForm";
 import SortSelect from "./sortSelect";
 import Joi from "joi";
 import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const StyledButton = styled(Button)({
   color: "#fff",
@@ -21,7 +29,11 @@ const StyledButton = styled(Button)({
   },
 });
 
-const Reviews = () => {
+const Reviews = ({ user }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [vehicle, setVehicle] = useState({});
+
   const [posted, setPosted] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [sortOption, setSortOption] = useState("d");
@@ -61,43 +73,69 @@ const Reviews = () => {
     setReviewFields(newReviewFields);
   };
 
-  const handleReviewPost = (e) => {
-    e.preventDefault();
-    const allErrors = validate();
-    setErrors(allErrors || {});
-    if (allErrors) {
-      return;
+  const handleReviewPost = async (e) => {
+    const originalReviews = reviews;
+    try {
+      e.preventDefault();
+      const allErrors = validate();
+      setErrors(allErrors || {});
+      if (allErrors) {
+        return;
+      }
+      const { data: updatedReview } = await addReview(
+        reviewFields,
+        user._id,
+        vehicle._id
+      );
+      const newReviews = [updatedReview, ...reviews];
+      setReviews(newReviews);
+      handleClose();
+      toast.success("Review Submitted Successfully");
+      setPosted(updatedReview);
+      setReviewFields({
+        rating: "0",
+        title: "",
+        description: "",
+      });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        toast.error("Something went wrong");
+        setReviews(originalReviews);
+      }
     }
-    const updatedReview = {
-      ...reviewFields,
-      date: new Date(),
-      id: reviews.length + 1,
-      user: "Aditya Mahale",
-      useful: {
-        yes: 0,
-        no: 0,
-      },
-    };
-    const newReviews = [updatedReview, ...reviews];
-    setReviews(newReviews);
-    handleClose();
-    toast.success("Review Submitted Successfully");
-    setPosted(updatedReview);
   };
 
   const handleSortSelect = (e) => {
     setSortOption(e.target.value);
   };
 
-  const handleDelete = () => {
-    const filteredReviews = reviews.filter((r) => r !== posted);
-    setReviews(filteredReviews);
-    setPosted(null);
+  const handleDelete = async (id) => {
+    try {
+      await deleteReview(id);
+      const filteredReviews = reviews.filter((r) => r._id !== posted._id);
+      setReviews(filteredReviews);
+      setPosted(null);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        toast.error("Something went wrong");
+      }
+    }
   };
 
   useEffect(() => {
-    setReviews(getReviews());
-  }, []);
+    if (!location.state) {
+      navigate("/availablecars");
+    }
+
+    setVehicle(location.state);
+    const getData = async () => {
+      const { data: vehicleReviews } = await getReviews(location.state._id);
+      const { data: posted } = await getReview(user._id, location.state._id);
+      setReviews(vehicleReviews);
+      setPosted(posted);
+    };
+    getData();
+  }, [location, navigate]);
 
   const sortedReviews = getSortedReviews(reviews, sortOption);
 
@@ -131,13 +169,16 @@ const Reviews = () => {
         </Typography>
 
         <Stack direction={{ xs: "column", md: "row" }} spacing={4}>
-          {!posted && (
+          {user && !user.isAdmin && !posted && (
             <StyledButton onClick={handleOpen} variant="contained">
               Post Review
             </StyledButton>
           )}
-          {posted && (
-            <StyledButton onClick={handleDelete} variant="contained">
+          {user && !user.isAdmin && posted && (
+            <StyledButton
+              onClick={() => handleDelete(posted._id)}
+              variant="contained"
+            >
               DELETE Review
             </StyledButton>
           )}
@@ -150,7 +191,7 @@ const Reviews = () => {
 
       <Stack spacing={2} paddingBottom="30px">
         {sortedReviews.map((review) => (
-          <Review key={review.id} review={review} />
+          <Review key={review._id} review={review} user={user} />
         ))}
       </Stack>
     </Container>

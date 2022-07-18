@@ -1,3 +1,4 @@
+/* Author: @104 Shaik Asaduddin (sh465111@dal.ca) - Maintainer */
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -10,11 +11,29 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import { IconButton, Typography } from '@mui/material';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import axios from 'axios';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
-const EmployeeActionModal = ({ open, handleClose, setOpen, title, fields, addEntity }) => {
+
+const EmployeeActionModal = ({ open, handleClose, setOpen, title, fields, addEntity, getVehicles, getStations, openToastSnackBar }) => {
     const [scroll, setScroll] = React.useState('paper'); // eslint-disable-line no-unused-vars
     const [modalFields, setModalFields] = React.useState(fields);
     const [disabledAdd, setDisabledAdd] = React.useState(false);
+    const [didLoad, setDidLoad] = React.useState(false);
+
+    const [loading, setLoading] = React.useState(false);
+    const [toast, setToast] = React.useState("");
+    const [toastMessage, setToastMessage] = React.useState("");
+    const [severity, setSeverity] = React.useState("");
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const handleSnackbarClose = () => setSnackbarOpen(false);
+
+    const Alert = React.forwardRef(function Alert(props, ref) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
 
     const descriptionElementRef = React.useRef(null);
     React.useEffect(() => {
@@ -36,7 +55,69 @@ const EmployeeActionModal = ({ open, handleClose, setOpen, title, fields, addEnt
 
     React.useEffect(() => {
         isAddDisabled();
-    }, [modalFields])
+    }, [modalFields]);
+
+    // add either a vehicle or station
+    const addEntityInInventory = (entityType, modalFields) => {
+        setLoading(true);
+        let requestBody = {};
+        if (entityType == "car") {
+            modalFields.forEach(field => {
+                if (field.requestProp === 'door' ||
+                field.requestProp === 'available' ||
+                field.requestProp === 'automatic' ||
+                field.requestProp === 'ac' ||
+                field.requestProp === 'sportsMode' ||
+                field.requestProp === 'cruiseControl' ||
+                field.requestProp === 'childCarSeat') {
+                    requestBody[field.requestProp] = (field.value === 'Yes') ? true : false;
+                } else {
+                    requestBody[field.requestProp] = field.value;
+                }
+            });
+            // Adding new car
+            const registrationNoField = modalFields.find(field => field.id === 'addCar-registrationNo').value;
+            axios.post('/vehicles', { ...requestBody }).then((response) => {
+                const message = `Car with ${registrationNoField} registration number added successfully`;
+                openToastSnackBar(message, 'success');
+                setLoading(false);
+                setOpen(false);
+                // update the list of cars
+                getVehicles();
+            }, (err) => {
+                console.error("err: ", err);
+                setLoading(false);
+                const message = `Failed to add car with ${registrationNoField} registration number added successfully`;
+                setToastMessage(message);
+                setSnackbarOpen(true);
+                setSeverity('error');
+            });
+        } else {
+            const stationNameField = modalFields.find(field => field.id === 'addStation-stationName').value;
+            // const message = `Station with ${stationNameField} added successfully`;
+            // setToastMessage(message);
+            modalFields.forEach(field => {
+                requestBody[field.requestProp] = field.value;
+            });
+
+            // Adding new station
+            axios.post('/stations', { ...requestBody }).then((response) => {
+                const message = `Station with ${stationNameField} name added successfully`;
+                openToastSnackBar(message, 'success');
+                setLoading(false);
+                setOpen(false);
+                // update the list of stations
+                getStations();
+            }, (err) => {
+                console.error("err: ", err);
+                setLoading(false);
+                const message = `Failed to add station with ${stationNameField} name added successfully`;
+                setToastMessage(message);
+                setSnackbarOpen(true);
+                setSeverity('error');
+            });
+        }
+    }
 
     const inputChanged = (event, field) => {
         const fieldsDuplicate = JSON.parse(JSON.stringify(modalFields));
@@ -111,7 +192,6 @@ const EmployeeActionModal = ({ open, handleClose, setOpen, title, fields, addEnt
     const numbersAndSpecialChars = /^[a-zA-Z]+$/;
 
     const selectFieldChanged = (event, field) => {
-        console.log("field: ", field);
         const fieldsDuplicate = JSON.parse(JSON.stringify(modalFields));
         fieldsDuplicate.map(fieldProp => {
             if (fieldProp.name === field.name) {
@@ -178,10 +258,34 @@ const EmployeeActionModal = ({ open, handleClose, setOpen, title, fields, addEnt
         isAddDisabled();
     }
 
+    // check if all fields are valid
     const isAddDisabled = () => {
         let isDisabled = modalFields.some(field => field.error || !field.value);
         setDisabledAdd(isDisabled);
         return isDisabled;
+    }
+
+    const changeListener = (event) => {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(event.target.files[0])
+        fileReader.onload = () => {
+            if (fileReader.result) {
+                const fieldsDuplicate = JSON.parse(JSON.stringify(modalFields));
+                fieldsDuplicate.map(fieldProp => {
+                    if (fieldProp.id === 'addCar-image') {
+                        fieldProp.value = fileReader.result;
+                        fieldProp.fileName = event.target.files[0].name;
+                    }
+                    return fieldProp;
+                });
+                setModalFields([...fieldsDuplicate]);
+            }
+        }
+        fileReader.onerror = (error) => {
+            // reject(error);
+            console.log("error: ", error);
+        }
+
     }
 
     return (
@@ -222,6 +326,17 @@ const EmployeeActionModal = ({ open, handleClose, setOpen, title, fields, addEnt
                                     </Select>
                                 </FormControl>
                                 :
+                                (field.type === 'image') ?
+                                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'end', color: '#a9a9a9' }}>
+                                        <Typography variant="div" gutterBottom color={field.fileName ? '#161616' : '#a9a9a9'}>
+                                            {field.fileName ? field.fileName : 'No image selected'}
+                                        </Typography>
+                                        <IconButton color="primary" component="label">
+                                            <input type="file" accept="image/*" onChange={changeListener} hidden />
+                                            <AddPhotoAlternateIcon fontSize="medium" />
+                                        </IconButton>
+                                    </Box>
+                                :
                                 <>
                                 {/* [Code Attribution 3 for MUI TextField] */}
                                 {/* [URL: https://mui.com/material-ui/react-text-field/#full-width] */}
@@ -247,10 +362,23 @@ const EmployeeActionModal = ({ open, handleClose, setOpen, title, fields, addEnt
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button
                         disabled={disabledAdd}
-                        onClick={() => { addEntity((title === 'Add a car' ? 'car' : 'station'), modalFields); }}>
+                        onClick={() => { addEntityInInventory((title === 'Add car' ? 'car' : 'station'), modalFields); }}>
                             Add
                     </Button>
                 </DialogActions>
+                <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={6000}
+                    onClose={handleSnackbarClose}
+                >
+                    <Alert
+                    onClose={handleSnackbarClose}
+                    severity={severity}
+                    sx={{ width: '100%' }}
+                    >
+                    {toastMessage}
+                    </Alert>
+                </Snackbar>
             </Dialog>
         </div>
     );

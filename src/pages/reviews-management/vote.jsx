@@ -1,19 +1,24 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
+
 import { Typography } from "@mui/material";
 import React, { useState } from "react";
+import { updateReview } from "../../services/reviewsService";
 
-const Vote = ({ yes, no }) => {
-  const [agree, setAgree] = useState(yes);
-  const [disagree, setDisagree] = useState(no);
+const Vote = ({ review, user }) => {
+  const [agree, setAgree] = useState(review.yes);
+  const [disagree, setDisagree] = useState(review.no);
   const [disabled, setDisabled] = useState(false);
 
-  const handleYesClick = () => {
-    if (disabled) return;
+  const handleYesClick = async () => {
+    if (disabled || !user) return;
+    await updateReview(review._id, true);
     setAgree(agree + 1);
     setDisabled(true);
   };
 
-  const handleNoClick = () => {
-    if (disabled) return;
+  const handleNoClick = async () => {
+    if (disabled || !user) return;
+    await updateReview(review._id, false);
     setDisagree(disagree + 1);
     setDisabled(true);
   };
@@ -29,7 +34,7 @@ const Vote = ({ yes, no }) => {
           borderRadius: "5px",
           backgroundColor: "#00d2d3",
           fontWeight: 600,
-          cursor: "pointer",
+          cursor: disabled || !user ? "auto" : "pointer",
         }}
         onClick={handleYesClick}
       >
@@ -43,7 +48,7 @@ const Vote = ({ yes, no }) => {
           borderRadius: "5px",
           backgroundColor: "#00d2d3",
           fontWeight: 600,
-          cursor: "pointer",
+          cursor: disabled || !user ? "auto" : "pointer",
         }}
         onClick={handleNoClick}
       >

@@ -1,3 +1,5 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
+
 import styled from "@emotion/styled";
 import {
   Button,
@@ -28,7 +30,14 @@ const StyledButton = styled(Button)({
   },
 });
 
-const OfferCard = ({ offer, selectedOffer, onSelect, onApply, applied }) => {
+const OfferCard = ({
+  offer,
+  selectedOffer,
+  onSelect,
+  onApply,
+  applied,
+  user,
+}) => {
   return (
     <Card
       variant="outlined"
@@ -38,14 +47,14 @@ const OfferCard = ({ offer, selectedOffer, onSelect, onApply, applied }) => {
         marginLeft: "15px",
         cursor: "pointer",
         backgroundColor:
-          selectedOffer && offer.id === selectedOffer.id ? "#bbb" : "#fff",
+          selectedOffer && offer._id === selectedOffer._id ? "#bbb" : "#fff",
       }}
       onClick={() => onSelect(offer)}
     >
       <CardMedia
         component="img"
         height="300"
-        image={offer.image}
+        image="/offer.jpg"
         alt={offer.title}
       />
       <CardContent>
@@ -56,14 +65,16 @@ const OfferCard = ({ offer, selectedOffer, onSelect, onApply, applied }) => {
           {offer.description}
         </Typography>
       </CardContent>
-      <StyledButton
-        size="small"
-        variant="outlined"
-        onClick={onApply}
-        disabled={applied}
-      >
-        Apply
-      </StyledButton>
+      {user && !user.isAdmin && (
+        <StyledButton
+          size="small"
+          variant="outlined"
+          onClick={onApply}
+          disabled={applied}
+        >
+          Apply
+        </StyledButton>
+      )}
     </Card>
   );
 };

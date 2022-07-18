@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/common/Header";
-
+import NavBar from "../../components/common/nav-bar";
 
 function UserList(props) {
   const [users, setUsers] = useState([]);
@@ -43,7 +42,7 @@ function UserList(props) {
   }, []);
   return (
     <div>
-      <Header />
+      <NavBar />
       <div className="clearfix">
         <div className="text-center" style={{ margin: "1em" }}>
           <label htmlFor="searchValue">Enter User Name </label>

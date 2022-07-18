@@ -1,6 +1,8 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
+
 import React, { useEffect, useState } from "react";
 import Card from "./card";
-import { getOffers } from "./service/offersService";
+import { getOffers, addOffer, deleteOffer } from "../../services/offers";
 import {
   Grid,
   Container,
@@ -32,7 +34,7 @@ const StyledButton = styled(Button)({
   },
 });
 
-const Offers = () => {
+const Offers = ({ user }) => {
   const [offers, setOffers] = useState([]);
   const [applied, setApplied] = useState(false);
   const [open, setOpen] = useState(false);
@@ -71,36 +73,52 @@ const Offers = () => {
     setOfferFields(newOfferFields);
   };
 
-  const handleOfferPost = (e) => {
-    e.preventDefault();
-    const allErrors = validate();
-    setErrors(allErrors || {});
-    if (allErrors) {
-      return;
+  const handleOfferPost = async (e) => {
+    const originalOffers = offers;
+    try {
+      e.preventDefault();
+      const allErrors = validate();
+      setErrors(allErrors || {});
+      if (allErrors) {
+        return;
+      }
+      const { data: newOffer } = await addOffer(offerFields);
+      const newOffers = [{ ...newOffer }, ...offers];
+      setOffers(newOffers);
+      handleClose();
+      toast.success("Offer Added Successfully");
+      setOfferFields({
+        title: "",
+        description: "",
+      });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        toast.error("Something went wrong");
+        setOffers(originalOffers);
+      }
     }
-    const updatedOffer = {
-      ...offerFields,
-      id: offers.length + 1,
-      image: "/offer.jpg",
-    };
-    const newOffers = [updatedOffer, ...offers];
-    setOffers(newOffers);
-    handleClose();
-    toast.success("Offer Added Successfully");
-    setOfferFields({
-      title: "",
-      description: "",
-    });
   };
 
   const handleSelect = (selected) => {
+    if (user && !user.isAdmin) return;
     setSelectedOffer({ ...selected });
   };
 
-  const handleDelete = () => {
-    const newOffers = offers.filter((offer) => offer.id !== selectedOffer.id);
-    setOffers(newOffers);
-    setSelectedOffer(null);
+  const handleDelete = async () => {
+    const originalOffers = offers;
+    try {
+      const newOffers = offers.filter(
+        (offer) => offer._id !== selectedOffer._id
+      );
+      setOffers(newOffers);
+      await deleteOffer(selectedOffer._id);
+      setSelectedOffer(null);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        toast.error("Something went wrong");
+        setOffers(originalOffers);
+      }
+    }
   };
 
   const handleApply = () => {
@@ -109,7 +127,12 @@ const Offers = () => {
   };
 
   useEffect(() => {
-    setOffers(getOffers());
+    const getData = async () => {
+      const { data: offers } = await getOffers();
+      setOffers(offers);
+    };
+
+    getData();
   }, []);
 
   return (
@@ -145,18 +168,20 @@ const Offers = () => {
             Offers
           </Typography>
 
-          <Stack direction={{ xs: "column", md: "row" }} spacing={4}>
-            <StyledButton
-              onClick={handleDelete}
-              disabled={selectedOffer === null}
-              variant="outlined"
-            >
-              DELETE OFFER
-            </StyledButton>
-            <StyledButton onClick={handleOpen} variant="outlined">
-              ADD OFFER
-            </StyledButton>
-          </Stack>
+          {user && user.isAdmin && (
+            <Stack direction={{ xs: "column", md: "row" }} spacing={4}>
+              <StyledButton
+                onClick={handleDelete}
+                disabled={selectedOffer === null}
+                variant="outlined"
+              >
+                DELETE OFFER
+              </StyledButton>
+              <StyledButton onClick={handleOpen} variant="outlined">
+                ADD OFFER
+              </StyledButton>
+            </Stack>
+          )}
         </Stack>
         <Grid container spacing={3}>
           {offers.map((offer) => (
@@ -165,7 +190,7 @@ const Offers = () => {
               xs={12}
               md={4}
               style={{ cursor: "pointer" }}
-              key={offer.id}
+              key={offer._id}
             >
               <Card
                 key={offer.id}
@@ -174,6 +199,7 @@ const Offers = () => {
                 onSelect={handleSelect}
                 onApply={handleApply}
                 applied={applied}
+                user={user}
               />
             </Grid>
           ))}

@@ -41,6 +41,7 @@ const AvailableCars = () => {
   const [reservationData, setReservationData] = useState({});
   const [filter, setFilter] = useState("Any");
   const [sortBy, setSortBy] = useState("Price-L2H");
+  const dateDiff = null;
 
   useEffect(() => {
     if (!location.state) {
@@ -49,6 +50,8 @@ const AvailableCars = () => {
     console.log("state: ", location.state);
     setReservationData(location.state);
     console.log("availableCars.js (reservationData): ", reservationData);
+    const oneDay = 1000 * 60 * 60 * 24;
+    dateDiff = (new Date(reservationData.dropDate).getTime() - new Date(reservationData.pickupDate).getTime()) / oneDay
     const getVehicles = async () => {
       const { data: newVehicles } = await getSpecificVehicles(reservationData);
       console.log("availableCars.js (newVehicles): ", newVehicles);
@@ -84,6 +87,13 @@ const AvailableCars = () => {
       const h2lvehicles = [...vehicles].sort((a, b) => b.price - a.price)
       setVehicles(h2lvehicles)
     }
+  };
+
+  const handleReserve = (vehicle) => {
+    vehicle.price = vehicle.price * dateDiff
+    navigate(`/vehicles/${vehicle._id}`, {
+      state: { ...vehicle, ...reservationData }
+    });
   };
 
   return (
@@ -269,16 +279,12 @@ const AvailableCars = () => {
                 textAlign="center"
                 margin={"auto"}
               >
-                <h2>C$ {vehicle.price} Total</h2>
+                <h2>C$ {vehicle.price * dateDiff} Total</h2>
                 <StyledButton
                   variant="contained"
                   size="large"
                   color="success"
-                  onClick={() => {
-                    navigate(`/vehicles/${vehicle._id}`, {
-                      state: { ...vehicle, ...reservationData }
-                    });
-                  }}
+                  onClick={() => handleReserve(vehicle)}
                 >
                   Reserve
                 </StyledButton>

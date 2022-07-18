@@ -56,7 +56,7 @@ const CancelReservation = () => {
   const handleCancelReservation = async (event) => {
     const id = reservationData._id;
     console.log("reservationData._id: ", id);
-    const { data: result } = await cancelReservation(id);
+    const { data: result } = await cancelReservation(id, cancellationValues.reason.value);
     console.log("Result: ", result);
     if (result.isCancelled) {
       navigate("/viewreservations")
@@ -65,7 +65,7 @@ const CancelReservation = () => {
 
   const validate = (event) => {
     let isSubmittable = true;
-    let errorMessage = cancellationValues.reason.value   === "" ? "Cancellation Reason is required." : ""
+    let errorMessage = cancellationValues.reason.value  === "" ? "Cancellation Reason is required." : ""
     isSubmittable &= errorMessage  === "";
     setCancellationValues((cancellationValues) => ({
       ...cancellationValues,

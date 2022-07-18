@@ -35,7 +35,6 @@ const Detail = () => {
       navigate("/availablecars");
     }
     setVehicle(location.state);
-    console.log("Data: ",location.state);
   }, [location, navigate]);
 
   return (

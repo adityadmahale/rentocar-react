@@ -213,19 +213,41 @@ const MakeReservation = () => {
       },
     }));
 
-    console.log("makeReservation.js: ",reservationValues);
+    if (reservationValues.pickupDate == reservationValues.dropDate) {
+      const dateArr = ["9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM"]
+      let errorMessage10 = dateArr.indexOf(reservationValues.dropTime.value) <= dateArr.indexOf(reservationValues.pickupTime.value) ? "Pickup Time is after or same as Drop Time" : ""
+      let errorMessage11 = errorMessage10 === "" ? "" : "Drop Time is before or same as Pickup Time"
+      isSubmittable &= errorMessage10 === "";
+      isSubmittable &= errorMessage11 === "";
+      setReservationValues((reservationValues) => ({
+        ...reservationValues,
+        pickupTime: {
+          value: reservationValues.pickupTime.value,
+          errorMessage: errorMessage10,
+        },
+      }));
+      setReservationValues((reservationValues) => ({
+        ...reservationValues,
+        dropTime: {
+          value: reservationValues.dropTime.value,
+          errorMessage: errorMessage11,
+        },
+      }));
+    }
+
+    console.log("makeReservation.js: ", reservationValues);
     if (isSubmittable) {
       const reservationDataTemp = {
-          pickupPostal: reservationValues.pickupPostal.value,
-          dropPostal: reservationValues.dropPostal.value,
-          pickupDate: reservationValues.pickupDate.value.toDateString(),
-          dropDate: reservationValues.dropDate.value.toDateString(),
-          pickupTime: reservationValues.pickupTime.value,
-          dropTime: reservationValues.dropTime.value,
-          age: reservationValues.age.value,
-          nationality: reservationValues.nationality.value,
-          carType: reservationValues.carType.value
-        }
+        pickupPostal: reservationValues.pickupPostal.value,
+        dropPostal: reservationValues.dropPostal.value,
+        pickupDate: reservationValues.pickupDate.value.toDateString(),
+        dropDate: reservationValues.dropDate.value.toDateString(),
+        pickupTime: reservationValues.pickupTime.value,
+        dropTime: reservationValues.dropTime.value,
+        age: reservationValues.age.value,
+        nationality: reservationValues.nationality.value,
+        carType: reservationValues.carType.value
+      }
       navigate("/availablecars", { state: reservationDataTemp });
     }
   };

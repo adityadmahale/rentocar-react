@@ -3,7 +3,6 @@
 * @description: This file fetches available cars according to customer requirements taken from /makereservation
 *               and shows details on Frontend to reseve the car
 */
-
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -51,7 +50,7 @@ const AvailableCars = () => {
     setReservationData(location.state);
     console.log("availableCars.js (reservationData): ", reservationData);
     const oneDay = 1000 * 60 * 60 * 24;
-    dateDiff = (new Date(reservationData.dropDate).getTime() - new Date(reservationData.pickupDate).getTime()) / oneDay
+    dateDiff = Math.round((new Date(reservationData.dropDate).getTime() - new Date(reservationData.pickupDate).getTime()) / oneDay)
     const getVehicles = async () => {
       const { data: newVehicles } = await getSpecificVehicles(reservationData);
       console.log("availableCars.js (newVehicles): ", newVehicles);

@@ -1,3 +1,7 @@
+/*
+* @author: Maan Mandaliya (B00903171 | mn638205@dal.ca)
+* @description: This file fetches existing reservations from database and shows in card format with option to modify and cancel.
+*/
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
@@ -10,6 +14,7 @@ import { TextField } from "@mui/material";
 import { CardActions, Button } from "@mui/material";
 import NavBar from "../../components/common/nav-bar";
 import { styled } from "@mui/material";
+import { getReservations, getSpecificReservations } from "../../services/reservationService";
 
 const StyledButton = styled(Button)({
   color: "#fff",
@@ -27,6 +32,15 @@ const ViewReservations = () => {
   const navigate = useNavigate();
   const [reservations, setReservations] = useState([]);
   const [search, setSearch] = useState();
+
+  useEffect(() => {
+    const getReservationsData = async () => {
+      const { data: newReservations } = await getReservations();
+      console.log("availableCars.js (newReservations): ", newReservations);
+      setReservations(newReservations);
+    };
+    getReservationsData()
+  }, [navigate]);
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
@@ -76,198 +90,72 @@ const ViewReservations = () => {
             </StyledButton>
           </Grid>
           {/* Reference: https://mui.com/material-ui/react-grid/ */}
-          <Grid item xs={12} sm={3} md={3}>
-            {/* Reference: https://mui.com/material-ui/react-card/ */}
-            <Card sx={{ maxWidth: 345 }}>
-              <CardMedia
-                component="img"
-                height="150"
-                image={require("../../assets/images/sedan.webp")}
-                alt="SEDAN"
-              />
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Reservation: A1B2
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Pickup
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Halifax - Bayers Rd, B3L4P3
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Monday, June 06 12:00 PM
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Drop
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Halifax - Bayers Rd, B3L4P3
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Tuesday, June 07 12:00 PM
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Age: 23
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Nationality: Canadian
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Car Type: Sedan
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  C$ 200 Total
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <StyledButton
-                  size="small"
-                  onClick={() => {
-                    navigate("/modifyreservation");
-                  }}
-                >
-                  Modify
-                </StyledButton>
-                <StyledButton
-                  size="small"
-                  onClick={() => {
-                    navigate("/cancelreservation");
-                  }}
-                >
-                  Cancel
-                </StyledButton>
-              </CardActions>
-            </Card>
-          </Grid>
-          <Grid item xs={12} sm={3} md={3}>
-            {/* Reference: https://mui.com/material-ui/react-card/ */}
-            <Card sx={{ maxWidth: 345 }}>
-              <CardMedia
-                component="img"
-                height="150"
-                image={require("../../assets/images/hatchback.webp")}
-                alt="HATCHBACK"
-              />
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Reservation: A1B3
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Pickup
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Halifax - Bayers Rd, B3L4P3
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Monday, June 06 12:00 PM
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Drop
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Halifax - Bayers Rd, B3L4P3
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Tuesday, June 07 12:00 PM
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Age: 22
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Nationality: Canadian
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Car Type: Hatchback
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  C$ 100 Total
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <StyledButton
-                  size="small"
-                  onClick={() => {
-                    navigate("/modifyreservation");
-                  }}
-                >
-                  Modify
-                </StyledButton>
-                <StyledButton
-                  size="small"
-                  onClick={() => {
-                    navigate("/cancelreservation");
-                  }}
-                >
-                  Cancel
-                </StyledButton>
-              </CardActions>
-            </Card>
-          </Grid>
-          <Grid item xs={12} sm={3} md={3}>
-            {/* Reference: https://mui.com/material-ui/react-card/ */}
-            <Card sx={{ maxWidth: 345 }}>
-              <CardMedia
-                component="img"
-                height="150"
-                image={require("../../assets/images/suv.webp")}
-                alt="SUV"
-              />
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Reservation: A1B4
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Pickup
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Halifax - Bayers Rd, B3L4P3
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Monday, June 06 12:00 PM
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Drop
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Halifax - Bayers Rd, B3L4P3
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Tuesday, June 07 12:00 PM
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Age: 18
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Nationality: Non-Canadian
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Car Type: SUV
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  C$ 150 Total
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <StyledButton
-                  size="small"
-                  onClick={() => {
-                    navigate("/modifyreservation");
-                  }}
-                >
-                  Modify
-                </StyledButton>
-                <StyledButton
-                  size="small"
-                  onClick={() => {
-                    navigate("/cancelreservation");
-                  }}
-                >
-                  Cancel
-                </StyledButton>
-              </CardActions>
-            </Card>
-          </Grid>
+          {reservations.map((reservation) => (
+            <Grid item xs={12} sm={3} md={3}>
+              {/* Reference: https://mui.com/material-ui/react-card/ */}
+              <Card sx={{ maxWidth: 345 }}>
+                <CardMedia
+                  component="img"
+                  height="150"
+                  image={require("../../assets/images/sedan.webp")}
+                  alt="SEDAN"
+                />
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Reservation: {reservation.number}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    Pickup
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    {reservation.pickupPostal}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    {reservation.pickupDate}, {reservation.pickupTime}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    Drop
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    {reservation.dropPostal}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                  {reservation.dropDate}, {reservation.dropTime}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    Age: {reservation.age}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    Nationality: {reservation.nationality}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    Car Type: {reservation.carType}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    C$ {reservation.price} Total
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <StyledButton
+                    size="small"
+                    onClick={() => {
+                      navigate("/modifyreservation");
+                    }}
+                  >
+                    Modify
+                  </StyledButton>
+                  <StyledButton
+                    size="small"
+                    onClick={() => {
+                      navigate("/cancelreservation", {state: reservation});
+                    }}
+                  >
+                    Cancel
+                  </StyledButton>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
         </Grid>
       </Box>
     </React.Fragment>

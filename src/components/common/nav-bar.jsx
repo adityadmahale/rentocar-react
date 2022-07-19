@@ -17,7 +17,7 @@ import auth from "./../../services/authService";
 import { useNavigate } from "react-router-dom";
 
 const pages = [
-  "Vehicles",
+  "Reservation",
   "Inventory Listing",
   "Reservation Summary",
   "Comparison",
@@ -48,8 +48,8 @@ const NavBar = () => {
       navigate("/comparison");
     } else if (page === "Offers") {
       navigate("/offers");
-    } else if (page === "Vehicles") {
-      navigate("/availablecars");
+    } else if (page === "Reservation") {
+      navigate("/makereservation");
     }
   };
 

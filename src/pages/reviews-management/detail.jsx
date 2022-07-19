@@ -151,6 +151,7 @@ const Detail = () => {
           >
             BOOK NOW
           </StyledButton>
+
         </Grid>
       </Grid>
     </Container>

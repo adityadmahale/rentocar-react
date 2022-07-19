@@ -12,6 +12,7 @@ import { Button } from "@mui/material";
 import NavBar from "../../components/common/nav-bar";
 import { styled } from "@mui/material";
 import { cancelReservation } from "../../services/reservationService";
+import moment from "moment";
 
 const StyledButton = styled(Button)({
   color: "#fff",
@@ -40,9 +41,7 @@ const CancelReservation = () => {
     if (!location.state) {
       navigate('/viewreservations');
     }
-    console.log("state: ", location.state);
     setReservationData(location.state);
-    console.log("cancelReservation.js (reservationData): ", location.state);
   }, [location, navigate, reservationData]);
 
   const handleChange = (event) => {
@@ -55,9 +54,7 @@ const CancelReservation = () => {
 
   const handleCancelReservation = async (event) => {
     const id = reservationData._id;
-    console.log("reservationData._id: ", id);
     const { data: result } = await cancelReservation(id, cancellationValues.reason.value);
-    console.log("Result: ", result);
     if (result.isCancelled) {
       navigate("/viewreservations")
     }
@@ -65,8 +62,8 @@ const CancelReservation = () => {
 
   const validate = (event) => {
     let isSubmittable = true;
-    let errorMessage = cancellationValues.reason.value  === "" ? "Cancellation Reason is required." : ""
-    isSubmittable &= errorMessage  === "";
+    let errorMessage = cancellationValues.reason.value === "" ? "Cancellation Reason is required." : ""
+    isSubmittable &= errorMessage === "";
     setCancellationValues((cancellationValues) => ({
       ...cancellationValues,
       reason: {
@@ -75,7 +72,6 @@ const CancelReservation = () => {
       }
     }));
 
-    console.log(cancellationValues);
     if (isSubmittable) {
       handleCancelReservation()
     }
@@ -125,7 +121,9 @@ const CancelReservation = () => {
               {reservationData.pickupPostal}
             </Typography>
             <Typography variant="body1" gutterBottom>
-              {reservationData.pickupDate},{reservationData.pickupTime}
+              {
+                reservationData.pickupDate && moment(new Date(reservationData.pickupDate).toISOString().replace(/T/, " ").replace(/\..+/, "")).format("MMMM DD, YYYY")
+              }, {reservationData.pickupTime}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={3} md={3} margin="auto">
@@ -136,7 +134,9 @@ const CancelReservation = () => {
               {reservationData.dropPostal}
             </Typography>
             <Typography variant="body1" gutterBottom>
-              {reservationData.dropDate},{reservationData.dropTime}
+              {
+                reservationData.dropDate && moment(new Date(reservationData.dropDate).toISOString().replace(/T/, " ").replace(/\..+/, "")).format("MMMM DD, YYYY")
+              },{reservationData.dropTime}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={3} md={3} margin="auto">
@@ -162,7 +162,7 @@ const CancelReservation = () => {
               onChange={handleChange}
               variant="outlined"
               fullWidth
-              error={cancellationValues.reason.errorMessage  === "" ? false : true}
+              error={cancellationValues.reason.errorMessage === "" ? false : true}
               helperText={cancellationValues.reason.errorMessage}
             />
           </Grid>
@@ -172,7 +172,7 @@ const CancelReservation = () => {
               variant="contained"
               size="large"
               color="warning"
-              onClick={()=> navigate('/viewreservations')}
+              onClick={() => navigate('/viewreservations')}
             >
               Cancel
             </StyledButton>

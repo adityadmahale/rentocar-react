@@ -58,6 +58,17 @@ const ViewReservations = () => {
     }
   };
 
+  const handleVehicleImage = (vehicleObjectID) => {
+  };
+
+  const enableCardActions = (pickupDate) => {
+    // Reservation Cancellation and Modification is not possible within 24 hours of Car Pickup
+    pickupDate = new Date(pickupDate)
+    const today = new Date()
+    const dayDifference = Math.ceil((pickupDate.getTime() - today.getTime()) / (1000 * 3600 * 24))
+    return dayDifference > 1;
+  };
+
   return (
     <React.Fragment>
       <NavBar />
@@ -108,7 +119,7 @@ const ViewReservations = () => {
                 <CardMedia
                   component="img"
                   height="150"
-                  image={require("../../assets/images/sedan.webp")}
+                  image={handleVehicleImage(reservation.vehicle)}
                   alt="SEDAN"
                 />
                 <CardContent>
@@ -150,24 +161,28 @@ const ViewReservations = () => {
                     C$ {reservation.price} Total
                   </Typography>
                 </CardContent>
-                <CardActions>
-                  <StyledButton
-                    size="small"
-                    onClick={() => {
-                      navigate("/modifyreservation");
-                    }}
-                  >
-                    Modify
-                  </StyledButton>
-                  <StyledButton
-                    size="small"
-                    onClick={() => {
-                      navigate("/cancelreservation", { state: reservation });
-                    }}
-                  >
-                    Cancel
-                  </StyledButton>
-                </CardActions>
+                {
+                  enableCardActions(reservation.pickupDate) ?
+                    <CardActions>
+                      <StyledButton
+                        size="small"
+                        onClick={() => {
+                          navigate("/modifyreservation", { state: reservation })
+                        }}
+                      >
+                        Modify
+                      </StyledButton>
+                      <StyledButton
+                        size="small"
+                        onClick={() => {
+                          navigate("/cancelreservation", { state: reservation });
+                        }}
+                      >
+                        Cancel
+                      </StyledButton>
+                    </CardActions>
+                    : null
+                }
               </Card>
             </Grid>
           ))}
@@ -176,5 +191,6 @@ const ViewReservations = () => {
     </React.Fragment>
   );
 };
+
 
 export default ViewReservations;

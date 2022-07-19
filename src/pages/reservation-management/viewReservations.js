@@ -32,19 +32,30 @@ const StyledButton = styled(Button)({
 const ViewReservations = () => {
   const navigate = useNavigate();
   const [reservations, setReservations] = useState([]);
+  const [filteredReservations, setFilteredReservations] = useState([]);
   const [search, setSearch] = useState();
 
   useEffect(() => {
     const getReservationsData = async () => {
       const { data: newReservations } = await getReservations();
       setReservations(newReservations);
+      setFilteredReservations(newReservations)
     };
     getReservationsData()
   }, [navigate]);
 
   const handleSearchChange = (event) => {
-    setSearch(event.target.value);
-    console.log("Search======>", search);
+    const value = event.target.value
+    setSearch(value);
+    if (search !== null) {
+      const filteredReservationsData = reservations.filter((reservation) => {
+        return reservation.number.toLowerCase().startsWith(value.toLowerCase())
+      });
+      setFilteredReservations(filteredReservationsData)
+    }
+    else {
+      setFilteredReservations(reservations)
+    }
   };
 
   return (
@@ -68,9 +79,9 @@ const ViewReservations = () => {
           <Grid item xs={12} sm={4} md={4}>
             <TextField
               name="Search"
-              label="Search Reservation"
+              label="Search by Reservation Number"
               type="text"
-              value={search}
+              value={search || ""}
               onChange={handleSearchChange}
               variant="outlined"
               fullWidth
@@ -90,7 +101,7 @@ const ViewReservations = () => {
             </StyledButton>
           </Grid>
           {/* Reference: https://mui.com/material-ui/react-grid/ */}
-          {reservations.map((reservation) => (
+          {filteredReservations.map((reservation) => (
             <Grid item key={Math.random()} xs={12} sm={3} md={3}>
               {/* Reference: https://mui.com/material-ui/react-card/ */}
               <Card sx={{ maxWidth: 345 }}>

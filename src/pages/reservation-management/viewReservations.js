@@ -58,9 +58,6 @@ const ViewReservations = () => {
     }
   };
 
-  const handleVehicleImage = (vehicleObjectID) => {
-  };
-
   const enableCardActions = (pickupDate) => {
     // Reservation Cancellation and Modification is not possible within 24 hours of Car Pickup
     pickupDate = new Date(pickupDate)
@@ -119,7 +116,7 @@ const ViewReservations = () => {
                 <CardMedia
                   component="img"
                   height="150"
-                  image={handleVehicleImage(reservation.vehicle)}
+                  image={reservation.vehicleImage}
                   alt="SEDAN"
                 />
                 <CardContent>

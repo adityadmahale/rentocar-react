@@ -94,7 +94,7 @@ const AvailableCars = () => {
   const handleReserve = (vehicle) => {
     vehicle.price = dateDiff > 0 ? vehicle.price * dateDiff : vehicle.price
     navigate(`/vehicles/${vehicle._id}`, {
-      state: { ...vehicle, ...reservationData }
+      state: { ...vehicle, ...reservationData, vehicleImage: vehicle.image }
     });
   };
 

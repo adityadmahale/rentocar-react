@@ -42,7 +42,7 @@ const CancelReservation = () => {
     }
     console.log("state: ", location.state);
     setReservationData(location.state);
-    console.log("cancelReservation.js (reservationData): ", reservationData);
+    console.log("cancelReservation.js (reservationData): ", location.state);
   }, [location, navigate, reservationData]);
 
   const handleChange = (event) => {

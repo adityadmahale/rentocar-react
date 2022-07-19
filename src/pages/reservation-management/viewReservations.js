@@ -14,7 +14,7 @@ import { TextField } from "@mui/material";
 import { CardActions, Button } from "@mui/material";
 import NavBar from "../../components/common/nav-bar";
 import { styled } from "@mui/material";
-import { getReservations, getSpecificReservations } from "../../services/reservationService";
+import { getReservations } from "../../services/reservationService";
 import moment from "moment";
 
 const StyledButton = styled(Button)({

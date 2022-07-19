@@ -7,5 +7,5 @@ export const getReservations = () => {
 };
 
 export const cancelReservation = (id, cancellationReason) => {
-  return http.delete(reservationsAPIEndpoint + `${id}`, { "cancellationReason": cancellationReason })
+  return http.delete(reservationsAPIEndpoint + `${id}`, { data: { cancellationReason: cancellationReason } })
 };

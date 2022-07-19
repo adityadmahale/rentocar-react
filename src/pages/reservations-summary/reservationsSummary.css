@@ -62,3 +62,10 @@ button {
 .active-content {
   display: block;
 }
+
+.chart-div{
+  width : 50%;
+  height: 50%;
+  margin-right: auto;
+  margin-left: auto;
+}

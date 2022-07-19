@@ -1,3 +1,8 @@
+/*
+* @author: Maan Mandaliya (B00903171 | mn638205@dal.ca)
+* @description: This file is used to modify the existing reservation. It redirects user back to /availablecars
+*               Where user can select new car and follow next steps.
+*/
 import React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";

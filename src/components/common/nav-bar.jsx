@@ -27,6 +27,18 @@ const pages = [
 const settings = ["View Profile", "Logout"];
 
 const NavBar = () => {
+
+  const isAdmin = () => {
+    const user = auth.getCurrentUser();
+    if(user.isAdmin === undefined){
+      const index = pages.indexOf('Reservation Summary')
+      if(index > -1){
+        pages.splice(index, 1);
+      }
+    }
+
+  } 
+
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -71,6 +83,7 @@ const NavBar = () => {
 
   return (
     <AppBar sx={{ bgcolor: "#00d2d3" }} position="static">
+      {isAdmin()}
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}

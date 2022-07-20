@@ -88,7 +88,7 @@ function App() {
           <Route path="/comparison" element={<Comparision />} />
           <Route
             path="/reservationsSummary"
-            element={<ReservationsSummary />}
+            element={<ReservationsSummary user = {user} />}
           />
           {/* Route for Reservation Management */}
           <Route path="/makereservation" element={<MakeReservation />} />

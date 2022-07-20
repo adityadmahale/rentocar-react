@@ -19,6 +19,7 @@ import Select from "@mui/material/Select";
 import NavBar from "../../components/common/nav-bar";
 import { styled } from "@mui/material";
 import { getSpecificVehicles } from "../../services/vehicleService";
+import moment from "moment";
 
 const StyledButton = styled(Button)({
   color: "#fff",
@@ -120,7 +121,9 @@ const AvailableCars = () => {
                 {reservationData.pickupPostal}
               </Typography>
               <Typography variant="body1" gutterBottom>
-                {reservationData.pickupDate}, {reservationData.pickupTime}
+                {
+                  moment(new Date(reservationData.pickupDate).toISOString().replace(/T/, " ").replace(/\..+/, "")).format("MMMM DD, YYYY")
+                }, {reservationData.pickupTime}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={6} margin="auto">
@@ -131,7 +134,9 @@ const AvailableCars = () => {
                 {reservationData.dropPostal}
               </Typography>
               <Typography variant="body1" gutterBottom>
-                {reservationData.dropDate}, {reservationData.dropTime}
+                {
+                  moment(new Date(reservationData.dropDate).toISOString().replace(/T/, " ").replace(/\..+/, "")).format("MMMM DD, YYYY")
+                }, {reservationData.dropTime}
               </Typography>
             </Grid>
             {/* Reference: https://mui.com/material-ui/react-button */}

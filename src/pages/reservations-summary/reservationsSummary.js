@@ -3,13 +3,16 @@ import * as React from 'react';
 import Navbar from './../../components/common/nav-bar'
 import { Chart , registerables} from 'chart.js';
 import {getDailyAnalysis, getYearlyAnalysis, getMonthlyAnalysis} from "./../../services/reservationSummaryService";
+import {useNavigate} from "react-router-dom";
 Chart.register(...registerables);
 
 
 
-function ReservationsSummary() {
+
+function ReservationsSummary({user}) {
 
   const [tabsValue, setValue] = React.useState(1);
+  const navigate = useNavigate();
   let yearlyBookings;
   let monthlyBookings;
   let dailyBookings;
@@ -20,11 +23,22 @@ function ReservationsSummary() {
   var dailyChart = React.useRef(undefined);
 
   React.useEffect(() => {
+   if(user == null){
+    navigate('/');
+    return;
+   }
+   if(user.isAdmin === undefined){
+    alert("You are not authorized");
+    navigate('/userprofile');
+    return;
+   }
+    
     yearlyData();
+    console.log(user)
   });
 
   const yearlyData = async () => {
-    const response = await getYearlyAnalysis();
+    const response = await getYearlyAnalysis(user);
     const currentYearChartElement = document.getElementById('current-year-chart').getContext('2d');
     const currentYearData = {
         columns: response.data.currentYearColumns,
@@ -91,11 +105,11 @@ function ReservationsSummary() {
             }
           },
     });
-
+    document.getElementById('year-rentals').innerHTML = "Total rentals in the year = "+yearlyBookings;
   }
 
   const monthlyData = async () => {
-    const response = await getMonthlyAnalysis();
+    const response = await getMonthlyAnalysis(user);
     const currentMonthChartElement = document.getElementById('current-month-chart').getContext('2d');
     const currentMonthData = {
         columns: response.data.currentMonthColumns,
@@ -162,11 +176,11 @@ function ReservationsSummary() {
             }
           },
     });
-
+    document.getElementById('month-rentals').innerHTML = "Total rentals in the month = "+monthlyBookings;
   }
 
   const dailyData = async () => {
-    const response = await getDailyAnalysis();
+    const response = await getDailyAnalysis(user);
     const dailyChartElement = document.getElementById('daily-chart').getContext('2d');
     const dayData = {
         columns: response.data.dailyColumns,
@@ -202,7 +216,7 @@ function ReservationsSummary() {
             }
           },
     });
-
+    document.getElementById('daily-rentals').innerHTML = "Total rentals in the day = "+dailyBookings;
   }
 
   const handleTabChange = (newValue) => {
@@ -238,7 +252,7 @@ function ReservationsSummary() {
             <canvas id="current-year-chart"></canvas>
           </div>
           <br/>
-          <p>Total rentals in the year = {yearlyBookings}</p>
+          <p id='year-rentals'></p>
           <br/><br/><br/>
           <h2>Yearly Analysis</h2>
           <div id = 'yearly-chart-div' className="chart-div">
@@ -251,7 +265,7 @@ function ReservationsSummary() {
             <canvas id="current-month-chart"></canvas>
           </div>
           <br/>
-          <p>Total rentals in the month = {monthlyBookings}</p>
+          <p id='month-rentals'></p>
           <br/><br/><br/>
           <h2>Monthly Analysis</h2>
           <div id = 'monthly-chart-div' className="chart-div">
@@ -264,7 +278,7 @@ function ReservationsSummary() {
               <canvas id="daily-chart"></canvas>
             </div>
           <br/>
-          <p>Total rentals in the day = {dailyBookings}</p>
+          <p id='daily-rentals'></p>
         </div>
       </div>
     </div>

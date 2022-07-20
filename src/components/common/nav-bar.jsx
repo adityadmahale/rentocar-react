@@ -29,8 +29,6 @@ const NavBar = () => {
 
   const isAdmin = () => {
     const user = auth.getCurrentUser();
-    console.log(user)
-    console.log(user.isAdmin)
     if(user.isAdmin === undefined){
       const index = pages.indexOf('Reservation Summary')
       if(index > -1){

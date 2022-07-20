@@ -22,6 +22,7 @@ const pages = [
   "Reservation Summary",
   "Comparison",
   "Offers",
+  "Support"
 ];
 const settings = ["View Profile", "Logout"];
 
@@ -50,6 +51,8 @@ const NavBar = () => {
       navigate("/offers");
     } else if (page === "Reservation") {
       navigate("/makereservation");
+    } else if (page === "Support") {
+      navigate("/supporthome");
     }
   };
 

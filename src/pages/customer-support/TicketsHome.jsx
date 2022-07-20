@@ -6,33 +6,77 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Header from "../../components/common/Header";
 import "./TicketsHome.css";
 import { TextField } from "@mui/material";
 import { InputLabel, MenuItem, Select, FormControl } from "@mui/material";
 import NavBar from "../../components/common/nav-bar";
+import { getAllTickets } from "../../services/supportService";
 
-function createData(ticketNumber, calories, fat, carbs, protein, button) {
-  return { ticketNumber, calories, fat, carbs, protein, button };
-}
+// function createData(ticketNumber, calories, fat, carbs, protein, button) {
+//   return { ticketNumber, calories, fat, carbs, protein, button };
+// }
 
 function handleChangeStatus() {
   console.log("dropdown changed");
 }
 
-const rows = [
-  createData("T00894", "Billing Issue", 6.0, 24, 4.0, 4.0),
-  createData("T00002", "Tire Replacement", 9.0, 37, 4.3),
-  createData("T00123", "Scrapes and dent", 16.0, 24, 6.0),
-  createData("T00234", "Driver Addition", 3.7, 67, 4.3),
-  createData("T00554", "Insurance change", 16.0, 49, 3.9),
-];
 
-function TicketsHome() {
-  const [state, setState] = useState({
-    status: "",
-    ticketNo: "",
-  });
+
+// const rows = [
+//   createData("T00894", "Billing Issue", 6.0, 24, 4.0, 4.0),
+//   createData("T00002", "Tire Replacement", 9.0, 37, 4.3),
+//   createData("T00123", "Scrapes and dent", 16.0, 24, 6.0),
+//   createData("T00234", "Driver Addition", 3.7, 67, 4.3),
+//   createData("T00554", "Insurance change", 16.0, 49, 3.9),
+// ];
+
+function TicketsHome({ user }) {
+
+  console.log(user)
+  useEffect(() => {
+    console.log()
+    loadTickets();
+   
+}, []);
+
+
+// const [rowdata, setRowdata] = useState([{
+//   ticketDescription: "",
+//   ticketType: "",
+//   status: "",
+//   raisedBy: "",
+//   modifiedBy: "",
+//   assignedTo : ""
+// }]);
+
+const handleEdit = async () => {
+  // const originalOffers = offers;
+  // try {
+  //   const newOffers = offers.filter(
+  //     (offer) => offer._id !== selectedOffer._id
+  //   );
+  //   setOffers(newOffers);
+  //   await deleteOffer(selectedOffer._id);
+  //   setSelectedOffer(null);
+  // } catch (ex) {
+  //   if (ex.response && ex.response.status === 400) {
+  //     toast.error("Something went wrong");
+  //     setOffers(originalOffers);
+  //   }
+  // }
+};
+
+const [ticket, setTicket] = useState([]);
+
+const loadTickets = () =>{
+  const getData = async () => {
+    const { data: fetchedTickets } = await getAllTickets();
+    console.log(fetchedTickets)
+    setTicket(fetchedTickets);
+    console.log(ticket)
+  };
+  getData();
+}
 
   return (
     <React.Fragment>
@@ -59,7 +103,7 @@ function TicketsHome() {
               <Select
                 labelId="status-label"
                 id="demo-simple-select"
-                value={state.status}
+                // value={state.status}
                 onChange={handleChangeStatus}
               >
                 <MenuItem value={"New"}>New</MenuItem>
@@ -92,23 +136,23 @@ function TicketsHome() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {ticket.map((row,index) => (
                 <TableRow
-                  key={row.ticketNumber}
+                  key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.ticketNumber}
+                    T{index+1}
                   </TableCell>
-                  <TableCell>{row.calories}</TableCell>
-                  <TableCell>{row.fat}</TableCell>
-                  <TableCell>{row.carbs}</TableCell>
-                  <TableCell>{row.protein}</TableCell>
+                  <TableCell>{row.ticketDescription}</TableCell>
+                  <TableCell>{row.ticketType}</TableCell>
+                  <TableCell>{row.status}</TableCell>
+                  <TableCell>{row.raisedBy}</TableCell>
                   <TableCell>
                     <button
                       type="submit"
                       className="btn btn-info"
-                      onClick={console.log("Click")}
+                      onClick={handleEdit}
                       style={{ backgroundColor: "#00d2d3", color: "#fff" }}
                     >
                       EDIT

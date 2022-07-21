@@ -36,6 +36,7 @@ const ViewReservations = ({ user }) => {
   const [search, setSearch] = useState();
 
   useEffect(() => {
+    console.log(user)
     if (user === null) {
       navigate("/");
       return;

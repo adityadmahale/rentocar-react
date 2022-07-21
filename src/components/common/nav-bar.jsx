@@ -25,7 +25,7 @@ const pages = [
   "Support",
   "Careers"
 ];
-const settings = ["View Profile", "Logout"];
+const settings = ["View Profile", "Logout", "Reservations"];
 
 const NavBar = () => {
   const isAdmin = () => {
@@ -85,6 +85,9 @@ const NavBar = () => {
       window.location = "/";
     } else if (setting === "View Profile") {
       navigate("/userprofile");
+    }
+    else if (setting === "Reservations") {
+      navigate("/viewreservations");
     }
   };
 

@@ -72,7 +72,7 @@ const Login = () => {
           if (response.data.message === "Login Success") {
             const message = response.data.message;
             toast.success(message);
-            window.location = "/userprofile";
+            window.location = "/makereservation";
           } else {
             const message = response.data.message;
             toast.warn(message);

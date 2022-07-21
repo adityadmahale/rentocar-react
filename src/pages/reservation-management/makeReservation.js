@@ -18,6 +18,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { FormHelperText } from "@mui/material";
 import NavBar from "../../components/common/nav-bar";
 import { styled } from "@mui/material";
+import authService from "../../services/authService";
 
 const StyledButton = styled(Button)({
   color: "#fff",
@@ -73,7 +74,8 @@ const MakeReservation = ({ user }) => {
   });
 
   useEffect(() => {
-    if (user === null) {
+    const currentUser = authService.getCurrentUser();
+    if (user === null && currentUser === null) {
       alert("You are not authorized");
       navigate("/");
       return;
@@ -260,10 +262,25 @@ const MakeReservation = ({ user }) => {
     }
   };
 
+  const background = '/bgimage.jpg';
+
   return (
     <React.Fragment>
       <NavBar />
-      <div style={{ textAlign: "center" }}>
+      <div style={{
+        backgroundImage: `url(${background})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        height: "100vh",
+        width: "100vw",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        zIndex: -1
+      }}></div>
+      <div style={{ 
+        textAlign: "center" }}>
         {/* Reference: https://mui.com/material-ui/react-box */}
         <Box
           sx={{ flexGrow: 1 }}

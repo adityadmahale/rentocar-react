@@ -117,7 +117,6 @@ const Register = () => {
 
   return (
     <div>
-      <LoginNavBar />
       <Grid
         container
         spacing={0}
@@ -129,6 +128,16 @@ const Register = () => {
         <Grid item xs={3} width={{ xs: "80%", md: "60%", lg: "35%" }}>
           <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
             <Stack spacing={1.5} alignItems="center">
+              <Box
+                component="img"
+                sx={{
+                  maxHeight: { xs: 233, md: 167 },
+                  maxWidth: { xs: 350, md: 250 },
+                  marginBottom: "20px",
+                }}
+                alt="RentoCar."
+                src="/logo200x50.png"
+              />
               <Input
                 label="First Name"
                 name="firstName"

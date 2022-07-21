@@ -2,7 +2,7 @@
 * @author: Maan Mandaliya (B00903171 | mn638205@dal.ca)
 * @description: This file is used to create job posting from admin side.
 */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";

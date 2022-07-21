@@ -1,6 +1,6 @@
 // Author: Aditya Mahale(ad619659@dal.ca)
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Card from "./card";
 import { getOffers, addOffer, deleteOffer } from "../../services/offers";
 import {
@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import Modal from "./modal";
 import OfferForm from "./offerForm";
 import NavBar from "../../components/common/nav-bar";
+import OfferContext from "../../context/offerContext";
 
 const StyledButton = styled(Button)({
   color: "#fff",
@@ -41,6 +42,7 @@ const Offers = ({ user }) => {
   const [selectedOffer, setSelectedOffer] = useState(null);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const context = useContext(OfferContext);
 
   const [offerFields, setOfferFields] = useState({
     title: "",
@@ -124,8 +126,9 @@ const Offers = ({ user }) => {
     }
   };
 
-  const handleApply = () => {
+  const handleApply = (discount) => {
     toast.success("Offer Applied");
+    context.setOffer(parseInt(discount));
     setApplied(true);
   };
 

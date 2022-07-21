@@ -23,7 +23,7 @@ const pages = [
   "Comparison",
   "Offers",
   "Support",
-  "Careers"
+  "Careers",
 ];
 const settings = ["View Profile", "Logout"];
 
@@ -34,6 +34,10 @@ const NavBar = () => {
       const index = pages.indexOf("Reservation Summary");
       if (index > -1) {
         pages.splice(index, 1);
+      }
+      const index1 = pages.indexOf("Inventory Listing");
+      if (index1 > -1) {
+        pages.splice(index1, 1);
       }
     }
   };
@@ -67,10 +71,9 @@ const NavBar = () => {
     } else if (page === "Careers") {
       const user = auth.getCurrentUser();
       if (user && user.isAdmin) {
-        navigate("/viewpostings")
-      }
-      else {
-        navigate("/viewuserpostings")
+        navigate("/viewpostings");
+      } else {
+        navigate("/viewuserpostings");
       }
     }
   };

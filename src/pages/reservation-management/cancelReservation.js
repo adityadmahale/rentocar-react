@@ -109,7 +109,7 @@ const CancelReservation = () => {
           >
             <img
               alt="suv"
-              src={require("../../assets/images/suv.webp")}
+              src={reservationData.vehicleImage}
               style={{ height: "150px", width: "250px", alignSelf: "center" }}
             />
           </Grid>

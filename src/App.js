@@ -88,19 +88,19 @@ function App() {
           <Route path="/comparison" element={<Comparision />} />
           <Route
             path="/reservationsSummary"
-            element={<ReservationsSummary user = {user} />}
+            element={<ReservationsSummary user={user} />}
           />
           {/* Route for Reservation Management */}
-          <Route path="/makereservation" element={<MakeReservation />} />
+          <Route path="/makereservation" element={<MakeReservation user={user} />} />
           <Route path="/availablecars" element={<AvailableCars />} />
-          <Route path="/viewreservations" element={<ViewReservations />} />
+          <Route path="/viewreservations" element={<ViewReservations user={user} />} />
           <Route path="/cancelreservation" element={<CancelReservation />} />
           <Route path="/modifyreservation" element={<ModifyReservation />} />
           {/* Route for Career Management */}
-          <Route path="/viewpostings" element={<ViewPostings />} />
-          <Route path="/viewuserpostings" element={<ViewUserPostings />} />
+          <Route path="/viewpostings" element={<ViewPostings user={user} />} />
+          <Route path="/viewuserpostings" element={<ViewUserPostings user={user} />} />
           <Route path="/viewapplications" element={<ViewApplications />} />
-          <Route path="/createposting" element={<CreatePosting />} />
+          <Route path="/createposting" element={<CreatePosting user={user} />} />
           <Route path="/applyposting" element={<ApplyPosting />} />
         </Routes>
       </Router>

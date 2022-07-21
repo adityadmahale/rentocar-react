@@ -29,13 +29,23 @@ const StyledButton = styled(Button)({
     },
 });
 
-const ViewPostings = () => {
+const ViewPostings = ({ user }) => {
     const navigate = useNavigate();
     const [postings, setPostings] = useState([]);
     const [filteredPostings, setFilteredPostings] = useState([]);
     const [search, setSearch] = useState();
 
     useEffect(() => {
+        if (user === null) {
+            alert("You are not authorized");
+            navigate("/");
+            return;
+        }
+        else if (user.isAdmin === null) {
+            alert("You are not authorized");
+            navigate('/');
+            return;
+        }
         const getPostingsData = async () => {
             const { data: postingsData } = await getPostings();
             setPostings(postingsData);
@@ -86,7 +96,7 @@ const ViewPostings = () => {
                     </Grid>
                     {/* Reference: https://mui.com/material-ui/react-grid/ */}
                     {filteredPostings.map((posting) => (
-                        <Grid item xs={12} sm={3} md={3}>
+                        <Grid item key={posting._id} xs={12} sm={3} md={3}>
                             {/* Reference: https://mui.com/material-ui/react-card/ */}
                             <Card sx={{ maxWidth: 345 }}>
                                 <CardContent>

@@ -47,7 +47,6 @@ const AvailableCars = () => {
       navigate('/makereservation');
       return;
     }
-    console.log(location.state)
     setReservationData(location.state);
     const getVehicles = async () => {
       const { data: newVehicles } = await getSpecificVehicles(location.state);
@@ -153,7 +152,7 @@ const AvailableCars = () => {
               {/* Reference: https://mui.com/material-ui/api/form-control */}
               {/* Reference: https://mui.com/material-ui/react-select/ */}
               <FormControl fullWidth>
-                <InputLabel id="filter">Filter By</InputLabel>
+                <InputLabel id="filter">Filter</InputLabel>
                 <Select
                   labelId="filter-label"
                   id="filter"
@@ -170,7 +169,7 @@ const AvailableCars = () => {
             </Grid>
             <Grid item xs={12} sm={6} md={6} margin="auto">
               <FormControl fullWidth>
-                <InputLabel id="sort">Sort By</InputLabel>
+                <InputLabel id="sort">Sort</InputLabel>
                 <Select
                   labelId="sort-label"
                   id="sort"

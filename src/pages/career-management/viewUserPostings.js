@@ -29,13 +29,18 @@ const StyledButton = styled(Button)({
     },
 });
 
-const ViewUserPostings = () => {
+const ViewUserPostings = ({ user }) => {
     const navigate = useNavigate();
     const [postings, setPostings] = useState([]);
     const [filteredPostings, setFilteredPostings] = useState([]);
     const [search, setSearch] = useState();
 
     useEffect(() => {
+        if (user === null) {
+            alert("You are not authorized");
+            navigate("/");
+            return;
+        }
         const getPostingsData = async () => {
             const { data: postingsData } = await getPostings();
             setPostings(postingsData);
@@ -82,7 +87,7 @@ const ViewUserPostings = () => {
                     </Grid>
                     {/* Reference: https://mui.com/material-ui/react-grid/ */}
                     {filteredPostings.map((posting) => (
-                        <Grid item xs={12} sm={3} md={3}>
+                        <Grid item key={posting._id} xs={12} sm={3} md={3}>
                             {/* Reference: https://mui.com/material-ui/react-card/ */}
                             <Card sx={{ maxWidth: 345 }}>
                                 <CardContent>
@@ -96,7 +101,7 @@ const ViewUserPostings = () => {
                                     <Typography variant="body1" gutterBottom>Type: {posting.jobType}</Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small" onClick={() => { navigate("/applyposting", { state: { posting: posting } }) }}>Apply</Button>
+                                    <StyledButton size="small" onClick={() => { navigate("/applyposting", { state: { posting: posting } }) }}>Apply</StyledButton>
                                 </CardActions>
                             </Card>
                         </Grid>

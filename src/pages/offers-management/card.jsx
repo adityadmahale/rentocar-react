@@ -76,7 +76,7 @@ const OfferCard = ({
         <StyledButton
           size="small"
           variant="outlined"
-          onClick={onApply}
+          onClick={() => onApply(offer.discount)}
           disabled={applied}
         >
           Apply

@@ -45,7 +45,9 @@ const AvailableCars = () => {
   useEffect(() => {
     if (!location.state) {
       navigate('/makereservation');
+      return;
     }
+    console.log(location.state)
     setReservationData(location.state);
     const getVehicles = async () => {
       const { data: newVehicles } = await getSpecificVehicles(location.state);
@@ -94,7 +96,7 @@ const AvailableCars = () => {
   const handleReserve = (vehicle) => {
     vehicle.price = dateDiff > 0 ? vehicle.price * dateDiff : vehicle.price
     navigate(`/vehicles/${vehicle._id}`, {
-      state: { ...vehicle, ...reservationData }
+      state: { ...vehicle, ...reservationData, vehicleImage: vehicle.image }
     });
   };
 
@@ -134,19 +136,6 @@ const AvailableCars = () => {
                 {reservationData.dropDate}, {reservationData.dropTime}
               </Typography>
             </Grid>
-            {/* Reference: https://mui.com/material-ui/react-button */}
-            {/* <Grid item xs={12} sm={4} md={4} margin="auto" textAlign={"center"}>
-              <StyledButton
-                variant="contained"
-                size="large"
-                color="warning"
-                onClick={() => {
-                  navigate("/makereservation", { state: reservationData });
-                }}
-              >
-                Modify Rental Details
-              </StyledButton>
-            </Grid> */}
             <Grid item xs={12} sm={12}>
               {/* Reference: https://mui.com/material-ui/react-divider */}
               <Divider

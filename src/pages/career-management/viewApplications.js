@@ -3,26 +3,66 @@
 * @description: This file fetches all job applications for specific job posting.
 */
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from '@mui/material/Typography';
 import { Card } from "@mui/material";
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import { TextField } from "@mui/material";
-import { CardActions, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import NavBar from "../../components/common/nav-bar";
+import { getApplications } from "../../services/jobApplicationService";
+import { styled } from "@mui/material";
+
+const StyledButton = styled(Button)({
+    color: "#fff",
+    backgroundColor: "#00d2d3",
+    padding: "15px",
+    "&:active": {
+        backgroundColor: "#00d2d3",
+    },
+    "&:hover": {
+        backgroundColor: "#00d2d3",
+    },
+});
 
 const ViewApplications = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [applications, setApplications] = useState([]);
+    const [filteredApplications, setFilteredApplications] = useState([]);
     const [search, setSearch] = useState();
+    var position = null;
+
+    useEffect(() => {
+        if (!location.state) {
+            navigate("/viewpostings");
+            return;
+        }
+        const { positionName } = location.state
+        position = positionName
+        const getApplicationsFunc = async () => {
+            const { data: applicationsData } = await getApplications(position);
+            setApplications(applicationsData);
+            setFilteredApplications(applicationsData)
+        };
+        getApplicationsFunc()
+    }, [navigate, location]);
 
     const handleSearchChange = (event) => {
-        setSearch(event.target.value);
-        console.log("Search======>", search)
-    }
+        const value = event.target.value
+        setSearch(value);
+        if (value !== null) {
+            const filteredApplicationsData = applications.filter((application) => {
+                return application.name.toLowerCase().startsWith(value.toLowerCase())
+            });
+            setFilteredApplications(filteredApplicationsData)
+        }
+        else {
+            setFilteredApplications(applications)
+        }
+    };
 
     return (
         <React.Fragment>
@@ -33,75 +73,40 @@ const ViewApplications = () => {
                 {/* Reference: https://mui.com/material-ui/react-typography */}
                 <Grid container spacing={3}>
                     <Grid item xs={12} sm={4} md={4}>
-                        <Typography variant="h4" gutterBottom>Posting Applications</Typography>
+                        <Typography variant="h4" gutterBottom>Job Posting Applications</Typography>
                     </Grid>
                     <Grid item xs={12} sm={4} md={4}>
-                        <Typography variant="h5" gutterBottom>Position: Sales Associate</Typography>
+                        <Typography variant="h5" gutterBottom>Position: {position}</Typography>
                     </Grid>
                     <Grid item xs={12} sm={4} md={4}>
                         <TextField
                             name="Search"
-                            label="Search Application"
+                            label="Search Applicant by Name"
                             type="text"
-                            value={search}
+                            value={search || ""}
                             onChange={handleSearchChange}
                             variant="outlined"
                             fullWidth
                         />
                     </Grid>
-                    
+
                     {/* Reference: https://mui.com/material-ui/react-grid/ */}
-                    <Grid item xs={12} sm={3} md={3}>
-                        {/* Reference: https://mui.com/material-ui/react-card/ */}
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardContent>
-                                <Typography variant="h6" gutterBottom>Position: Sales Associate</Typography>
-                                <Typography variant="body1" gutterBottom>Name: ABC</Typography>
-                                <Typography variant="body1" gutterBottom>Contact: +1-999-999-9999</Typography>
-                                <Typography variant="body1" gutterBottom>Email: Email@gmail.com</Typography>
-                                <Typography variant="body1" gutterBottom>Documents: Resume, Cover Letter</Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Button size="small" onClick={() => { }}>Download</Button>
-                                <Button size="small" onClick={() => { }}>Contact</Button>
-                                <Button size="small" onClick={() => { }}>Reject</Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={12} sm={3} md={3}>
-                        {/* Reference: https://mui.com/material-ui/react-card/ */}
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardContent>
-                                <Typography variant="h6" gutterBottom>Position: Sales Associate</Typography>
-                                <Typography variant="body1" gutterBottom>Name: ABC</Typography>
-                                <Typography variant="body1" gutterBottom>Contact: +1-999-999-9999</Typography>
-                                <Typography variant="body1" gutterBottom>Email: Email@gmail.com</Typography>
-                                <Typography variant="body1" gutterBottom>Documents: Resume, Cover Letter</Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Button size="small" onClick={() => { }}>Download</Button>
-                                <Button size="small" onClick={() => { }}>Contact</Button>
-                                <Button size="small" onClick={() => { }}>Reject</Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={12} sm={3} md={3}>
-                        {/* Reference: https://mui.com/material-ui/react-card/ */}
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardContent>
-                                <Typography variant="h6" gutterBottom>Position: Sales Associate</Typography>
-                                <Typography variant="body1" gutterBottom>Name: ABC</Typography>
-                                <Typography variant="body1" gutterBottom>Contact: +1-999-999-9999</Typography>
-                                <Typography variant="body1" gutterBottom>Email: Email@gmail.com</Typography>
-                                <Typography variant="body1" gutterBottom>Documents: Resume, Cover Letter</Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Button size="small" onClick={() => { }}>Download</Button>
-                                <Button size="small" onClick={() => { }}>Contact</Button>
-                                <Button size="small" onClick={() => { }}>Reject</Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
+                    {filteredApplications.map((application) => (
+                        <Grid item xs={12} sm={3} md={3}>
+                            {/* Reference: https://mui.com/material-ui/react-card/ */}
+                            <Card sx={{ maxWidth: 345 }}>
+                                <CardContent>
+                                    <Typography variant="h6" gutterBottom>Name: {application.name}</Typography>
+                                    <Typography variant="body1" gutterBottom>Contact: {application.contact}</Typography>
+                                    <Typography variant="body1" gutterBottom>Email: {application.email}</Typography>
+                                </CardContent>
+                                {/* <CardActions>
+                                    <StyledButton size="small" onClick={() => { }}>Contact</StyledButton>
+                                    <StyledButton size="small" onClick={() => { }}>Reject</StyledButton>
+                                </CardActions> */}
+                            </Card>
+                        </Grid>
+                    ))}
                 </Grid>
             </Box>
         </React.Fragment>

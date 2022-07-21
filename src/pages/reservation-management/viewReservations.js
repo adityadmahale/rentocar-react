@@ -14,7 +14,8 @@ import { TextField } from "@mui/material";
 import { CardActions, Button } from "@mui/material";
 import NavBar from "../../components/common/nav-bar";
 import { styled } from "@mui/material";
-import { getReservations, getSpecificReservations } from "../../services/reservationService";
+import { getReservations } from "../../services/reservationService";
+import moment from "moment";
 
 const StyledButton = styled(Button)({
   color: "#fff",
@@ -31,20 +32,38 @@ const StyledButton = styled(Button)({
 const ViewReservations = () => {
   const navigate = useNavigate();
   const [reservations, setReservations] = useState([]);
+  const [filteredReservations, setFilteredReservations] = useState([]);
   const [search, setSearch] = useState();
 
   useEffect(() => {
     const getReservationsData = async () => {
       const { data: newReservations } = await getReservations();
-      console.log("availableCars.js (newReservations): ", newReservations);
       setReservations(newReservations);
+      setFilteredReservations(newReservations)
     };
     getReservationsData()
   }, [navigate]);
 
   const handleSearchChange = (event) => {
-    setSearch(event.target.value);
-    console.log("Search======>", search);
+    const value = event.target.value
+    setSearch(value);
+    if (search !== null) {
+      const filteredReservationsData = reservations.filter((reservation) => {
+        return reservation.number.toLowerCase().startsWith(value.toLowerCase())
+      });
+      setFilteredReservations(filteredReservationsData)
+    }
+    else {
+      setFilteredReservations(reservations)
+    }
+  };
+
+  const enableCardActions = (pickupDate) => {
+    // Reservation Cancellation and Modification is not possible within 24 hours of Car Pickup
+    pickupDate = new Date(pickupDate)
+    const today = new Date()
+    const dayDifference = Math.ceil((pickupDate.getTime() - today.getTime()) / (1000 * 3600 * 24))
+    return dayDifference > 1;
   };
 
   return (
@@ -68,9 +87,9 @@ const ViewReservations = () => {
           <Grid item xs={12} sm={4} md={4}>
             <TextField
               name="Search"
-              label="Search Reservation"
+              label="Search by Reservation Number"
               type="text"
-              value={search}
+              value={search || ""}
               onChange={handleSearchChange}
               variant="outlined"
               fullWidth
@@ -90,15 +109,15 @@ const ViewReservations = () => {
             </StyledButton>
           </Grid>
           {/* Reference: https://mui.com/material-ui/react-grid/ */}
-          {reservations.map((reservation) => (
-            <Grid item xs={12} sm={3} md={3}>
+          {filteredReservations.map((reservation) => (
+            <Grid item key={Math.random()} xs={12} sm={3} md={3}>
               {/* Reference: https://mui.com/material-ui/react-card/ */}
               <Card sx={{ maxWidth: 345 }}>
                 <CardMedia
                   component="img"
                   height="150"
-                  image={require("../../assets/images/sedan.webp")}
-                  alt="SEDAN"
+                  image={reservation.vehicleImage}
+                  alt={reservation.carType}
                 />
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
@@ -111,7 +130,9 @@ const ViewReservations = () => {
                     {reservation.pickupPostal}
                   </Typography>
                   <Typography variant="body1" gutterBottom>
-                    {reservation.pickupDate}, {reservation.pickupTime}
+                    {
+                      moment(new Date(reservation.pickupDate).toISOString().replace(/T/, " ").replace(/\..+/, "")).format("MMMM DD, YYYY")
+                    }, {reservation.pickupTime}
                   </Typography>
                   <Typography variant="body1" gutterBottom>
                     Drop
@@ -120,7 +141,9 @@ const ViewReservations = () => {
                     {reservation.dropPostal}
                   </Typography>
                   <Typography variant="body1" gutterBottom>
-                  {reservation.dropDate}, {reservation.dropTime}
+                    {
+                      moment(new Date(reservation.dropDate).toISOString().replace(/T/, " ").replace(/\..+/, "")).format("MMMM DD, YYYY")
+                    }, {reservation.dropTime}
                   </Typography>
                   <Typography variant="body1" gutterBottom>
                     Age: {reservation.age}
@@ -135,24 +158,28 @@ const ViewReservations = () => {
                     C$ {reservation.price} Total
                   </Typography>
                 </CardContent>
-                <CardActions>
-                  <StyledButton
-                    size="small"
-                    onClick={() => {
-                      navigate("/modifyreservation");
-                    }}
-                  >
-                    Modify
-                  </StyledButton>
-                  <StyledButton
-                    size="small"
-                    onClick={() => {
-                      navigate("/cancelreservation", {state: reservation});
-                    }}
-                  >
-                    Cancel
-                  </StyledButton>
-                </CardActions>
+                {
+                  enableCardActions(reservation.pickupDate) ?
+                    <CardActions>
+                      <StyledButton
+                        size="small"
+                        onClick={() => {
+                          navigate("/modifyreservation", { state: reservation })
+                        }}
+                      >
+                        Modify
+                      </StyledButton>
+                      <StyledButton
+                        size="small"
+                        onClick={() => {
+                          navigate("/cancelreservation", { state: reservation });
+                        }}
+                      >
+                        Cancel
+                      </StyledButton>
+                    </CardActions>
+                    : null
+                }
               </Card>
             </Grid>
           ))}
@@ -161,5 +188,6 @@ const ViewReservations = () => {
     </React.Fragment>
   );
 };
+
 
 export default ViewReservations;

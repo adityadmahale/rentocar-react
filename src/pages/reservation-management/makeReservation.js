@@ -33,7 +33,6 @@ const StyledButton = styled(Button)({
 
 const MakeReservation = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [reservationValues, setReservationValues] = useState({
     pickupPostal: {
       value: "",

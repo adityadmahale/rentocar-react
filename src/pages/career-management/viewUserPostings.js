@@ -9,20 +9,54 @@ import Grid from "@mui/material/Grid";
 import Typography from '@mui/material/Typography';
 import { Card } from "@mui/material";
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import { TextField } from "@mui/material";
 import { CardActions, Button } from "@mui/material";
+import { styled } from "@mui/material";
 import NavBar from "../../components/common/nav-bar";
+import { getPostings } from "../../services/jobPostingService";
+import moment from "moment";
+
+
+const StyledButton = styled(Button)({
+    color: "#fff",
+    backgroundColor: "#00d2d3",
+    padding: "15px",
+    "&:active": {
+        backgroundColor: "#00d2d3",
+    },
+    "&:hover": {
+        backgroundColor: "#00d2d3",
+    },
+});
 
 const ViewUserPostings = () => {
     const navigate = useNavigate();
     const [postings, setPostings] = useState([]);
+    const [filteredPostings, setFilteredPostings] = useState([]);
     const [search, setSearch] = useState();
 
+    useEffect(() => {
+        const getPostingsData = async () => {
+            const { data: postingsData } = await getPostings();
+            setPostings(postingsData);
+            setFilteredPostings(postingsData)
+        };
+        getPostingsData()
+    }, [navigate]);
+
     const handleSearchChange = (event) => {
-        setSearch(event.target.value);
-        console.log("Search======>", search)
-    }
+        const value = event.target.value
+        setSearch(value);
+        if (search !== null) {
+            const filteredPostingData = postings.filter((posting) => {
+                return posting.position.toLowerCase().startsWith(value.toLowerCase())
+            });
+            setFilteredPostings(filteredPostingData)
+        }
+        else {
+            setFilteredPostings(postings)
+        }
+    };
 
     return (
         <React.Fragment>
@@ -47,54 +81,26 @@ const ViewUserPostings = () => {
                         />
                     </Grid>
                     {/* Reference: https://mui.com/material-ui/react-grid/ */}
-                    <Grid item xs={12} sm={3} md={3}>
-                        {/* Reference: https://mui.com/material-ui/react-card/ */}
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardContent>
-                                <Typography variant="h6" gutterBottom>Position: Sales Associate</Typography>
-                                <Typography variant="body1" gutterBottom>Location: Halifax</Typography>
-                                <Typography variant="body1" gutterBottom>Pay: 26/hr</Typography>
-                                <Typography variant="body1" gutterBottom>Expiry: June 07 11:59 PM</Typography>
-                                <Typography variant="body1" gutterBottom>Type: Full-time</Typography>
-                                <Typography variant="body1" gutterBottom>Documents: Resume, Cover Letter</Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Button size="small" onClick={() => { navigate("/applyposting") }}>Apply</Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={12} sm={3} md={3}>
-                        {/* Reference: https://mui.com/material-ui/react-card/ */}
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardContent>
-                                <Typography variant="h6" gutterBottom>Position: Sales Associate</Typography>
-                                <Typography variant="body1" gutterBottom>Location: Halifax</Typography>
-                                <Typography variant="body1" gutterBottom>Pay: 26/hr</Typography>
-                                <Typography variant="body1" gutterBottom>Expiry: June 07 11:59 PM</Typography>
-                                <Typography variant="body1" gutterBottom>Type: Full-time</Typography>
-                                <Typography variant="body1" gutterBottom>Documents: Resume, Cover Letter</Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Button size="small" onClick={() => { navigate("/applyposting") }}>Apply</Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={12} sm={3} md={3}>
-                        {/* Reference: https://mui.com/material-ui/react-card/ */}
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardContent>
-                                <Typography variant="h6" gutterBottom>Position: Sales Associate</Typography>
-                                <Typography variant="body1" gutterBottom>Location: Halifax</Typography>
-                                <Typography variant="body1" gutterBottom>Pay: 26/hr</Typography>
-                                <Typography variant="body1" gutterBottom>Expiry: June 07 11:59 PM</Typography>
-                                <Typography variant="body1" gutterBottom>Type: Full-time</Typography>
-                                <Typography variant="body1" gutterBottom>Documents: Resume, Cover Letter</Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Button size="small" onClick={() => { navigate("/applyposting") }}>Apply</Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
+                    {filteredPostings.map((posting) => (
+                        <Grid item xs={12} sm={3} md={3}>
+                            {/* Reference: https://mui.com/material-ui/react-card/ */}
+                            <Card sx={{ maxWidth: 345 }}>
+                                <CardContent>
+                                    <Typography variant="h6" gutterBottom>Position: {posting.position}</Typography>
+                                    <Typography variant="body1" gutterBottom>Location: {posting.location}</Typography>
+                                    <Typography variant="body1" gutterBottom>Pay: C$ {posting.pay}/hr</Typography>
+                                    <Typography variant="body1" gutterBottom>
+                                        Expiry: {
+                                            moment(new Date(posting.expiryDate).toISOString().replace(/T/, " ").replace(/\..+/, "")).format("MMMM DD, YYYY")
+                                        }</Typography>
+                                    <Typography variant="body1" gutterBottom>Type: {posting.jobType}</Typography>
+                                </CardContent>
+                                <CardActions>
+                                    <Button size="small" onClick={() => { navigate("/applyposting", { state: { posting: posting } }) }}>Apply</Button>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+                    ))}
                 </Grid>
             </Box>
         </React.Fragment>

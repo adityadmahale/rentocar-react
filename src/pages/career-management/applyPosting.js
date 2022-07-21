@@ -31,8 +31,8 @@ const ApplyPosting = () => {
         }
     });
 
-    useEffect(()=> {
-        if(!location.state) {
+    useEffect(() => {
+        if (!location.state) {
             navigate("/viewuserpostings")
             return;
         }

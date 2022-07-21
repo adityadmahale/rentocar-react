@@ -29,13 +29,18 @@ const StyledButton = styled(Button)({
   },
 });
 
-const ViewReservations = () => {
+const ViewReservations = ({ user }) => {
   const navigate = useNavigate();
   const [reservations, setReservations] = useState([]);
   const [filteredReservations, setFilteredReservations] = useState([]);
   const [search, setSearch] = useState();
 
   useEffect(() => {
+    if (user === null) {
+      alert("You are not authorized");
+      navigate("/");
+      return;
+    }
     const getReservationsData = async () => {
       const { data: newReservations } = await getReservations();
       setReservations(newReservations);

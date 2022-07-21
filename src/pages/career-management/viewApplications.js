@@ -10,22 +10,9 @@ import Typography from '@mui/material/Typography';
 import { Card } from "@mui/material";
 import CardContent from '@mui/material/CardContent';
 import { TextField } from "@mui/material";
-import { Button } from "@mui/material";
 import NavBar from "../../components/common/nav-bar";
 import { getApplications } from "../../services/jobApplicationService";
-import { styled } from "@mui/material";
 
-const StyledButton = styled(Button)({
-    color: "#fff",
-    backgroundColor: "#00d2d3",
-    padding: "15px",
-    "&:active": {
-        backgroundColor: "#00d2d3",
-    },
-    "&:hover": {
-        backgroundColor: "#00d2d3",
-    },
-});
 
 const ViewApplications = () => {
     const navigate = useNavigate();
@@ -33,7 +20,7 @@ const ViewApplications = () => {
     const [applications, setApplications] = useState([]);
     const [filteredApplications, setFilteredApplications] = useState([]);
     const [search, setSearch] = useState();
-    var position = null;
+    const [position, setPosition] = useState();
 
     useEffect(() => {
         if (!location.state) {
@@ -41,9 +28,9 @@ const ViewApplications = () => {
             return;
         }
         const { positionName } = location.state
-        position = positionName
+        setPosition(positionName)
         const getApplicationsFunc = async () => {
-            const { data: applicationsData } = await getApplications(position);
+            const { data: applicationsData } = await getApplications(positionName);
             setApplications(applicationsData);
             setFilteredApplications(applicationsData)
         };
@@ -92,7 +79,7 @@ const ViewApplications = () => {
 
                     {/* Reference: https://mui.com/material-ui/react-grid/ */}
                     {filteredApplications.map((application) => (
-                        <Grid item xs={12} sm={3} md={3}>
+                        <Grid item key={application._id} xs={12} sm={3} md={3}>
                             {/* Reference: https://mui.com/material-ui/react-card/ */}
                             <Card sx={{ maxWidth: 345 }}>
                                 <CardContent>
@@ -100,10 +87,6 @@ const ViewApplications = () => {
                                     <Typography variant="body1" gutterBottom>Contact: {application.contact}</Typography>
                                     <Typography variant="body1" gutterBottom>Email: {application.email}</Typography>
                                 </CardContent>
-                                {/* <CardActions>
-                                    <StyledButton size="small" onClick={() => { }}>Contact</StyledButton>
-                                    <StyledButton size="small" onClick={() => { }}>Reject</StyledButton>
-                                </CardActions> */}
                             </Card>
                         </Grid>
                     ))}

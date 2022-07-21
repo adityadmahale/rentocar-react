@@ -34,6 +34,7 @@ const ApplyPosting = () => {
     useEffect(()=> {
         if(!location.state) {
             navigate("/viewuserpostings")
+            return;
         }
         setPosting(location.state)
     }, [location, posting])

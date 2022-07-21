@@ -19,7 +19,6 @@ import Select from "@mui/material/Select";
 import NavBar from "../../components/common/nav-bar";
 import { styled } from "@mui/material";
 import { getSpecificVehicles } from "../../services/vehicleService";
-import moment from "moment";
 
 const StyledButton = styled(Button)({
   color: "#fff",
@@ -46,7 +45,9 @@ const AvailableCars = () => {
   useEffect(() => {
     if (!location.state) {
       navigate('/makereservation');
+      return;
     }
+    console.log(location.state)
     setReservationData(location.state);
     const getVehicles = async () => {
       const { data: newVehicles } = await getSpecificVehicles(location.state);
@@ -121,9 +122,7 @@ const AvailableCars = () => {
                 {reservationData.pickupPostal}
               </Typography>
               <Typography variant="body1" gutterBottom>
-                {
-                  moment(new Date(reservationData.pickupDate).toISOString().replace(/T/, " ").replace(/\..+/, "")).format("MMMM DD, YYYY")
-                }, {reservationData.pickupTime}
+                {reservationData.pickupDate}, {reservationData.pickupTime}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={6} margin="auto">
@@ -134,24 +133,9 @@ const AvailableCars = () => {
                 {reservationData.dropPostal}
               </Typography>
               <Typography variant="body1" gutterBottom>
-                {
-                  moment(new Date(reservationData.dropDate).toISOString().replace(/T/, " ").replace(/\..+/, "")).format("MMMM DD, YYYY")
-                }, {reservationData.dropTime}
+                {reservationData.dropDate}, {reservationData.dropTime}
               </Typography>
             </Grid>
-            {/* Reference: https://mui.com/material-ui/react-button */}
-            {/* <Grid item xs={12} sm={4} md={4} margin="auto" textAlign={"center"}>
-              <StyledButton
-                variant="contained"
-                size="large"
-                color="warning"
-                onClick={() => {
-                  navigate("/makereservation", { state: reservationData });
-                }}
-              >
-                Modify Rental Details
-              </StyledButton>
-            </Grid> */}
             <Grid item xs={12} sm={12}>
               {/* Reference: https://mui.com/material-ui/react-divider */}
               <Divider

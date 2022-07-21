@@ -46,6 +46,7 @@ const ModifyReservation = () => {
   useEffect(() => {
     if (!location.state) {
       navigate('/viewreservations');
+      return;
     }
     setReservationData(location.state);
     const getVehicles = async () => {
@@ -123,9 +124,7 @@ const ModifyReservation = () => {
                 {reservationData.pickupPostal}
               </Typography>
               <Typography variant="body1" gutterBottom>
-                {
-                  moment(new Date(reservationData.pickupDate).toISOString().replace(/T/, " ").replace(/\..+/, "")).format("MMMM DD, YYYY")
-                }, {reservationData.pickupTime}
+                {reservationData.pickupDate}, {reservationData.pickupTime}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={6} margin="auto">
@@ -136,9 +135,7 @@ const ModifyReservation = () => {
                 {reservationData.dropPostal}
               </Typography>
               <Typography variant="body1" gutterBottom>
-                {
-                  moment(new Date(reservationData.dropDate).toISOString().replace(/T/, " ").replace(/\..+/, "")).format("MMMM DD, YYYY")
-                }, {reservationData.dropTime}
+                {reservationData.dropDate}, {reservationData.dropTime}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={12}>

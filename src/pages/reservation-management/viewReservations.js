@@ -117,7 +117,7 @@ const ViewReservations = () => {
                   component="img"
                   height="150"
                   image={reservation.vehicleImage}
-                  alt="SEDAN"
+                  alt={reservation.carType}
                 />
                 <CardContent>
                   <Typography variant="h6" gutterBottom>

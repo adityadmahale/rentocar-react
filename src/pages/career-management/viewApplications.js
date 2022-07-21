@@ -37,7 +37,8 @@ const ViewApplications = () => {
 
     useEffect(() => {
         if (!location.state) {
-            navigate("/viewpostings")
+            navigate("/viewpostings");
+            return;
         }
         const { positionName } = location.state
         position = positionName

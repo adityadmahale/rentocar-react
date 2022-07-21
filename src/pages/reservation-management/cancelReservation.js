@@ -40,6 +40,7 @@ const CancelReservation = () => {
   useEffect(() => {
     if (!location.state) {
       navigate('/viewreservations');
+      return;
     }
     setReservationData(location.state);
   }, [location, navigate, reservationData]);

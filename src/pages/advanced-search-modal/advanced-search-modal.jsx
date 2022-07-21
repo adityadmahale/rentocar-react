@@ -11,22 +11,14 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-
-
-const AdvancedSearchModal = ({ isOpen, handleDialogClose, searchForVehicles }) => {
+const AdvancedSearchModal = ({ isOpen, handleDialogClose, searchForVehicles, searchForStations, selectedTab }) => {
     const [scroll, setScroll] = React.useState('paper'); // eslint-disable-line no-unused-vars
 
     const title = "Search for a car";
 
-
     const [sameDropOff, setSameDropOff] = React.useState(false);
 
     const handleChange = (event) => {
-        console.log("event: ", event);
         const { name, value } = event.target;
         setSameDropOff(value);
     }
@@ -36,6 +28,21 @@ const AdvancedSearchModal = ({ isOpen, handleDialogClose, searchForVehicles }) =
         value: false,
         message: ''
     });
+
+    const [condition, setCondition] = React.useState('');
+    const [vehicleType, setVehicleType] = React.useState('');
+    const [door, setDoor] = React.useState('');
+    const [available, setAvailable] = React.useState('');
+    const [ac, setAC] = React.useState('');
+    const [sportsMode, setSportsMode] = React.useState('');
+    const [cruiseControl, setCruiseControl] = React.useState('');
+    const [childCarSeat, setChildCarSeat] = React.useState('');
+    const [regnNo, setRegnNo] = React.useState('');
+
+    const [stationCode, setStationCode] = React.useState();
+    const [stationName, setStationName] = React.useState();
+    const [stationCapacity, setStationCapacity] = React.useState();
+
     const validateAndSetLocation = (event) => {
         const { value } = event.target;
         if (value.length === 0) {
@@ -199,32 +206,77 @@ const AdvancedSearchModal = ({ isOpen, handleDialogClose, searchForVehicles }) =
     const [searchButtonDisabled, setSearchButtonDisabled] = React.useState(true);
 
     React.useEffect(() => {
-        if (fromLocation === '' || toLocation === '' || 
-            startDate === '' || endDate === '' || 
-            driverAge === '' || fromLocationError.value || toLocationError.value ||
-            startDateError.value || endDateError.value || driverAgeError.value) {
-            setSearchButtonDisabled(true);
-        } else {
-            setSearchButtonDisabled(false);
+        if (selectedTab === 0) {
+            if ((regnNo === null || regnNo === '') && condition === null
+                && vehicleType === null && door === null
+                && available === null && ac === null
+                && sportsMode === null && cruiseControl === null
+                && childCarSeat === null) {
+                setSearchButtonDisabled(true);
+            } else {
+                setSearchButtonDisabled(false);
+            }
+        } else if (selectedTab === 1) {
+            if ((stationCode === null || stationCode === '') && (stationName === null || stationName === '')
+                && (stationCapacity === null || stationCapacity === '')) {
+                setSearchButtonDisabled(true);
+            } else {
+                setSearchButtonDisabled(false);
+            }
         }
-    }, [fromLocation, toLocation, startDate, endDate, driverAge, 
-        fromLocationError, toLocationError, startDateError, 
-        endDateError, driverAgeError]);
+    }, [regnNo, condition, vehicleType, door, available, ac, sportsMode, cruiseControl, childCarSeat, stationCode, stationName, stationCapacity]);
 
     const handleSearch = () => {
-        console.log("searching");
-        console.log("fromLocation: ", fromLocation);
-        console.log("toLocation: ", toLocation);
-        console.log("startDate: ", startDate);
-        console.log("endDate: ", endDate);
-        console.log("driverAge: ", driverAge);
-        searchForVehicles({
-            fromLocation: fromLocation,
-            toLocation: toLocation,
-            startDate: startDate,
-            endDate: endDate,
-            driverAge: driverAge
-        });
+        if (selectedTab === 0) {
+            // take the properties if present and call searchForVehicles
+
+            let searchProperties = {};
+            if (regnNo !== null && regnNo !== '') {
+                searchProperties.regnNo = regnNo;
+            }
+            if (condition !== null && condition !== '') {
+                searchProperties.condition = condition;
+            }
+            if (vehicleType !== null && vehicleType !== '') {
+                searchProperties.type = vehicleType;
+            }
+            if (door !== null && door !== '') {
+                searchProperties.door = door;
+            }
+            if (available !== null && available !== '') {
+                searchProperties.available = available === "Yes" ? true : false;
+            }
+            if (ac !== null && ac !== '') {
+                searchProperties.ac = ac === "Yes" ? true : false;
+            }
+            if (sportsMode !== null && sportsMode !== '') {
+                searchProperties.sportsMode = sportsMode === "Yes" ? true : false;
+            }
+            if (cruiseControl !== null && cruiseControl !== '') {
+                searchProperties.cruiseControl = cruiseControl === "Yes" ? true : false;
+            }
+            if (childCarSeat !== null && childCarSeat !== '') {
+                searchProperties.childCarSeat = childCarSeat === "Yes" ? true : false;
+            }
+            searchForVehicles({
+                ...searchProperties
+            });
+        } else {
+            searchForStations({
+                stationCode: stationCode,
+                stationName: stationName,
+                stationCapacity: stationCapacity
+            })
+        }
+    }
+
+    const getSelectOptions = (options) => {
+
+        return (
+            (options && options.length > 0) ? options.map((option) => (
+                <MenuItem key={option} value={option}>{option}</MenuItem>
+            )) : null
+        );
     }
 
     return <Dialog
@@ -233,9 +285,9 @@ const AdvancedSearchModal = ({ isOpen, handleDialogClose, searchForVehicles }) =
         scroll={scroll}
         aria-labelledby="advanced-search-dialog"
         aria-describedby="advanced-search-dialog">
-        <DialogTitle id="advanced-search-dialog-title">{title}</DialogTitle>
+        <DialogTitle id="advanced-search-dialog-title">{selectedTab === 0 ? title : 'Search for a station'}</DialogTitle>
         <DialogContent dividers={scroll === 'paper'}>
-            <Box sx={{
+            {selectedTab === 0 && <Box sx={{
                 width: 500,
                 maxWidth: '100%',
                 display: 'flex',
@@ -243,95 +295,181 @@ const AdvancedSearchModal = ({ isOpen, handleDialogClose, searchForVehicles }) =
                 alignItems: 'center',
                 justifyContent: 'center'
             }}>
-                <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Same drop off</InputLabel>
+                <TextField
+                    key='regnNo'
+                    id='regnNo'
+                    label='Regn No'
+                    type='number'
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                    value={regnNo}
+                    onChange={(event) => { setRegnNo(event.target.value); }}
+                />
+                
+                <FormControl sx={{ minWidth: '100%', marginTop: '10px' }}>
+                    <InputLabel id='input-label'>Condition</InputLabel>
                     <Select
-                        labelId="sameDropOff-label-id"
-                        id="sameDropOff-select-id"
-                        value={sameDropOff}
-                        label="Same drop-off"
-                        onChange={handleChange}
+                        labelId='Condition'
+                        id='Condition'
+                        value={condition}
+                        label='Condition'
+                        onChange={(event) => {
+                            setCondition(event.target.value);
+                        }}
                     >
-                        <MenuItem value={true}>Same Drop off</MenuItem>
-                        <MenuItem value={false}>Different Drop off</MenuItem>
+                        {getSelectOptions(["New", "Used"])}
                     </Select>
                 </FormControl>
-                <TextField 
-                    required
-                    key='fromLocation'
-                    id='fromLocation'
-                    label='From Location'
+
+                <FormControl sx={{ minWidth: '100%', marginTop: '10px' }}>
+                    <InputLabel id='input-label-vehicleType'>Vehicle type</InputLabel>
+                    <Select
+                        labelId='vehicleType'
+                        id='vehicleType'
+                        value={vehicleType}
+                        label='Vehicle type'
+                        onChange={(event) => {
+                            setVehicleType(event.target.value);
+                        }}
+                    >
+                        {getSelectOptions(["Car", "Van", "Bus", "Truck"])}
+                    </Select>
+                </FormControl>
+
+                <FormControl sx={{ minWidth: '100%', marginTop: '10px' }}>
+                    <InputLabel id='input-label-Door'>Door</InputLabel>
+                    <Select
+                        labelId='Door'
+                        id='Door'
+                        value={door}
+                        label='Door'
+                        onChange={(event) => {
+                            setDoor(event.target.value);
+                        }}
+                    >
+                        {getSelectOptions(["Yes", "No"])}
+                    </Select>
+                </FormControl>
+
+                <FormControl sx={{ minWidth: '100%', marginTop: '10px' }}>
+                    <InputLabel id='input-label-Available'>Available</InputLabel>
+                    <Select
+                        labelId='Available'
+                        id='Available'
+                        value={available}
+                        label='Available'
+                        onChange={(event) => {
+                            setAvailable(event.target.value);
+                        }}
+                    >
+                        {getSelectOptions(["Yes", "No"])}
+                    </Select>
+                </FormControl>
+
+                <FormControl sx={{ minWidth: '100%', marginTop: '10px' }}>
+                    <InputLabel id='input-label-ac'>AC mode</InputLabel>
+                    <Select
+                        labelId='ac'
+                        id='ac'
+                        value={ac}
+                        label='AC mode'
+                        onChange={(event) => {
+                            setAC(event.target.value);
+                        }}
+                    >
+                        {getSelectOptions(["Yes", "No"])}
+                    </Select>
+                </FormControl>
+
+                <FormControl sx={{ minWidth: '100%', marginTop: '10px' }}>
+                    <InputLabel id='input-label-sportsMode'>Sports mode</InputLabel>
+                    <Select
+                        labelId='sportsMode'
+                        id='sportsMode'
+                        value={sportsMode}
+                        label='Sports mode'
+                        onChange={(event) => {
+                            setSportsMode(event.target.value);
+                        }}
+                    >
+                        {getSelectOptions(["Yes", "No"])}
+                    </Select>
+                </FormControl>
+
+                <FormControl sx={{ minWidth: '100%', marginTop: '10px' }}>
+                    <InputLabel id='input-label-sportsMode'>Cruise control</InputLabel>
+                    <Select
+                        labelId='cruiseControl'
+                        id='cruiseControl'
+                        value={cruiseControl}
+                        label='Cruise control'
+                        onChange={(event) => {
+                            setCruiseControl(event.target.value);
+                        }}
+                    >
+                        {getSelectOptions(["Yes", "No"])}
+                    </Select>
+                </FormControl>
+
+                <FormControl sx={{ minWidth: '100%', marginTop: '10px' }}>
+                    <InputLabel id='input-label-sportsMode'>Child car seat</InputLabel>
+                    <Select
+                        labelId='childCarSeat'
+                        id='childCarSeat'
+                        value={childCarSeat}
+                        label='Child car seat'
+                        onChange={(event) => {
+                            setChildCarSeat(event.target.value);
+                        }}
+                    >
+                        {getSelectOptions(["Yes", "No"])}
+                    </Select>
+                </FormControl>
+            </Box>}
+            {selectedTab === 1 && <Box sx={{
+                width: 500,
+                maxWidth: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}>
+                <TextField
+                    key='stationCode'
+                    id='stationCode'
+                    label='Station code'
+                    type='number'
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                    value={stationCode}
+                    onChange={(event) => { setStationCode(event.target.value); }}
+                />
+                <TextField
+                    key='stationName'
+                    id='stationName'
+                    label='Station name'
                     type='text'
                     variant="outlined"
                     margin="normal"
                     fullWidth
-                    onChange={(event) => { validateAndSetLocation(event); }}
-                    error={fromLocationError.value}
-                    helperText={fromLocationError.value ? fromLocationError.message: null}
+                    value={stationName}
+                    onChange={(event) => { setStationName(event.target.value); }}
                 />
-
                 <TextField
-                    required
-                    key='toLocation'
-                    id='toLocation'
-                    label='To Location'
-                    type='text'
+                    key='capacity'
+                    id='capacity'
+                    label='Station capacity'
+                    type='number'
                     variant="outlined"
                     margin="normal"
                     fullWidth
-                    onChange={(event) => { validateAndSetToLocation(event); }}
-                    error={toLocationError.value}
-                    helperText={toLocationError.value ? toLocationError.message: null}
+                    value={stationCapacity}
+                    onChange={(event) => { setStationCapacity(event.target.value); }}
                 />
-
-                <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                    maxWidth: '100%',
-                    marginTop: '10px'
-                }}>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-
-                        <DateTimePicker
-                        disablePast
-                        label="Start Date"
-                        renderInput={(params) => <TextField {...params} error={startDateError.value} helperText={startDateError.message}/>}
-                        value={startDate}
-                        onChange={(newValue) => {
-                            validateAndSetStartDate(newValue);
-                            // setStartDate(newValue);
-                        }}
-                        />
-                        <DateTimePicker
-                        disablePast
-                        label="End Date"
-                        renderInput={(params) => <TextField {...params} error={endDateError.value} helperText={endDateError.message}/>}
-                        value={endDate}
-                        onChange={(newValue) => {
-                            validateAndSetEndDate(newValue);
-                            // setEndDate(newValue);
-                        }}
-                        />
-                    </LocalizationProvider>
-                </Box>
-
-                <TextField
-                        required
-                        key='driversAge'
-                        id='driversAge'
-                        label='Driver age'
-                        type='number'
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        onChange={(event) => { validateAndSetDriverAge (event); }}
-                        error={driverAgeError.value}
-                        helperText={driverAgeError.value ? driverAgeError.message: null}
-                    />
             </Box>
+            }
         </DialogContent>
         <DialogActions>
             <Button onClick={handleDialogClose} color="primary">Cancel</Button>

@@ -14,14 +14,16 @@ import CarRepairIcon from '@mui/icons-material/CarRepair';
 import { Search } from '@mui/icons-material';
 import AdvancedSearchModal from '../../advanced-search-modal/advanced-search-modal';
 import axios from 'axios';
+import CloseIcon from '@mui/icons-material/Close';
 
 const fabActions = [
     { icon: <CarRepairIcon />, name: 'Add car', actionId: 'addCar' },
     { icon: <EmojiTransportationIcon />, name: 'Add station', actionId: 'addStation' },
     { icon: <Search />, name: 'Search', actionId: 'searchCarAction' },
+    { icon: <CloseIcon />, name: 'Clear search', actionId: 'clearAction' }
 ];
 
-const FabMenu = ({getVehicles, setVehicles, getStations}) => {
+const FabMenu = ({getVehicles, setVehicles, setStations, getStations, selectedTab}) => {
     const [open, setOpen] = React.useState(false);
     const handleClose = () => {
         setOpen(false);
@@ -36,6 +38,8 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const handleSnackbarClose = () => setSnackbarOpen(false);
 
+    const [showClearButton, setShowClearButton] = React.useState(false);
+
     const Alert = React.forwardRef(function Alert(props, ref) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
     });
@@ -46,8 +50,8 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
         setSnackbarOpen(true);
     }
 
-    const getFieldsBasedOnAction = () => {
-        if (actionType === "addCar") {
+    const getFieldsBasedOnAction = (actionTypeVal) => {
+        if (actionTypeVal === "addCar") {
             return [
                 {
                     name: "Registration No.", type: "number", id: 'addCar-registrationNo',
@@ -123,7 +127,8 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
                         required: true,
                         options: ["New", "Used"]
                     },
-                    value: "New"
+                    value: "New",
+                    searchAvaillity: true,
                 },
                 {
                     name: "Mileage", type: "number", id: 'addCar-mileage',
@@ -145,7 +150,8 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
                         required: true,
                         options: ["Car", "Van", "Bus", "Truck"]
                     },
-                    value: "Car"
+                    value: "Car",
+                    searchAvaillity: true,
                 },
                 {
                     name: "Station code", type: "number", id: 'addCar-stationCode',
@@ -174,7 +180,8 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
                         required: true,
                         options: ["Yes", "No"]
                     },
-                    value: "Yes"
+                    value: "Yes",
+                    searchAvaillity: true,
                 },
                 {
                     name: "Available", type: "select", id: 'addCar-available',
@@ -185,7 +192,8 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
                         required: true,
                         options: ["Yes", "No"]
                     },
-                    value: "Yes"
+                    value: "Yes",
+                    searchAvaillity: true,
                 },
                 {
                     name: "Automatic", type: "select", id: 'addCar-automatic',
@@ -196,7 +204,8 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
                         required: true,
                         options: ["Yes", "No"]
                     },
-                    value: "Yes"
+                    value: "Yes",
+                    searchAvaillity: true,
                 },
                 {
                     name: "AC mode", type: "select", id: 'addCar-ac-mode',
@@ -207,7 +216,8 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
                         required: true,
                         options: ["Yes", "No"]
                     },
-                    value: "Yes"
+                    value: "Yes",
+                    searchAvaillity: true,
                 },
                 {
                     name: "Sports mode", type: "select", id: 'addCar-sports-mode',
@@ -218,7 +228,8 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
                         required: true,
                         options: ["Yes", "No"]
                     },
-                    value: "Yes"
+                    value: "Yes",
+                    searchAvaillity: true,
                 },
                 {
                     name: "Cruise control", type: "select", id: 'addCar-cruise-control-mode',
@@ -229,7 +240,8 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
                         required: true,
                         options: ["Yes", "No"]
                     },
-                    value: "Yes"
+                    value: "Yes",
+                    searchAvaillity: true,
                 },
                 {
                     name: "Child car seat", type: "select", id: 'addCar-child-car-seat',
@@ -240,7 +252,8 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
                         required: true,
                         options: ["Yes", "No"]
                     },
-                    value: "Yes"
+                    value: "Yes",
+                    searchAvaillity: true,
                 },
                 {
                     name: "Large bag", type: "number", id: 'addCar-large-bag',
@@ -270,7 +283,8 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
                     requestProp: 'stationCode',
                     validators: {
                         required: true
-                    }
+                    },
+                    searchAvaillity: true,
                 },
                 {
                     name: "Station name", type: "text", id: 'addStation-stationName',
@@ -281,7 +295,8 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
                         required: true,
                         minLength: 3,
                         maxLength: 20
-                    }
+                    },
+                    searchAvaillity: true,
                 },
                 {
                     name: "Station address", type: "text", id: 'addStation-stationAddress',
@@ -305,7 +320,8 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
                     validators: {
                         required: true,
                         min: 1
-                    }
+                    },
+                    searchAvaillity: true,
                 },
             ];
         }
@@ -383,20 +399,33 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
 
     const searchForVehicles = (requestParams) => {
         // axios.post('/vehicles/search', {)
-        console.log("requestParams: ", requestParams);
-        let requestBody = {
-            pickupStation: requestParams.fromLocation,
-            dropoffStation: requestParams.toLocation,
-        };
+        setShowClearButton(true);
         // search for vehicles
-        axios.post('/vehicles/search', {...requestBody}).then((response) => {
-            console.log("response: ", response);
-            // setIsSearchModalOpen(false);
+        axios.post('/vehicles/filterAllVehicles', {...requestParams}).then((response) => {
             setVehicles(response.data);
+            setIsSearchModalOpen(false);
         }, (err) => {
             console.error("err: ", err);
         });
     }
+
+    const searchForStations = (requestParams) => {
+        setShowClearButton(true);
+        axios.post('/stations/search', {...requestParams}).then((response) => {
+            setStations(response.data);
+            setIsSearchModalOpen(false);
+        }, (err) => {
+            console.error("err: ", err);
+        }
+        );
+    }
+
+    React.useEffect(() => {
+        if (showClearButton === false) {
+            getVehicles();
+            getStations();
+        }
+    }, [showClearButton]);
 
 
     return (
@@ -417,7 +446,7 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
                     sx={{ position: 'absolute', bottom: 16, right: 16 }}
                     icon={<SpeedDialIcon />}
                 >
-                    {fabActions.map((fabAction) => (
+                    {fabActions.slice(0, showClearButton ? (fabActions.length) : (fabActions.length - 1)).map((fabAction) => (
                         <SpeedDialAction
                             key={fabAction.name}
                             icon={fabAction.icon}
@@ -428,10 +457,12 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
                                 if (fabAction.actionId === "searchCarAction") {
                                     setIsSearchModalOpen(true);
                                     setOpen(false);
+                                } else if (fabAction.actionId === "clearAction") {
+                                    setShowClearButton(false);
                                 } else {
-                                setOpen(true);
-                                setTitle(fabAction.name);
-                                setActionType(fabAction.actionId);
+                                    setOpen(true);
+                                    setTitle(fabAction.name);
+                                    setActionType(fabAction.actionId);
                                 }
                                 }
                             }/>
@@ -441,14 +472,18 @@ const FabMenu = ({getVehicles, setVehicles, getStations}) => {
                     handleClose={handleClose}
                     addEntity={addEntity}
                     title={title}
-                    fields={getFieldsBasedOnAction()}
+                    fields={getFieldsBasedOnAction(actionType)}
                     setToastMessage={setToastMessage}
                     getVehicles={getVehicles}
                     getStations={getStations}
                     setOpen={setOpen}
                     openToastSnackBar={openToastSnackBar}>
                 </EmployeeActionModal>
-                <AdvancedSearchModal isOpen={isSearchModalOpen} searchForVehicles={searchForVehicles} handleDialogClose={handleSearchDialogClose}></AdvancedSearchModal>
+                <AdvancedSearchModal fields={getFieldsBasedOnAction()} isOpen={isSearchModalOpen} 
+                    searchForVehicles={searchForVehicles} 
+                    handleDialogClose={handleSearchDialogClose}
+                    selectedTab={selectedTab}
+                    searchForStations={searchForStations}></AdvancedSearchModal>
             </Box>
 
             <Box sx={{ position: 'fixed', top: '49%', right: '49%', height: 40 }}>

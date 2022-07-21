@@ -8,13 +8,14 @@ import Checkbox from '@mui/material/Checkbox';
 
 export default function AddressForm() {
   
-//const [fname, setfname] = useState(localStorage.getItem("fname"));
+const [fname, setfname] = useState();
+const [lname, setlname] = useState();
+
 
 // const handleChange = (e) => {
 //   setfname(e.target.value);
 //   console.log(fname)
 // };
-
 
   return (
     <React.Fragment>
@@ -25,13 +26,15 @@ export default function AddressForm() {
         <Grid item xs={12} sm={6}>
           <TextField
             required
-           // value={fname}
+            value={fname}
             id="firstName"
             name="firstName"
             label="First name"
             fullWidth
             autoComplete="given-name"
             variant="standard"
+            error={fname===""}
+            helperText={fname === ""? "Empty!" : ""}
             // onChange={handleChange}
             // onBlur={handleChange}
             // //onClick={handleChange}
@@ -113,7 +116,7 @@ export default function AddressForm() {
         </Grid>
         <Grid item xs={12}>
           <FormControlLabel
-            control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
+            control={<Checkbox color="secondary" name="addInsurance" id="addInsurance" value="yes" />}
             label="Add Insurance"
           />
         </Grid>

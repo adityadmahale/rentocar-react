@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import LinkMUI from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useLocation, useNavigate } from "react-router-dom";
 import AddressForm from "./AddressForm";
 import PaymentForm from "./PaymentForm";
 import Review from "./Review";
@@ -19,7 +20,7 @@ import { styled } from "@mui/material";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { LinkedCameraOutlined } from "@mui/icons-material";
-
+import { postReservation } from "../../services/reservationService";
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
@@ -63,11 +64,19 @@ function getStepContent(step) {
 const theme = createTheme();
 
 export default function Checkout({user}) {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [activeStep, setActiveStep] = React.useState(0);
   const [fetcheduser,setFetcheduser] = useState([]);
+  const [reservationData, setReservationData] = useState({});
 
   useEffect(() => {
     // console.log(user)
+    
+    if (!location.state) {
+      navigate('/makereservation');
+    }
+    setReservationData(location.state)
     loadUser();
   }, [])
 
@@ -86,6 +95,14 @@ export default function Checkout({user}) {
   const handleNext = () => {
       var fname, lname, address, city, state, country, zip, insurance;
       var cname, cnumber, exp;
+      var data=reservationData;
+      console.log(data);
+
+      localStorage.setItem("car_name",data['name']);
+      localStorage.setItem("car_image",data['image']);
+      localStorage.setItem("pickupDate", data['pickupDate']);
+      localStorage.setItem("pickupTime", data['pickupTime']);
+      
 
     if(activeStep === steps.length - 3){
       fname=document.querySelector("#firstName").value
@@ -105,11 +122,16 @@ export default function Checkout({user}) {
       localStorage.setItem("country",country);
       zip=document.querySelector("#zip").value
       localStorage.setItem("zip",zip);
-      if(document.querySelector("#insurance")!=null){
+
+      if(document.querySelector("#addInsurance").checked){
         insurance=true
     }
     else{
       insurance=false
+    }
+    
+    if(insurance){
+      setReservationData({...reservationData,price:data['price']+10})
     }
     localStorage.setItem("insurance",insurance);
   }
@@ -136,7 +158,10 @@ export default function Checkout({user}) {
 
     if(activeStep === steps.length - 1){
       
-      var booking=generateString(3)+generateString(4);
+      var booking=generateString(6);
+      data['bookingID']=booking.trim()
+      data['username']='test_user'
+     // setReservationData({...reservationData,bookingID:booking})
 
       localStorage.setItem("bookingID",booking)
       axios.post('/payment', {
@@ -153,11 +178,22 @@ export default function Checkout({user}) {
         insurance: localStorage.getItem('insurance')
       })
       .then(function (response) {
+        //axios.post('/')
+       
         console.log(response);
       })
       .catch(function (error) {
         console.log(error);
       });
+        console.log(data)
+        const postReservationData = async() => {
+        const result = await postReservation(data);
+        if (result.number === booking) {
+          console.log("Reservation Added succefully")
+        }
+      };
+      postReservationData()
+
     }
     setActiveStep(activeStep + 1);
   };

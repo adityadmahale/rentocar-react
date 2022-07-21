@@ -26,6 +26,7 @@ var car_image=localStorage.getItem('car_image');
 var price=localStorage.getItem('price');
 var insurance = localStorage.getItem('insurance_cost');
 var total_price=localStorage.getItem('total_price');
+var offer_price=localStorage.getItem('offer_percentage');
 
 const products = [
   { 
@@ -62,6 +63,14 @@ const payments = [
             ${insurance}
           </Typography>
         </ListItem>
+       
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Discount" />
+          <Typography variant="body2">
+            {offer_price}%
+          </Typography>
+        </ListItem>
+
 
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />

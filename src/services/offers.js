@@ -14,6 +14,7 @@ export const addOffer = (offer) => {
   return http.post(offersAPIEndpoint, {
     title: offer.title,
     description: offer.description,
+    discount: parseInt(offer.discount),
   });
 };
 

@@ -5,7 +5,7 @@ import Input from "../../components/common/input";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoginNavBar from "../../components/common/nav-bar-login";
-import axios from 'axios';
+import axios from "axios";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -30,9 +30,9 @@ const Register = () => {
 
     // Validate First Name
     if (user.userName === "") {
-      allErrors.userName = " username cannot be empty";
+      allErrors.userName = " Username cannot be empty";
     } else if (!user.userName.match(/^[a-zA-Z]*$/)) {
-      allErrors.userName = "First Name can only contain letters";
+      allErrors.userName = "Username can only contain letters";
     }
 
     // Validate Last Name
@@ -80,8 +80,8 @@ const Register = () => {
   };
 
   const headers = {
-    'Content-Type': 'application/json',
-  }
+    "Content-Type": "application/json",
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -92,101 +92,111 @@ const Register = () => {
     }
 
     let requestBody = {
-      "firstname": user.firstName,
-      "lastname": user.lastName,
-      "username" : user.userName,
-      "email": user.email,
-      "password" : user.password
-    }
-    console.log(requestBody)
-    axios.post('/users/register', JSON.stringify(requestBody), {headers: headers}).then((response) => {
-            toast.success("Registered successfuly");
-    }, (err) => {
-      const message = err.response.data.message;
-      toast.error(message);     
-  });
+      firstname: user.firstName,
+      lastname: user.lastName,
+      username: user.userName,
+      email: user.email,
+      password: user.password,
+    };
+    console.log(requestBody);
+    axios
+      .post("/users/register", JSON.stringify(requestBody), {
+        headers: headers,
+      })
+      .then(
+        (response) => {
+          toast.success("Registered successfuly");
+        },
+        (err) => {
+          const message = err.response.data.message;
+          toast.error(message);
+        }
+      );
     navigate("/");
   };
 
   return (
     <div>
-    <LoginNavBar/>
-    <Grid
-      container
-      spacing={0}
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
-      sx={{ marginTop: "40px" }}
-    >
-      <Grid item xs={3} width={{ xs: "80%", md: "60%", lg: "35%" }}>
-        <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
-          <Stack spacing={1.5} alignItems="center">
-             <Input
-              label="First Name"
-              name="firstName"
-              type="text"
-              value={user.firstName}
-              onChange={handleChange}
-              errors={errors}
-            />
-            <Input
-              label="Last Name"
-              name="lastName"
-              type="text"
-              value={user.lastName}
-              onChange={handleChange}
-              errors={errors}
-            />
-            <Input
-              label="Username"
-              name="userName"
-              type="text"
-              value={user.userName}
-              onChange={handleChange}
-              errors={errors}
-            />
-            <Input
-              label="Email"
-              name="email"
-              type="email"
-              value={user.email}
-              onChange={handleChange}
-              errors={errors}
-            />
-            <Input
-              label="Password"
-              name="password"
-              type="password"
-              value={user.password}
-              onChange={handleChange}
-              errors={errors}
-            />
-            <Input
-              label="Confirm Password"
-              name="confirmPassword"
-              type="password"
-              value={user.confirmPassword}
-              onChange={handleChange}
-              errors={errors}
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              fullWidth
-              style={{ minHeight: "40px", backgroundColor: "#00d2d3" }}
-            >
-              Register
-            </Button>
-            <Typography variant="span" component="span" style={{}}>
-              <Link to="/" style={{ textDecoration: "none", color: "#00d2d3" }}>
-                Already have an account?
-              </Link>
-            </Typography>
-          </Stack>
-        </Box>
+      <LoginNavBar />
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ marginTop: "40px" }}
+      >
+        <Grid item xs={3} width={{ xs: "80%", md: "60%", lg: "35%" }}>
+          <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
+            <Stack spacing={1.5} alignItems="center">
+              <Input
+                label="First Name"
+                name="firstName"
+                type="text"
+                value={user.firstName}
+                onChange={handleChange}
+                errors={errors}
+              />
+              <Input
+                label="Last Name"
+                name="lastName"
+                type="text"
+                value={user.lastName}
+                onChange={handleChange}
+                errors={errors}
+              />
+              <Input
+                label="Username"
+                name="userName"
+                type="text"
+                value={user.userName}
+                onChange={handleChange}
+                errors={errors}
+              />
+              <Input
+                label="Email"
+                name="email"
+                type="email"
+                value={user.email}
+                onChange={handleChange}
+                errors={errors}
+              />
+              <Input
+                label="Password"
+                name="password"
+                type="password"
+                value={user.password}
+                onChange={handleChange}
+                errors={errors}
+              />
+              <Input
+                label="Confirm Password"
+                name="confirmPassword"
+                type="password"
+                value={user.confirmPassword}
+                onChange={handleChange}
+                errors={errors}
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                style={{ minHeight: "40px", backgroundColor: "#00d2d3" }}
+              >
+                Register
+              </Button>
+              <Typography variant="span" component="span" style={{}}>
+                <Link
+                  to="/"
+                  style={{ textDecoration: "none", color: "#00d2d3" }}
+                >
+                  Already have an account?
+                </Link>
+              </Typography>
+            </Stack>
+          </Box>
+        </Grid>
       </Grid>
-    </Grid>
     </div>
   );
 };

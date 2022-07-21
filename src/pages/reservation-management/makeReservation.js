@@ -76,7 +76,6 @@ const MakeReservation = ({ user }) => {
   useEffect(() => {
     const currentUser = authService.getCurrentUser();
     if (user === null && currentUser === null) {
-      alert("You are not authorized");
       navigate("/");
       return;
     }

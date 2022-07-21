@@ -36,8 +36,8 @@ const ViewReservations = ({ user }) => {
   const [search, setSearch] = useState();
 
   useEffect(() => {
+    console.log(user)
     if (user === null) {
-      alert("You are not authorized");
       navigate("/");
       return;
     }

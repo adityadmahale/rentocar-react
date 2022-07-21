@@ -103,6 +103,7 @@ export default function Checkout({user}) {
       localStorage.setItem("pickupDate", data['pickupDate']);
       localStorage.setItem("pickupTime", data['pickupTime']);
       
+      
 
     if(activeStep === steps.length - 3){
       fname=document.querySelector("#firstName").value
@@ -122,18 +123,21 @@ export default function Checkout({user}) {
       localStorage.setItem("country",country);
       zip=document.querySelector("#zip").value
       localStorage.setItem("zip",zip);
-
+      localStorage.setItem("price",data['price'])
       if(document.querySelector("#addInsurance").checked){
         insurance=true
     }
     else{
       insurance=false
     }
-    
+    var insurance_cost=0
     if(insurance){
-      setReservationData({...reservationData,price:data['price']+10})
+      insurance_cost=data['price']*0.1
+      setReservationData({...reservationData,price:data['price']+insurance_cost})
+      
     }
     localStorage.setItem("insurance",insurance);
+    localStorage.setItem("insurance_cost",insurance_cost);   
   }
     if(activeStep === steps.length - 2){
       cname=document.querySelector("#cardName").value
@@ -142,6 +146,7 @@ export default function Checkout({user}) {
       localStorage.setItem("cardName",cname)
       localStorage.setItem("cardNumber",cnumber)
       localStorage.setItem("expDate",exp)
+      localStorage.setItem("total_price",data['price'])
     }
 
     const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -160,7 +165,7 @@ export default function Checkout({user}) {
       
       var booking=generateString(6);
       data['bookingID']=booking.trim()
-      data['username']='test_user'
+      data['username']=fetcheduser.username
      // setReservationData({...reservationData,bookingID:booking})
 
       localStorage.setItem("bookingID",booking)

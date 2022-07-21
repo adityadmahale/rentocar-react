@@ -261,7 +261,7 @@ const MakeReservation = () => {
           sx={{ flexGrow: 1 }}
           m={10}
           mb={5}
-          bgcolor="#e8e8e8"
+          bgcolor="#ffffff"
           style={{ padding: "15px" }}
         >
           {/* Reference: https://mui.com/material-ui/react-grid/ */}

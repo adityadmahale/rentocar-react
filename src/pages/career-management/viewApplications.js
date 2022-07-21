@@ -20,7 +20,7 @@ const ViewApplications = () => {
     const [applications, setApplications] = useState([]);
     const [filteredApplications, setFilteredApplications] = useState([]);
     const [search, setSearch] = useState();
-    var position = null;
+    const [position, setPosition] = useState();
 
     useEffect(() => {
         if (!location.state) {
@@ -28,9 +28,9 @@ const ViewApplications = () => {
             return;
         }
         const { positionName } = location.state
-        position = positionName
+        setPosition(positionName)
         const getApplicationsFunc = async () => {
-            const { data: applicationsData } = await getApplications(position);
+            const { data: applicationsData } = await getApplications(positionName);
             setApplications(applicationsData);
             setFilteredApplications(applicationsData)
         };

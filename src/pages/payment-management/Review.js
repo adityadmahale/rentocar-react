@@ -4,10 +4,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
-import civic from '../../assets/images/civic.jpg'
-
-
-
 
 
 export default function Review() {
@@ -25,12 +21,18 @@ var exp=localStorage.getItem('expDate');
 
 var car_name=localStorage.getItem('car_name');
 var pickup_Date=localStorage.getItem('pickupDate');
+var pickup_Time=localStorage.getItem('pickupTime');
 var car_image=localStorage.getItem('car_image');
+var price=localStorage.getItem('price');
+var insurance = localStorage.getItem('insurance_cost');
+var total_price=localStorage.getItem('total_price');
+
 const products = [
   { 
     name: car_name,
-    pickupDate: pickup_Date,
-    price: '$30.99',
+    price: price,
+    pickup_Date: pickup_Date,
+    pickup_Time: pickup_Time
   },
 ];
 
@@ -50,15 +52,21 @@ const payments = [
       <List disablePadding>
         {products.map((product) => (
           <ListItem key={product.name} sx={{ py: 1, px: 0 }}>
-            <ListItemText primary={product.name} secondary={product.desc} />
-            <Typography variant="body2">{product.price}</Typography>
+            <ListItemText primary={product.name} secondary={product.pickup_Date+' at '+product.pickup_Time}/>
+            <Typography variant="body2">$ {product.price}</Typography>
           </ListItem>
         ))}
+         <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Insurance" />
+          <Typography variant="body2">
+            ${insurance}
+          </Typography>
+        </ListItem>
 
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            $30.06
+            ${total_price}
           </Typography>
         </ListItem>
       </List>

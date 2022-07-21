@@ -36,15 +36,23 @@ const ViewReservations = ({ user }) => {
   const [search, setSearch] = useState();
 
   useEffect(() => {
-    console.log(user)
     if (user === null) {
       navigate("/");
       return;
     }
     const getReservationsData = async () => {
       const { data: newReservations } = await getReservations();
-      setReservations(newReservations);
-      setFilteredReservations(newReservations)
+      if (user.username === "admin") {
+        setReservations(newReservations);
+        setFilteredReservations(newReservations);
+      }
+      else {
+        const newFilteredReservations = newReservations.filter((newReservation) => {
+          return newReservation.username === user.username;
+        });
+        setReservations(newFilteredReservations);
+        setFilteredReservations(newFilteredReservations);
+      }
     };
     getReservationsData()
   }, [navigate]);

@@ -25,7 +25,7 @@ const pages = [
   "Support",
   "Careers",
 ];
-const settings = ["View Profile", "Logout", "Reservations"];
+const settings = ["View Profile", "Reservations", "Logout"];
 
 const NavBar = () => {
   const isAdmin = () => {

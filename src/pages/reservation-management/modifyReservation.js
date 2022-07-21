@@ -124,7 +124,9 @@ const ModifyReservation = () => {
                 {reservationData.pickupPostal}
               </Typography>
               <Typography variant="body1" gutterBottom>
-                {reservationData.pickupDate}, {reservationData.pickupTime}
+              {
+                reservationData.pickupDate && moment(new Date(reservationData.pickupDate).toISOString().replace(/T/, " ").replace(/\..+/, "")).format("MMMM DD, YYYY")
+              }, {reservationData.pickupTime}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={6} margin="auto">
@@ -135,7 +137,9 @@ const ModifyReservation = () => {
                 {reservationData.dropPostal}
               </Typography>
               <Typography variant="body1" gutterBottom>
-                {reservationData.dropDate}, {reservationData.dropTime}
+              {
+                reservationData.dropDate && moment(new Date(reservationData.dropDate).toISOString().replace(/T/, " ").replace(/\..+/, "")).format("MMMM DD, YYYY")
+              }, {reservationData.dropTime}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={12}>
@@ -154,8 +158,8 @@ const ModifyReservation = () => {
             <Grid item xs={12} sm={6} md={6} margin="auto">
               {/* Reference: https://mui.com/material-ui/api/form-control */}
               {/* Reference: https://mui.com/material-ui/react-select/ */}
-              <FormControl fullWidth>
-                <InputLabel id="filter">Filter By</InputLabel>
+              <FormControl fullWidth> 
+                <InputLabel id="filter">Filter</InputLabel>
                 <Select
                   labelId="filter-label"
                   id="filter"
@@ -172,7 +176,7 @@ const ModifyReservation = () => {
             </Grid>
             <Grid item xs={12} sm={6} md={6} margin="auto">
               <FormControl fullWidth>
-                <InputLabel id="sort">Sort By</InputLabel>
+                <InputLabel id="sort">Sort</InputLabel>
                 <Select
                   labelId="sort-label"
                   id="sort"

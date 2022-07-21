@@ -11,6 +11,19 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import NavBar from "../../components/common/nav-bar";
 import { applyApplication } from "../../services/jobApplicationService";
+import { styled } from "@mui/material";
+
+const StyledButton = styled(Button)({
+    color: "#fff",
+    backgroundColor: "#00d2d3",
+    padding: "15px",
+    "&:active": {
+        backgroundColor: "#00d2d3",
+    },
+    "&:hover": {
+        backgroundColor: "#00d2d3",
+    },
+});
 
 const ApplyPosting = () => {
     const navigate = useNavigate();
@@ -161,7 +174,7 @@ const ApplyPosting = () => {
                         </Grid>
                         <Grid item xs={12} sm={12} md={12}>
                             {/* Reference: https://mui.com/material-ui/react-button */}
-                            <Button variant="contained" size="large" color="success" onClick={validate}>Submit</Button>
+                            <StyledButton variant="contained" size="large" color="success" onClick={validate}>Submit</StyledButton>
                         </Grid>
                     </Grid>
                 </Box>

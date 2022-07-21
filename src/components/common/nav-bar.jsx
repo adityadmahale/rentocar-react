@@ -23,6 +23,7 @@ const pages = [
   "Comparison",
   "Offers",
   "Support",
+  "Careers"
 ];
 const settings = ["View Profile", "Logout"];
 
@@ -63,6 +64,14 @@ const NavBar = () => {
       navigate("/makereservation");
     } else if (page === "Support") {
       navigate("/supporthome");
+    } else if (page === "Careers") {
+      const user = auth.getCurrentUser();
+      if (user && user.isAdmin) {
+        navigate("/viewpostings")
+      }
+      else {
+        navigate("/viewuserpostings")
+      }
     }
   };
 

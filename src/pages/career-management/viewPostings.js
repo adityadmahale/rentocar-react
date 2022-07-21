@@ -96,7 +96,7 @@ const ViewPostings = ({ user }) => {
                     </Grid>
                     {/* Reference: https://mui.com/material-ui/react-grid/ */}
                     {filteredPostings.map((posting) => (
-                        <Grid item xs={12} sm={3} md={3}>
+                        <Grid item key={posting._id} xs={12} sm={3} md={3}>
                             {/* Reference: https://mui.com/material-ui/react-card/ */}
                             <Card sx={{ maxWidth: 345 }}>
                                 <CardContent>

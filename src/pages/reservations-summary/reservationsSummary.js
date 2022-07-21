@@ -3,32 +3,42 @@ import * as React from 'react';
 import Navbar from './../../components/common/nav-bar'
 import { Chart , registerables} from 'chart.js';
 import {getDailyAnalysis, getYearlyAnalysis, getMonthlyAnalysis} from "./../../services/reservationSummaryService";
+import {useNavigate} from "react-router-dom";
 Chart.register(...registerables);
 
 
 
-function ReservationsSummary() {
 
-
+function ReservationsSummary({user}) {
 
   const [tabsValue, setValue] = React.useState(1);
+  const navigate = useNavigate();
   let yearlyBookings;
   let monthlyBookings;
   let dailyBookings;
-  let yearlyChart;
-  let currentYearChart;
-  let monthlyChart;
-  let currentMonthChart
-  let dailyChart;
+  var yearlyChart = React.useRef(undefined);
+  var currentYearChart = React.useRef(undefined);
+  var monthlyChart = React.useRef(undefined);
+  var currentMonthChart = React.useRef(undefined);
+  var dailyChart = React.useRef(undefined);
 
   React.useEffect(() => {
-    console.log('Working')
+   if(user == null){
+    navigate('/');
+    return;
+   }
+   if(user.isAdmin === undefined){
+    alert("You are not authorized");
+    navigate('/userprofile');
+    return;
+   }
+    
     yearlyData();
+    console.log(user)
   });
 
   const yearlyData = async () => {
-    const response = await getYearlyAnalysis();
-    console.log(response.data);
+    const response = await getYearlyAnalysis(user);
     const currentYearChartElement = document.getElementById('current-year-chart').getContext('2d');
     const currentYearData = {
         columns: response.data.currentYearColumns,
@@ -39,7 +49,10 @@ function ReservationsSummary() {
       sum+= element;
     });
     yearlyBookings = sum;
-    currentYearChart = new Chart(currentYearChartElement, {
+    if(currentYearChart.current !== undefined){
+      currentYearChart.current.destroy();
+    }
+    currentYearChart.current = new Chart(currentYearChartElement, {
       type: 'bar',
       data: {
           labels: currentYearData.columns,
@@ -53,7 +66,10 @@ function ReservationsSummary() {
         options: {
             scales: {
               y: {
-                beginAtZero: true
+                beginAtZero: true,
+                ticks: {
+                  precision: 0
+              }
               }
             }
           },
@@ -64,7 +80,10 @@ function ReservationsSummary() {
         columns: response.data.yearlyColumns,
         bookings: response.data.yearlyBookings
     }
-    currentYearChart = new Chart(yearlyChartElement, {
+    if(yearlyChart.current !== undefined){
+      yearlyChart.current.destroy();
+    }
+    yearlyChart.current = new Chart(yearlyChartElement, {
       type: 'bar',
       data: {
           labels: yearlyData.columns,
@@ -78,17 +97,19 @@ function ReservationsSummary() {
         options: {
             scales: {
               y: {
-                beginAtZero: true
+                beginAtZero: true,
+                ticks: {
+                  precision: 0
+              }
               }
             }
           },
     });
-
+    document.getElementById('year-rentals').innerHTML = "Total rentals in the year = "+yearlyBookings;
   }
 
   const monthlyData = async () => {
-    const response = await getMonthlyAnalysis();
-    console.log(response.data);
+    const response = await getMonthlyAnalysis(user);
     const currentMonthChartElement = document.getElementById('current-month-chart').getContext('2d');
     const currentMonthData = {
         columns: response.data.currentMonthColumns,
@@ -99,7 +120,10 @@ function ReservationsSummary() {
       sum+= element;
     });
     monthlyBookings = sum;
-    currentMonthChart = new Chart(currentMonthChartElement, {
+    if(currentMonthChart.current !== undefined){
+      currentMonthChart.current.destroy();
+    }
+    currentMonthChart.current = new Chart(currentMonthChartElement, {
       type: 'bar',
       data: {
           labels: currentMonthData.columns,
@@ -113,7 +137,10 @@ function ReservationsSummary() {
         options: {
             scales: {
               y: {
-                beginAtZero: true
+                beginAtZero: true,
+                ticks: {
+                  precision: 0
+              }
               }
             }
           },
@@ -124,7 +151,10 @@ function ReservationsSummary() {
         columns: response.data.monthlyColumns,
         bookings: response.data.monthlyBookings
     }
-    monthlyChart = new Chart(monthlyChartElement, {
+    if(monthlyChart.current !== undefined){
+      monthlyChart.current.destroy();
+    }
+    monthlyChart.current = new Chart(monthlyChartElement, {
       type: 'bar',
       data: {
           labels: monthlyData.columns,
@@ -138,17 +168,19 @@ function ReservationsSummary() {
         options: {
             scales: {
               y: {
-                beginAtZero: true
+                beginAtZero: true,
+                ticks: {
+                  precision: 0
+              }
               }
             }
           },
     });
-
+    document.getElementById('month-rentals').innerHTML = "Total rentals in the month = "+monthlyBookings;
   }
 
   const dailyData = async () => {
-    const response = await getDailyAnalysis();
-    console.log(response.data);
+    const response = await getDailyAnalysis(user);
     const dailyChartElement = document.getElementById('daily-chart').getContext('2d');
     const dayData = {
         columns: response.data.dailyColumns,
@@ -159,8 +191,10 @@ function ReservationsSummary() {
       sum+= element;
     });
     dailyBookings = sum;
-
-    dailyChart = new Chart(dailyChartElement, {
+    if(dailyChart.current !== undefined){
+      dailyBookings.current.destroy();
+    }
+    dailyChart.current = new Chart(dailyChartElement, {
       type: 'bar',
       data: {
           labels: dayData.columns,
@@ -174,12 +208,15 @@ function ReservationsSummary() {
         options: {
             scales: {
               y: {
-                beginAtZero: true
+                beginAtZero: true,
+                ticks: {
+                  precision: 0
+              }
               }
             }
           },
     });
-
+    document.getElementById('daily-rentals').innerHTML = "Total rentals in the day = "+dailyBookings;
   }
 
   const handleTabChange = (newValue) => {
@@ -215,7 +252,7 @@ function ReservationsSummary() {
             <canvas id="current-year-chart"></canvas>
           </div>
           <br/>
-          <p>Total rentals in the year = {yearlyBookings}</p>
+          <p id='year-rentals'></p>
           <br/><br/><br/>
           <h2>Yearly Analysis</h2>
           <div id = 'yearly-chart-div' className="chart-div">
@@ -228,7 +265,7 @@ function ReservationsSummary() {
             <canvas id="current-month-chart"></canvas>
           </div>
           <br/>
-          <p>Total rentals in the month = {monthlyBookings}</p>
+          <p id='month-rentals'></p>
           <br/><br/><br/>
           <h2>Monthly Analysis</h2>
           <div id = 'monthly-chart-div' className="chart-div">
@@ -241,7 +278,7 @@ function ReservationsSummary() {
               <canvas id="daily-chart"></canvas>
             </div>
           <br/>
-          <p>Total rentals in the day = {dailyBookings}</p>
+          <p id='daily-rentals'></p>
         </div>
       </div>
     </div>

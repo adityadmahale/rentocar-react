@@ -26,6 +26,7 @@ import Login from "./pages/user-management/Login";
 import UserProfile from "./pages/user-management/user-profile";
 import UpdatePassword from "./pages/user-management/update-password";
 import TicketsHome from "./pages/customer-support/TicketsHome";
+import NewTicket from "./pages/customer-support/add-ticket";
 import Checkout from "./pages/payment-management/Checkout";
 import InventoryHome from "./pages/inventory-management/InventoryHome";
 import Offers from "./pages/offers-management/offers";
@@ -67,7 +68,9 @@ function App() {
           {/*User Update Password page */}
           {/* <Route path="/updatepassword" element={!user ? <Navigate to="/" /> : <UpdatePassword user={user} />} /> */}
           <Route path="/updatepassword" element={<UpdatePassword user={user} />} />
-          <Route path="/ticketshome" element={<TicketsHome />} />
+          {/* <Route path="/updatepassword" element={!user ? <Navigate to="/" /> : <TicketsHome user={user} />} /> */}
+          <Route path="/supporthome" element={<TicketsHome user={user} />} />
+          <Route path="/ticket" element={<NewTicket user={user} />} />
           {/* Routes for Inventory Management */}
           <Route path="/inventoryhome" element={<InventoryHome />} />
           {/* Route for Offers Management */}
@@ -85,7 +88,7 @@ function App() {
           <Route path="/comparison" element={<Comparision />} />
           <Route
             path="/reservationsSummary"
-            element={<ReservationsSummary />}
+            element={<ReservationsSummary user = {user} />}
           />
           {/* Route for Reservation Management */}
           <Route path="/makereservation" element={<MakeReservation />} />

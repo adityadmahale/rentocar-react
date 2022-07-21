@@ -43,7 +43,7 @@ const OfferCard = ({
       variant="outlined"
       sx={{
         maxWidth: 345,
-        height: "580px",
+        height: "610px",
         marginLeft: "15px",
         cursor: "pointer",
         backgroundColor:
@@ -63,6 +63,13 @@ const OfferCard = ({
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {offer.description}
+        </Typography>
+        <Typography
+          variant="h5"
+          component="div"
+          sx={{ marginTop: "10px", backgroundColor: "#00d2d3" }}
+        >
+          {offer.discount}% Discount
         </Typography>
       </CardContent>
       {user && !user.isAdmin && (

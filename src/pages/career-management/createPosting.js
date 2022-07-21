@@ -19,8 +19,21 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { FormHelperText } from "@mui/material";
 import NavBar from "../../components/common/nav-bar";
 import { createPosting } from "../../services/jobPostingService";
+import { styled } from "@mui/material";
 
-const CreatePosting = () => {
+const StyledButton = styled(Button)({
+    color: "#fff",
+    backgroundColor: "#00d2d3",
+    padding: "15px",
+    "&:active": {
+        backgroundColor: "#00d2d3",
+    },
+    "&:hover": {
+        backgroundColor: "#00d2d3",
+    },
+});
+
+const CreatePosting = ({ user }) => {
     const navigate = useNavigate();
     const [jobPosting, setJobPosting] = useState({
         position: {
@@ -44,6 +57,19 @@ const CreatePosting = () => {
             errorMessage: ""
         }
     });
+
+    useEffect(() => {
+        if (user === null) {
+            alert("You are not authorized");
+            navigate("/");
+            return;
+        }
+        else if (user.isAdmin === null) {
+            alert("You are not authorized");
+            navigate('/');
+            return;
+        }
+    }, []);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -242,7 +268,7 @@ const CreatePosting = () => {
                         </Grid>
                         <Grid item xs={12} sm={12} md={12}>
                             {/* Reference: https://mui.com/material-ui/react-button */}
-                            <Button variant="contained" size="large" color="success" onClick={validate}>Submit</Button>
+                            <StyledButton variant="contained" size="large" color="success" onClick={validate}>Submit</StyledButton>
                         </Grid>
                     </Grid>
                 </Box>

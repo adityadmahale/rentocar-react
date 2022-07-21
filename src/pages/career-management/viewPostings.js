@@ -29,13 +29,23 @@ const StyledButton = styled(Button)({
     },
 });
 
-const ViewPostings = () => {
+const ViewPostings = ({ user }) => {
     const navigate = useNavigate();
     const [postings, setPostings] = useState([]);
     const [filteredPostings, setFilteredPostings] = useState([]);
     const [search, setSearch] = useState();
 
     useEffect(() => {
+        if (user === null) {
+            alert("You are not authorized");
+            navigate("/");
+            return;
+        }
+        else if (user.isAdmin === null) {
+            alert("You are not authorized");
+            navigate('/');
+            return;
+        }
         const getPostingsData = async () => {
             const { data: postingsData } = await getPostings();
             setPostings(postingsData);

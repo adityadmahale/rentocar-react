@@ -29,13 +29,18 @@ const StyledButton = styled(Button)({
     },
 });
 
-const ViewUserPostings = () => {
+const ViewUserPostings = ({ user }) => {
     const navigate = useNavigate();
     const [postings, setPostings] = useState([]);
     const [filteredPostings, setFilteredPostings] = useState([]);
     const [search, setSearch] = useState();
 
     useEffect(() => {
+        if (user === null) {
+            alert("You are not authorized");
+            navigate("/");
+            return;
+        }
         const getPostingsData = async () => {
             const { data: postingsData } = await getPostings();
             setPostings(postingsData);
@@ -96,7 +101,7 @@ const ViewUserPostings = () => {
                                     <Typography variant="body1" gutterBottom>Type: {posting.jobType}</Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small" onClick={() => { navigate("/applyposting", { state: { posting: posting } }) }}>Apply</Button>
+                                    <StyledButton size="small" onClick={() => { navigate("/applyposting", { state: { posting: posting } }) }}>Apply</StyledButton>
                                 </CardActions>
                             </Card>
                         </Grid>

@@ -98,10 +98,10 @@ function App() {
           <Route path="/modifyreservation" element={<ModifyReservation />} />
           {/* Route for Career Management */}
           <Route path="/viewpostings" element={<ViewPostings user={user} />} />
-          <Route path="/viewuserpostings" element={<ViewUserPostings />} />
-          <Route path="/viewapplications" element={<ViewApplications user={user} />} />
+          <Route path="/viewuserpostings" element={<ViewUserPostings user={user} />} />
+          <Route path="/viewapplications" element={<ViewApplications />} />
           <Route path="/createposting" element={<CreatePosting user={user} />} />
-          <Route path="/applyposting" element={<ApplyPosting user={user} />} />
+          <Route path="/applyposting" element={<ApplyPosting />} />
         </Routes>
       </Router>
     </div>

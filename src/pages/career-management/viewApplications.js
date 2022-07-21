@@ -10,22 +10,9 @@ import Typography from '@mui/material/Typography';
 import { Card } from "@mui/material";
 import CardContent from '@mui/material/CardContent';
 import { TextField } from "@mui/material";
-import { Button } from "@mui/material";
 import NavBar from "../../components/common/nav-bar";
 import { getApplications } from "../../services/jobApplicationService";
-import { styled } from "@mui/material";
 
-const StyledButton = styled(Button)({
-    color: "#fff",
-    backgroundColor: "#00d2d3",
-    padding: "15px",
-    "&:active": {
-        backgroundColor: "#00d2d3",
-    },
-    "&:hover": {
-        backgroundColor: "#00d2d3",
-    },
-});
 
 const ViewApplications = () => {
     const navigate = useNavigate();
@@ -100,10 +87,6 @@ const ViewApplications = () => {
                                     <Typography variant="body1" gutterBottom>Contact: {application.contact}</Typography>
                                     <Typography variant="body1" gutterBottom>Email: {application.email}</Typography>
                                 </CardContent>
-                                {/* <CardActions>
-                                    <StyledButton size="small" onClick={() => { }}>Contact</StyledButton>
-                                    <StyledButton size="small" onClick={() => { }}>Reject</StyledButton>
-                                </CardActions> */}
                             </Card>
                         </Grid>
                     ))}

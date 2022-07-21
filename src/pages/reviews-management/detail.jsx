@@ -34,6 +34,7 @@ const Detail = () => {
     if (!location.state) {
       navigate("/availablecars");
     }
+    console.log(location.state)
     setVehicle(location.state);
   }, [location, navigate]);
 

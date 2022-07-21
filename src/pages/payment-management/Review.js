@@ -7,13 +7,7 @@ import Grid from '@mui/material/Grid';
 import civic from '../../assets/images/civic.jpg'
 
 
-const products = [
-  { 
-    name: 'Honda Civic',
-    desc: '22-06-2022',
-    price: '$30.99',
-  },
-];
+
 
 
 export default function Review() {
@@ -29,6 +23,16 @@ var cname=localStorage.getItem("cardName");
 var cnumber=localStorage.getItem("cardNumber");
 var exp=localStorage.getItem('expDate');
 
+var car_name=localStorage.getItem('car_name');
+var pickup_Date=localStorage.getItem('pickupDate');
+var car_image=localStorage.getItem('car_image');
+const products = [
+  { 
+    name: car_name,
+    pickupDate: pickup_Date,
+    price: '$30.99',
+  },
+];
 
 const addresses = [address1, city, state, zip, country];
 const payments = [
@@ -42,7 +46,7 @@ const payments = [
       <Typography variant="h6" gutterBottom>
         Order summary
       </Typography>
-      <img src={civic} alt="car" width={200}/>
+      <img src={car_image} alt="car" width={200}/>
       <List disablePadding>
         {products.map((product) => (
           <ListItem key={product.name} sx={{ py: 1, px: 0 }}>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import auth from "./../../services/authService";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
@@ -19,8 +19,10 @@ import NavBar from "../../components/common/nav-bar";
 import { styled } from "@mui/material";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import OfferContext from "../../context/offerContext";
 import { LinkedCameraOutlined } from "@mui/icons-material";
 import { postReservation } from "../../services/reservationService";
+import { toast } from "react-toastify";
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
@@ -69,9 +71,9 @@ export default function Checkout({user}) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [fetcheduser,setFetcheduser] = useState([]);
   const [reservationData, setReservationData] = useState({});
-
+  const context = useContext(OfferContext);
+  
   useEffect(() => {
-    // console.log(user)
     
     if (!location.state) {
       navigate('/makereservation');
@@ -88,15 +90,16 @@ export default function Checkout({user}) {
         setFetcheduser(response.data.user)
       }, (err) => {
         const message = err.response.data.message;    
-        console.log(message);
       });
     }
 
   const handleNext = () => {
       var fname, lname, address, city, state, country, zip, insurance;
-      var cname, cnumber, exp;
+      var cname, cnumber, exp,cvv;
       var data=reservationData;
-      console.log(data);
+
+    
+      var error=false;
 
       localStorage.setItem("car_name",data['name']);
       localStorage.setItem("car_image",data['image']);
@@ -106,6 +109,7 @@ export default function Checkout({user}) {
       
 
     if(activeStep === steps.length - 3){
+     
       fname=document.querySelector("#firstName").value
       localStorage.setItem("fname",fname);
       lname=document.querySelector("#lastName").value
@@ -130,23 +134,107 @@ export default function Checkout({user}) {
     else{
       insurance=false
     }
+    localStorage.setItem("offer_percentage",context.offer);
+    var cost=data['price']-data['price']*context.offer/100
+
     var insurance_cost=0
     if(insurance){
       insurance_cost=data['price']*0.1
-      setReservationData({...reservationData,price:data['price']+insurance_cost})
+      setReservationData({...reservationData,price:cost+insurance_cost})
       
     }
+    else{
+      setReservationData({...reservationData,price:cost})
+    }
+
     localStorage.setItem("insurance",insurance);
-    localStorage.setItem("insurance_cost",insurance_cost);   
+    localStorage.setItem("insurance_cost",insurance_cost);  
+
+    if(fname===""){
+      toast.error("first name should not be Empty");
+      error=true;
+    }
+    if(lname===""){
+      toast.error("Last name should not be Empty");
+      error=true;
+    }
+    if(address===""){
+      toast.error("Address should not be Empty");
+      error=true;
+    }
+    if(city===""){
+      toast.error("City should not be Empty");
+      error=true;
+    }
+    if(city.length<3){
+      toast.error("City name length should not be less than 3");
+      error=true;
+    }
+    if(state===""){
+      toast.error("State/Province should not be Empty");
+      error=true;
+    }
+    if(state.length<3){
+      toast.error("State/Province name length should not be less than 3");
+      error=true;
+    }
+    if(zip===""){
+      toast.error("zip should not be Empty");
+      error=true;
+    }
+    if(zip.length!==6){
+      toast.error("zip length should be of 6 characters");
+      error=true;
+    }
+    if(country===""){
+      toast.error("Country should not be Empty");
+      error=true;
+    }
+    if(country.length<3){
+      toast.error("Country name length should not be less than 3");
+      error=true;
+    }
+
+
+    localStorage.setItem("error","test_error"); 
   }
     if(activeStep === steps.length - 2){
       cname=document.querySelector("#cardName").value
       cnumber=document.querySelector("#cardNumber").value
       exp=document.querySelector("#expDate").value
+      cvv=document.querySelector("#cvv").value
       localStorage.setItem("cardName",cname)
       localStorage.setItem("cardNumber",cnumber)
       localStorage.setItem("expDate",exp)
       localStorage.setItem("total_price",data['price'])
+      if(cname===""){
+        toast.error("card name should not be Empty");
+        error=true;
+      }
+      if(cnumber===""){
+        toast.error("card number should not be Empty");
+        error=true;
+      }
+      if(cvv===""){
+        toast.error("cvv should not be Empty");
+        error=true;
+      }
+      if(cname.length<3){
+        toast.error("Name on Card should not be less than 3 characters");
+        error=true;
+      }
+      if(cnumber.length!==16){
+        toast.error("card number should be of 16 digits");
+        error=true;
+      }
+      if(cvv.length!==3){
+        toast.error("cvv should be of 3 digits");
+        error=true;
+      }
+
+
+
+
     }
 
     const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -190,7 +278,6 @@ export default function Checkout({user}) {
       .catch(function (error) {
         console.log(error);
       });
-        console.log(data)
         const postReservationData = async() => {
         const result = await postReservation(data);
         if (result.number === booking) {
@@ -200,7 +287,9 @@ export default function Checkout({user}) {
       postReservationData()
 
     }
-    setActiveStep(activeStep + 1);
+    if(error===false){
+      setActiveStep(activeStep + 1);
+    }
   };
 
   const handleBack = () => {

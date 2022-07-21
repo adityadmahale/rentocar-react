@@ -31,7 +31,7 @@ const StyledButton = styled(Button)({
   },
 });
 
-const MakeReservation = () => {
+const MakeReservation = ({ user }) => {
   const navigate = useNavigate();
   const [reservationValues, setReservationValues] = useState({
     pickupPostal: {
@@ -71,6 +71,14 @@ const MakeReservation = () => {
       errorMessage: "",
     }
   });
+
+  useEffect(() => {
+    if (user === null) {
+      alert("You are not authorized");
+      navigate("/");
+      return;
+    }
+  }, []);
 
   const handleChange = (event) => {
     const { name, value } = event.target;

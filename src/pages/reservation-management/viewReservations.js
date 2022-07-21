@@ -37,7 +37,6 @@ const ViewReservations = ({ user }) => {
 
   useEffect(() => {
     if (user === null) {
-      alert("You are not authorized");
       navigate("/");
       return;
     }

@@ -26,6 +26,8 @@ const ReviewForm = ({ reviewFields, onChange, onReviewPost, errors }) => {
         />
         <TextField
           placeholder="Description"
+          label="Description"
+          variant="outlined"
           multiline
           name="description"
           rows={6}

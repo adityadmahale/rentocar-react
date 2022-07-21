@@ -45,12 +45,14 @@ const Offers = ({ user }) => {
   const [offerFields, setOfferFields] = useState({
     title: "",
     description: "",
+    discount: "",
   });
   const [errors, setErrors] = useState({});
 
   const schema = Joi.object({
     title: Joi.string().required().label("Title"),
     description: Joi.string().required().label("Description"),
+    discount: Joi.number().required().label("Discount"),
   });
 
   const validate = () => {
@@ -90,6 +92,7 @@ const Offers = ({ user }) => {
       setOfferFields({
         title: "",
         description: "",
+        discount: "",
       });
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
